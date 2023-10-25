@@ -24,7 +24,7 @@ use App\Http\Controllers\GoogleLoginController;
 //     return view('welcome');
 // });
 
-Route::get('/halochat', function () {
+Route::get('/projects/halochat', function () {
     return redirect('/front');
 });
 
