@@ -28,21 +28,29 @@
       </nav><!-- .nav-menu -->
     </div>
   </header><!-- End Header -->
-
-    <!-- ======= Breadcrumbs ======= -->
-    <section class="breadcrumbs_top">
+  
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs_top">
     <div class="container-fluid">
 
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="logo">
-          <a href="#"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
-        </div>
-        <ul>
-          <li><a href="#" class="register_btn">Register</a></li>
-          <li><a href="#" class="login_btn">Login</a></li>
-        </ul>
-        
-      </div>
+    <div class="d-flex justify-content-between align-items-center">
+    <div class="logo">
+        <a href="#"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
+    </div>
+    <ul>
+        @if(auth()->check() || session()->has('authenticated_user'))
+            <!-- User is logged in or session variable is set, display something else -->
+            <!-- Add your authenticated user content here -->
+            <li><a href="{{ route('front.logout') }}" class="login_btn">Logout</a></li>
+
+        @else
+            <!-- User is not logged in, display the register and login links -->
+            <li><a href="{{ route('front.register') }}" class="register_btn">Register</a></li>
+            <li><a href="{{ route('front.login') }}" class="login_btn">Login</a></li>
+        @endif
+    </ul>
+</div>
+
 
     </div>
   </section><!-- End Breadcrumbs -->
