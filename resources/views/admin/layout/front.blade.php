@@ -1,7 +1,16 @@
+<style>
+  .sidebar .sidebar-brand-wrapper .sidebar-brand img {
+    width: calc(241px - 38px) !important;
+    max-width: 100%;
+    height: 31px !important;
+    margin: auto;
+    vertical-align: middle;
+}
+</style>
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="index.html"><img src="{{ URL::asset('public/images/logo.svg') }}" alt="logo" /></a>
-          <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{{ URL::asset('public/images/logo-mini.svg') }}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo" href="index.html"><img src="{{ URL::asset('public/images/halochat.ai.png') }}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{{ URL::asset('public/images/halochat.ai.png') }}" alt="logo" /></a>
         </div>
         <ul class="nav">
           <li class="nav-item profile">
@@ -209,12 +218,12 @@
                   <p class="p-3 mb-0 text-center">See all projects</p>
                 </div>
               </li> -->
-              <li class="nav-item nav-settings d-none d-lg-block">
+              <!-- <li class="nav-item nav-settings d-none d-lg-block">
                 <a class="nav-link" href="#">
                   <i class="mdi mdi-view-grid"></i>
                 </a>
-              </li>
-              <li class="nav-item dropdown border-left">
+              </li> -->
+              <!-- <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="mdi mdi-email"></i>
                   <span class="count bg-success"></span>
@@ -254,8 +263,8 @@
                   <div class="dropdown-divider"></div>
                   <p class="p-3 mb-0 text-center">4 new messages</p>
                 </div>
-              </li>
-              <li class="nav-item dropdown border-left">
+              </li> -->
+              <!-- <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                   <i class="mdi mdi-bell"></i>
                   <span class="count bg-danger"></span>
@@ -301,7 +310,7 @@
                   <div class="dropdown-divider"></div>
                   <p class="p-3 mb-0 text-center">See all notifications</p>
                 </div>
-              </li>
+              </li> -->
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                   <div class="navbar-profile">
