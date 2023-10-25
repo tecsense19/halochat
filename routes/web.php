@@ -20,16 +20,17 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::post('/authenticate', [LoginRegisterController::class, 'authenticate'])->name('authenticate');
-Route::any('/', [UserController::class, 'dashboard'])->name('dashboard')->methods(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
-// Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
 
-Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
+    Route::any('/', [UserController::class, 'dashboard'])->name('dashboard')->methods(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
+    // Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
+    Route::post('/admin/authenticate', [LoginRegisterController::class, 'authenticate'])->name('admin.authenticate');
 
+    Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
     Route::get('/', [LoginRegisterController::class, 'login'])->name('login');
     Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
     Route::get('/users', [UsersController::class, 'Users'])->name('users');
+    
 
    // ::Profiles
     Route::get('/profiles', [ProfileController::class, 'addProfiles'])->name('profile');
@@ -40,11 +41,10 @@ Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
     Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
 });
 
-// Route::any('/', [UserController::class, 'dashboard'])->name('dashboard');
+    // front routes
 
-Route::group(['prefix' => '/front', 'as' => 'front.',], function () {
     Route::post('/authenticate', [UserController::class, 'authenticate'])->name('authenticate');
-    Route::get('/', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/explore', [UserController::class, 'dashboard'])->name('dashboard');
     Route::post('store', [UserController::class, 'store'])->name('store');
     Route::get('/login', [UserController::class, 'login'])->name('login');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
@@ -52,7 +52,9 @@ Route::group(['prefix' => '/front', 'as' => 'front.',], function () {
     Route::get('/chat', [UserController::class, 'chat'])->name('chat.chat');
     Route::get('/chat/message/{id}', [MessageController::class, 'index'])->name('chat.message');
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
-});
+    Route::get('/gallery', [UserController::class, 'gallery'])->name('gallery.gallery');
+    Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
+
 
 
 Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');

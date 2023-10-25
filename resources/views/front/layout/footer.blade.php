@@ -8,7 +8,7 @@
           <li><a href="#">Affiliate</a></li>
         </ul>
         <ul class="links">
-          <li><a href="#">Terms of Service</a></li>
+          <li><a href="{{ route('terms.terms') }}">Terms of Service</a></li>
           <li><a href="#">Privacy Policy</a></li>
         </ul>
       </div>

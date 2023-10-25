@@ -47,7 +47,7 @@
         <h5>Welcome!</h5>
         <span>Sign up to your account</span>
       </div>
-      <form action="{{ route('front.authenticate') }}" method="POST">
+      <form action="{{ route('authenticate') }}" method="POST">
         {!! csrf_field() !!}
       <div class="form_sing_up">
           <div class="sign_in_google_btn">
@@ -83,7 +83,7 @@
           </div>
         </form>
         <div class="account-yet">
-          <p>Already have an account yet? <a href="{{ route('front.register') }}">Sign Up</a></p>
+          <p>Already have an account yet? <a href="{{ route('register') }}">Sign Up</a></p>
         </div>
       </div>
     </div>

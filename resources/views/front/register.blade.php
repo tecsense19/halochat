@@ -47,7 +47,7 @@
         <span>Sign up to your account</span>
       </div>
       <div class="form_sing_up">
-        <form action="{{ route('front.store') }}" method="POST">
+        <form action="{{ route('store') }}" method="POST">
         {!! csrf_field() !!}
           <div class="sign_in_google_btn">
           <a href="{{ route('google.login') }}"><img src="{{ URL::asset('public/front/img/connect-with-ai.png')}}"></a>
@@ -80,7 +80,7 @@
           </div>
         </form>
         <div class="account-yet">
-          <p>Already have an account yet? <a href="{{ route('front.login') }}">Sign in</a></p>
+          <p>Already have an account yet? <a href="{{ route('login') }}">Sign in</a></p>
         </div>
       </div>
     </div>

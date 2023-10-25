@@ -40,7 +40,7 @@ class GoogleLoginController extends Controller
                         ]
                     );
                 } 
-                return redirect()->route('front.dashboard'); // Adjust the route as needed
+                return redirect()->route('dashboard'); // Adjust the route as needed
             }
         }
     

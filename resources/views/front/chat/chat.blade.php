@@ -19,7 +19,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 @include('front.layout.front')
 @include('front.layout.header')
 
-  <main id="main" class="pt-0">
+<main id="main" class="pt-0">
     <section class="position-relative">
       <div class="container-fluid g-0">
         <div class="all_details_box">
@@ -94,16 +94,58 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
                   </div>
                 </div>
-
+                <div class="chat_content">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="have_we_met">
+                        <div class="chat_content_box">
+                          <p>Hey there… have we met before?</p>
+                          <div class="volume">
+                            <span><svg id="play-icon" width="20 " class="text-[#C14DA0]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"></path>
+                            </svg></span>
+                          </div>
+                        </div>
+                        <div class="message_feedback">
+                          <a href="#"><img src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
+                          <a href="#"><img src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="col-12">
+                      <div class="send_message">
+                        <span>Send me a picture of you</span>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="chat_content_img">
+                        <img src="{{ URL::asset('public/front/img/2-2.webp') }}">
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="searchbar-footer">
-                  <ul>
+                  <ul class="suggestion">
                     <li>Suggestion: </li>
                     <li><a href="#">Hey! How's your day been?</a></li>
                   </ul>
                   <div class="type_message">
                     <form action="#">
                       <input type="text" name="message" placeholder="Type action message">
-                      <button type="submit"><img src="{{ URL::asset('public/front/img/send-message.svg') }}"></button>
+                      <div class="dropdown">
+                        <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ URL::asset('public/front/img/ask-pic.svg') }}">  Ask <i class="bi bi-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><a href="#">Show me...</a></li>
+                          <li><a href="#">Send me...</a></li>
+                          <li><a href="#">Send</a></li>
+                          <li><a href="#">Can i see...</a></li>
+                          <li><a href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How to use</a></li>
+                        </ul>
+                      </div>
+                      <button type="submit" data-bs-toggle="modal" data-bs-target="#send"><img src="{{ URL::asset('public/front/img/send-message.svg') }}"></button>
                     </form>
                   </div>
                 </div>
@@ -241,3 +283,12 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
   </main><!-- End #main -->
 
   @include('front.layout.footer')
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.toggle-button-right').on('click', function () {
+        $('.sidebar').toggleClass('isClosed');
+        $('.sidebar ul.nav').toggleClass('isClosed');
+      });
+    });
+  </script>

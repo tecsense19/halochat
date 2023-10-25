@@ -49,6 +49,16 @@ class UserController extends Controller
     {
     return view("front.subscription.subscription");
     }
+
+    public function terms()
+    {
+    return view("front.terms.terms");
+    }
+    
+    public function gallery()
+    {
+    return view("front.gallery.gallery");
+    }
     
     public function store(Request $request)
     {
@@ -67,7 +77,7 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('front.dashboard')->withSuccess('You have successfully registered & logged in!');
+        return redirect()->route('dashboard')->withSuccess('You have successfully registered & logged in!');
     }
 
     public function authenticate(Request $request)
@@ -83,7 +93,7 @@ class UserController extends Controller
         {
             $request->session()->put('authenticated_user', true);
             $request->session()->regenerate();
-            return redirect()->route('front.dashboard')->withSuccess('You have successfully logged in!');
+            return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
         }
 
         return back()->withErrors(['email' => 'Your provided credentials do not match in our records.'])->onlyInput('email');

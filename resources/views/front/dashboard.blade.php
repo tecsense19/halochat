@@ -102,7 +102,7 @@
   @endphp
             <div class="col-xl-3 col-md-6 portfolio-item filter-app">
               <div class="portfolio-wrap">
-                <a href="{{ route('front.chat.message', ['id' => $item->profile_id]) }}">
+                <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}">
                   <div>
                     <img src="{{ $imgUrl }}" class="img-fluid">
                     <img src="{{ $imgUrl2 }}" class="img-fluid hover_img">
