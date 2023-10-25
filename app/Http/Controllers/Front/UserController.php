@@ -79,7 +79,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials) && auth()->user()->role === "User")
+        if(Auth::attempt($credentials) && auth()->user()->role === "User" && auth()->user()->deleted_at === null)
         {
             $request->session()->put('authenticated_user', true);
             $request->session()->regenerate();
