@@ -29,7 +29,7 @@ Route::get('/halochat', function () {
 });
 
 Route::post('/authenticate', [LoginRegisterController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
+
 // Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
 
 

@@ -20,7 +20,8 @@ class UserController extends Controller
     public function logout()
     {
     Session::flush();
-    return view("front.dashboard");
+    $profileList = Profile::with('profileImages')->get();
+    return view("front.dashboard", compact('profileList'));
     }
 
     public function register()
