@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Front\MessageController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
-
+use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,7 +29,6 @@ Route::get('/projects/halochat', function () {
 });
 
 Route::post('/authenticate', [LoginRegisterController::class, 'authenticate'])->name('authenticate');
-
 // Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
 
 
@@ -66,3 +65,17 @@ Route::group(['prefix' => '/front', 'as' => 'front.',], function () {
 
 Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
 Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+
+
+Route::get('/clear-cache', function () {
+    $exitCode = Artisan::call('cache:clear');
+
+    return 'Cache has been cleared'; // You can also return a view here if you prefer.
+});
+
+Route::get('/clear-route-cache', function () {
+    $exitCode = Artisan::call('route:clear');
+
+    return 'Route cache has been cleared'; // You can customize the response as needed.
+});
