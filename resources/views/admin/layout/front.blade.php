@@ -333,7 +333,7 @@
                     </div>
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <a class="dropdown-item preview-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <div class="preview-thumbnail">
                       <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-logout text-danger"></i>
@@ -343,7 +343,7 @@
                       <p class="preview-subject mb-1">Log out</p>
                     </div>
                   </a>
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                  <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
 
                         {!! csrf_field() !!}
 

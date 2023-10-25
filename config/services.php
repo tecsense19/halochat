@@ -19,6 +19,7 @@ return [
         'redirect'=> env('APP_URL').'/auth/google/callback',
     ],
 
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
