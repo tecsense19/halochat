@@ -14,8 +14,7 @@
         @if(auth()->check() || session()->has('authenticated_user'))
             <!-- User is logged in or session variable is set, display something else -->
             <!-- Add your authenticated user content here -->
-            <li><a href="{{ route('front.login') }}" class="register_btn">Profile</a></li>
-            <li><a href="{{ route('front.logout') }}" class="login_btn">Logout</a></li>
+
         @else
             <!-- User is not logged in, display the register and login links -->
             <li><a href="{{ route('front.register') }}" class="register_btn">Register</a></li>
