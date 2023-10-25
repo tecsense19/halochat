@@ -17,12 +17,13 @@ class GoogleLoginController extends Controller
   
     }
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
             $user = Socialite::driver('google')->user();
             if ($user) {
                 // Add your code to save or authenticate the user here.
-    
+                
+                $request->session()->put('authenticated_user', true);
                 if ($user) {
                     // Update the user with the same email if they exist, or create a new user
                     User::updateOrInsert(
