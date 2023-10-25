@@ -20,16 +20,17 @@ use App\Http\Controllers\GoogleLoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/halochat', function () {
+    return redirect('/front');
 });
 
-Route::controller(LoginRegisterController::class)->group(function() {
-    Route::post('/authenticate', 'authenticate')->name('authenticate');
-    Route::post('/logout', 'logout')->name('logout');
-    Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
-
-});
+Route::post('/authenticate', [LoginRegisterController::class, 'authenticate'])->name('authenticate');
+Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
+// Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
 
 
 Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
@@ -46,10 +47,9 @@ Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
     Route::get('profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('profiles/store', [ProfileController::class, 'store'])->name('profile.store');
     Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
-
-    
-
 });
+
+// Route::any('/', [UserController::class, 'dashboard'])->name('dashboard');
 
 Route::group(['prefix' => '/front', 'as' => 'front.',], function () {
     Route::post('/authenticate', [UserController::class, 'authenticate'])->name('authenticate');

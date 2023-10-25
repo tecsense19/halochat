@@ -29,13 +29,13 @@ class UserController extends Controller
     }
     public function dashboard()
     {
-        if (session()->has('authenticated_user')) {
+        // if (session()->has('authenticated_user')) {
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
-        } else {
+        // } else {
             // The user is not authenticated. You can redirect them or take other actions.
-            return redirect()->route('front.login'); // Redirect to the login page, for example.
-        }
+        //     return redirect()->route('front.login'); // Redirect to the login page, for example.
+        // }
     }
     
 
