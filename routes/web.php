@@ -20,17 +20,9 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Route::get('/projects/halochat', function () {
-    return redirect('/front');
-});
-
 Route::post('/authenticate', [LoginRegisterController::class, 'authenticate'])->name('authenticate');
+Route::any('/', [UserController::class, 'dashboard'])->name('dashboard')->methods(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
 // Route::get('/Users', [UsersController::class, 'Users'])->name('Users');
-
 
 Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
 
