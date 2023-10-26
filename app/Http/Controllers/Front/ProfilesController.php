@@ -26,7 +26,7 @@ class ProfilesController extends Controller
        $userId = session('user_id');
        $user = User::where('id', $userId)->first();
 
-       
+
         if($input['nickname']){
             // Replace 'New Name' with the new name you want
             $user->name = $input['nickname']; 
@@ -36,14 +36,14 @@ class ProfilesController extends Controller
 
         if($input['email']){
             // Replace 'New Name' with the new name you want
-            $user->name = $input['email']; 
+            $user->email = $input['email']; 
             // Save the changes to the database
             $user->save();
         }
 
         if($input['password']){
             // Replace 'New Name' with the new name you want
-            $user->name = Hash::make($input['password']); 
+            $user->password = Hash::make($input['password']); 
             // Save the changes to the database
             $user->save();
         }

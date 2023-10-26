@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/', [LoginRegisterController::class, 'login'])->name('login');
     Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
-    Route::get('/users', [UsersController::class, 'Users'])->name('users');
+    Route::get('/users', [UsersController::class, 'users'])->name('users');
     
 
    // ::Profiles
