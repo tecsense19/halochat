@@ -41,8 +41,36 @@
         @if(auth()->check() || session()->has('authenticated_user'))
             <!-- User is logged in or session variable is set, display something else -->
             <!-- Add your authenticated user content here -->
-            <li><a href="{{ route('logout') }}" class="login_btn">Logout</a></li>
+            
+          <!-- ======= Breadcrumbs ======= -->
+          <section class="breadcrumbs_top">
+            <div class="container-fluid">
 
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                  <a href="index.html"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
+                </div>
+                <div class="profile_dropdown"><!--Navigation Bar Starts Here-->
+                  <ul>
+                    <a href="#" class="display-picture"><img src="{{ URL::asset('public/front/img/man.svg') }}"> <span>My Profile</span> 
+                      <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
+                    </svg></a><!--Profile Image-->
+                    </ul>
+                    <div class="card hidden"><!--ADD TOGGLE HIDDEN CLASS ATTRIBUTE HERE-->
+                      <ul><!--MENU-->
+                        <li><a href="{{ route('profile.index') }}"><img src="{{ URL::asset('public/front/img/settings.svg') }}"> Settings</a></li>
+                        <li><a href="{{ route('gallery.gallery') }}"><img src="{{ URL::asset('public/front/img/gallery.svg') }}"> Gallery</a></li>
+                        <li><a href="{{ route('subscription.subscription') }}"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Subscription</a></li>
+                        <li><a href="#"><img src="{{ URL::asset('public/front/img/affiliate.svg') }}"> Affiliate</a></li>
+                        <li><a href="{{ route('logout') }}"><img src="{{ URL::asset('public/front/img/logout.svg') }}"> Log Out</a></li>
+                      </ul>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+          </section><!-- End Breadcrumbs -->
         @else
             <!-- User is not logged in, display the register and login links -->
             <li><a href="{{ route('register') }}" class="register_btn">Register</a></li>

@@ -55,6 +55,11 @@ class UserController extends Controller
     return view("front.terms.terms");
     }
     
+    public function profile()
+    {
+    return view("front.profile.profile");
+    }
+    
     public function gallery()
     {
     return view("front.gallery.gallery");

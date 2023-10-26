@@ -92,6 +92,75 @@ h6 {
   padding-top: 73px;
 }
 
+.profile_dropdown ul{
+  list-style: none;
+  display: flex;
+}
+
+.profile_dropdown .display-picture span {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #fff;
+  margin-left: 16px;
+}
+
+.profile_dropdown .display-picture svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  color: #fff;
+}
+
+.profile_dropdown .display-picture img{
+  width: 32px;
+  border-radius: 50%;
+}
+
+.profile_dropdown .card{
+  transition: 0.5s ease;
+  border: 0;
+}
+
+.profile_dropdown .card ul {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  top: 20px;
+  left: 0;
+  border-radius: 8px;
+  background: rgb(24 24 27);
+  overflow: hidden;
+}
+
+.profile_dropdown .card ul li {
+  padding: 0;
+}
+
+.profile_dropdown .card ul li a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.profile_dropdown .card ul li a:hover {
+  background: rgb(55 65 81);
+}
+
+.profile_dropdown .card ul li a img {
+  width: 20px;
+  padding-right: 5px;
+}
+
+.profile_dropdown .hidden{
+  display: none;
+}
+
+
+
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
@@ -262,7 +331,7 @@ h6 {
   left: 0;
   bottom: 0;
   width: 100px;
-  z-index: 9999;
+  z-index: 9;
   /* background: #131313; */
 }
 

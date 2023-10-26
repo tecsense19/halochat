@@ -7706,6 +7706,10 @@ button {
 button:focus:not(:focus-visible) {
   outline: 0; }
 
+  .login input:focus {
+    color: white;
+  }
+
 input,
 button,
 select,

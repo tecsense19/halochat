@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\UserController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Front\MessageController;
+use App\Http\Controllers\Front\ProfilesController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Artisan;
@@ -54,7 +55,9 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
     Route::get('/gallery', [UserController::class, 'gallery'])->name('gallery.gallery');
     Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
-
+    Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
+    Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
 
 
 Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');

@@ -22,11 +22,10 @@ class GoogleLoginController extends Controller
             $user = Socialite::driver('google')->user();
             if ($user) {
                 // Add your code to save or authenticate the user here.
-                
                 $request->session()->put('authenticated_user', true);
                 if ($user) {
                     // Update the user with the same email if they exist, or create a new user
-                    User::updateOrInsert(
+                    $result = User::updateOrInsert(
                         ['email' => $user->email],
                         [
                             'name' => $user->name,
@@ -36,10 +35,15 @@ class GoogleLoginController extends Controller
                             'plans' => 'Free',
                             'user_avatar' => $user->attributes['avatar'],
                             'email_verified' => $user->user['email_verified'],
-                            'email_verified_at' => date('Y-m-d H:i:s')
+                            'email_verified_at' => now()
                         ]
                     );
-                } 
+                
+                    // Get the user ID by querying the database based on the email
+                    $userId = User::where('email', $user->email)->value('id');
+                    $request->session()->put('user_id', $userId);
+                }
+                
                 return redirect()->route('dashboard'); // Adjust the route as needed
             }
         }
