@@ -87,8 +87,6 @@ class UserController extends Controller
 
     public function authenticate(Request $request)
     {
-        
-
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -97,6 +95,7 @@ class UserController extends Controller
         if(Auth::attempt($credentials) && auth()->user()->role === "User" && auth()->user()->deleted_at === null)
         {
             $request->session()->put('authenticated_user', true);
+            $request->session()->put('user_id', auth()->user()->id);
             $request->session()->regenerate();
             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
         }

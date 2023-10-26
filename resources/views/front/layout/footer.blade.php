@@ -15,6 +15,8 @@
     </div>
   </footer><!-- End  Footer -->
   <!-- Vendor JS Files -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
   <script src="{{ URL::asset('public/front/vendor/purecounter/purecounter_vanilla.js') }}"></script>
   <script src="{{ URL::asset('public/front/vendor/aos/aos.js') }}"></script>
   <script src="{{ URL::asset('public/front/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -28,6 +30,6 @@
   <script src="{{ URL::asset('public/front/js/main.js') }}"></script>
 
 
-</body>
+</body> 
 
 </html>

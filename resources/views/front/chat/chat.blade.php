@@ -1,5 +1,4 @@
 <?php 
-
 $user = isset($user) ? $user : '';
 $name = isset($user->name) ? $user->name : '';
 $description = isset($user->description) ? $user->description : '';
@@ -10,9 +9,7 @@ $body_description = isset($user->body_description) ? $user->body_description : '
 $ethnicity = isset($user->ethnicity) ? $user->ethnicity : '';
 $age = isset($user->age) ? $user->age : '';
 $relationship_status = isset($user->relationship_status) ? $user->relationship_status : '';
-
 $profileImages = isset($user->profileImages) ? $user->profileImages : [];
-
 
 ?>
 @include('front.layout.front')
@@ -22,7 +19,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     <section class="position-relative">
         <div class="container-fluid g-0">
             <div class="all_details_box">
-                <div class="chat-menu">
+                <div class="chat-menu" id="chat-menu">
                     <div class="chat-title">
                         <h3>Chat</h3>
                     </div>
@@ -39,7 +36,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
                     @endphp
                     <a href="#">
-                        <div class="chat-admin">
+                        <div class="chat-admin" id="mobile_view">
                             <div class="chat-profile">
                                 <img src="{{ $imgUrl1 }}">
                             </div>
@@ -82,6 +79,12 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <div id="wrapper" class="wrapper">
                         <div id="content" class="content">
                             <div class="chat-profile-bar">
+
+                                <div class="backtochat" style="display: none;">
+                                    <img src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg"
+                                        class="">
+                                </div>
+
                                 <div class="asuna-saito">
                                     <div class="asuna-image">
                                         <img src="{{ $imgUrl1 }}">
@@ -90,7 +93,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         <h6>{{ $name }}</h6>
                                     </div>
                                 </div>
-                                <div class="toggle-button-right">
+                                <div class="toggle-button-right" id="show-toggle-btn">
                                     <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
                                 </div>
                             </div>
@@ -177,12 +180,18 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
                                             aria-label="Slide 3"></button>
                                     </div>
+                                    <div class="back_btn" style="display: none;">
+                                        <img
+                                            src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg">
+                                        <div class="text-white text-sm font-semibold leading-normal">Back</div>
+                                    </div>
                                     <div class="carousel-inner">
                                         @foreach($profileImages as $key => $profileImages)
                                         @php
                                         $imgUrl = isset($profileImages->image_path) ?
                                         asset('storage/app/public').'/'.$profileImages->image_path : '';
                                         @endphp
+
                                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                             <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
                                             <img src="{{ $imgUrl }}" class="d-block w-100">
@@ -190,15 +199,15 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         </div>
                                         @endforeach
                                         <!-- <div class="carousel-item">
-                        <img src="{{ URL::asset('public/front/img/slider-img2.webp') }}" class="d-block w-100">
-                        <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                        2
-                      </div>
-                      <div class="carousel-item">
-                        <img src="{{ URL::asset('public/front/img/slider-img3.webp') }}" class="d-block w-100">
-                        <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                        3
-                      </div> -->
+                                          <img src="{{ URL::asset('public/front/img/slider-img2.webp') }}" class="d-block w-100">
+                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
+                                          2
+                                        </div>
+                                        <div class="carousel-item">
+                                          <img src="{{ URL::asset('public/front/img/slider-img3.webp') }}" class="d-block w-100">
+                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
+                                          3
+                                        </div> -->
                                     </div>
                                     <button class="carousel-control-prev" type="button"
                                         data-bs-target="#carouselExampleFade" data-bs-slide="prev">
@@ -330,7 +339,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     </div>
 </div>
 @include('front.layout.footer')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
     $('.toggle-button-right').on('click', function() {
@@ -338,4 +346,49 @@ $(document).ready(function() {
         $('.sidebar ul.nav').toggleClass('isClosed');
     });
 });
+</script>
+
+
+<script>
+if (window.innerWidth <= 1199) {
+
+    $('#mobile_view').on('click', function() {
+
+        $('.content').show();
+        $('.start_chat_part').show();
+        $('.chat-menu').hide();
+
+
+    });
+
+    $('#show-toggle-btn').on('click', function() {
+
+        $('#aside').show();
+        $('.content').hide();
+        $('.chat-menu').hide();
+
+    });
+
+    $('.back_btn').on('click', function() {
+
+        $('.content').show();
+        $('.start_chat_part').show();
+        $('.chat-menu').hide();
+        $('#aside').hide();
+
+
+    });
+
+    $('.backtochat').on('click', function() {
+
+        $('.content').hide();
+        $('.start_chat_part').hide();
+        $('.chat-menu').show();
+        $('#aside').hide();
+
+
+    });
+
+
+}
 </script>

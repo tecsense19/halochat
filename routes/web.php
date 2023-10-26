@@ -58,6 +58,7 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
     Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
+    Route::get('/profile/delete', [ProfilesController::class, 'delete'])->name('profile.delete');
 
 
 Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
