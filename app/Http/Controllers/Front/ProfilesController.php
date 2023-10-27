@@ -26,27 +26,24 @@ class ProfilesController extends Controller
        $userId = session('user_id');
        $user = User::where('id', $userId)->first();
 
-
-        if($input['nickname']){
-            // Replace 'New Name' with the new name you want
-            $user->name = $input['nickname']; 
-            // Save the changes to the database
-            $user->save();
-        }
-
-        if($input['email']){
-            // Replace 'New Name' with the new name you want
+            $user->name = $input['name']; 
             $user->email = $input['email']; 
-            // Save the changes to the database
+            if($input['Newpassword']){
+                $user->password = $input['Newpassword']; 
+            }
+            $user->gender = $input['gender']; 
             $user->save();
-        }
 
-        if($input['password']){
-            // Replace 'New Name' with the new name you want
-            $user->password = Hash::make($input['password']); 
-            // Save the changes to the database
-            $user->save();
+            return view("front.profile.profile", compact('user'));
         }
-        return view("front.profile.profile", compact('user'));
-    }
+        public function delete(request $request)
+        {
+            $input = $request->all();
+            $userId = session('user_id');
+            $user = User::where('id', $userId)->first();
+            
+            $user->deleted_at = date("Y-m-d H:i:s"); 
+            $user->save();
+            return view("front.profile.profile", compact('user'));
+        }
 }
