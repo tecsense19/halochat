@@ -51,14 +51,22 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/register', [UserController::class, 'register'])->name('register');
     Route::get('/chat', [UserController::class, 'chat'])->name('chat.chat');
-    Route::get('/chat/message/{id}', [MessageController::class, 'index'])->name('chat.message');
+  
+    
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
-    Route::get('/gallery', [UserController::class, 'gallery'])->name('gallery.gallery');
     Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
     Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
-    Route::get('/profile/delete', [ProfilesController::class, 'delete'])->name('profile.delete');
+    Route::post('/profile/delete', [ProfilesController::class, 'delete'])->name('profile.delete');
+
+    Route::get('/chat/message/{id}', [MessageController::class, 'index'])->name('chat.message');
+    Route::get('/chat/mobile/message/{id}', [MessageController::class, 'mobile'])->name('chat.messagemobile');
+    Route::post('/chat/message/store/{id}', [MessageController::class, 'store'])->name('chat.store');
+    Route::post('/chat/message/userMessage', [MessageController::class, 'userMessage'])->name('chat.userMessage');
+    Route::get('/gallery', [MessageController::class, 'gallery'])->name('gallery.gallery');
+    Route::get('/chat/delete/{id}', [MessageController::class, 'delete'])->name('chat.delete');
+    
 
 
 Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
@@ -67,13 +75,10 @@ Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleC
 
 
 Route::get('/clear-cache', function () {
-    $exitCode = Artisan::call('cache:clear');
-
-    return 'Cache has been cleared'; // You can also return a view here if you prefer.
-});
-
-Route::get('/clear-route-cache', function () {
-    $exitCode = Artisan::call('route:clear');
-
-    return 'Route cache has been cleared'; // You can customize the response as needed.
+	Artisan::call('cache:clear');
+	Artisan::call('route:clear');
+	Artisan::call('view:clear');
+	Artisan::call('config:clear');
+ 
+	return "Cache cleared successfully";
 });

@@ -3,13 +3,13 @@
     <div class="container_fluid">
       <div class="footer_content">
         <ul class="social_txt">
-          <li><a href="#">Discord</a></li>
+          <li><a href="https://discord.com/" target="_blank">Discord</a></li>
           <li><a href="#">Contact</a></li>
           <li><a href="#">Affiliate</a></li>
         </ul>
         <ul class="links">
           <li><a href="{{ route('terms.terms') }}">Terms of Service</a></li>
-          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="{{ route('terms.terms') }}">Privacy Policy</a></li>
         </ul>
       </div>
     </div>

@@ -809,7 +809,7 @@ form.search-form svg {
 .chat-admin {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   padding: 5px;
   border: 1px solid #545353;
   margin-top: 8px;
@@ -888,7 +888,7 @@ form.search-form svg {
   max-width: 400px;
   background: #131313;
   border-left: 1px solid;
-  padding-top: 73px;
+  /* padding-top: 73px; */
 }
 .start_chat_part .sidebar.isClosed {
   display: none !important;
@@ -2264,9 +2264,9 @@ a.change_plan_btn {
     display: flex;
     justify-content: space-between;
   }
-  .start_chat_part {
+  /* .start_chat_part {
     display: none;
-  }
+  } */
   .chat-menu {
     width: 100%;
   }
@@ -2415,3 +2415,122 @@ a.change_plan_btn {
     padding: 48px 25px;
   }
 }
+
+
+/* ANIMANTON */
+
+.dot-elastic {
+  position: relative;
+  display: inline-block;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #f7ddcb;
+  color: #f7ddcb;
+  display: inline-block;
+  margin: 0 2px;
+  animation: dot-grow 1s linear infinite;
+}
+
+.dot.dot1 {
+  animation-delay: 0s;
+}
+
+.dot.dot2 {
+  animation-delay: 0.33s;
+}
+
+.dot.dot3 {
+  animation-delay: 0.66s;
+}
+
+@keyframes dot-grow {
+  0%, 100% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.5);
+  }
+} 
+
+
+.back_btn {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  margin: 24px;
+}
+
+.chat-admin a {
+  display: flex;
+  align-content: stretch;
+  justify-content: space-around;
+}
+
+.chat_delete p {
+  display: flex;
+  margin-top: 6px;
+  justify-content: space-between;
+}
+
+@media (max-width: 1199px) {
+
+  .start_chat_part .content {
+    height: 100vh;
+    flex-grow: 9;
+    padding: 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding-top: unset;
+  }
+
+  .chat-menu {
+    background: #1A1A1A;
+    padding: 20px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+
+  .start_chat_part .content {
+    height: 100vh;
+    flex-grow: 9;
+    padding: 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding-top: unset;
+  }
+
+
+.start_chat_part .sidebar {
+  max-width: unset;
+  transition: all 0.3s;
+  width: 100%;
+  background: #131313;
+  border-left: 1px solid;
+  padding-top: unset;
+}
+
+.chat_mobile {
+    background: #1A1A1A;
+    padding: 20px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    padding-top: 80px !important;
+}
+.chat_delete p {
+  display: flex;
+  margin-top: 6px;
+  justify-content: space-evenly;
+}
+}
+

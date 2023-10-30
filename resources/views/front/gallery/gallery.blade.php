@@ -1,8 +1,6 @@
 @include('front.layout.front')
 @include('front.layout.header')
 
-
-
   <!-- Start #main -->
   <main id="main">
     <section class="gallery_section">
@@ -12,38 +10,53 @@
             <div class="col-lg-6">
               <div class="limit_txt">
                 <h3>You have reached the free pictures limit:</h3>
-                <span>3/3 pictures</span>
+                @php
+                $totalCount = 0; // Initialize a variable to store the total count
+                @endphp
+
+                @foreach($all_UserProfile as $chat_name)
+                    @php
+                    $totalCount += $chat_name->count; // Add the count of each item to the total count
+                    @endphp
+                    {{ $chat_name->count }}
+                @endforeach
+
+                <span>{{ $totalCount }}/{{ $totalCount }} pictures</span>
               </div>
             </div>
             <div class="col-lg-6">
               <div class="limit_txt justify-content-lg-end">
-                <a href="#" class="become_premium_btn"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Become Premium</a>
+                <a href="{{ route('subscription.subscription') }}" class="become_premium_btn"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Become Premium</a>
               </div>
             </div>
           </div>
         </div>
+        @foreach($all_UserProfile as $chat_name)
         <div class="pictures_box">
           <div class="pictures_head">
-            <h2>Asuna Saito <span>2 Pictures</span></h2>
-            <a href="#" class="see_btn d-none d-lg-block">See all</a>
+         
+            <h2> {{ $chat_name->profile->name }} <span>{{ $chat_name->count }} Pictures</span></h2>
+            <!-- <a href="#" class="see_btn d-none d-lg-block">See all</a> -->
           </div>
+        
           <div class="row">
             <div class="col-6 col-sm-3 col-lg-2">
               <div class="pictures_item" data-bs-toggle="modal" data-bs-target="#gallery">
-                <p><img src="{{ URL::asset('public/front/img/1.webp') }}"></p>
+                <p><img src="{{ $chat_name->media_url }}"></p>
               </div>
             </div>
-            <div class="col-6 col-sm-3 col-lg-2">
+            <!-- <div class="col-6 col-sm-3 col-lg-2">
               <div class="pictures_item" data-bs-toggle="modal" data-bs-target="#gallery">
                 <p><img src="{{ URL::asset('public/front/img/gallery-img2.webp') }}"></p>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="pictures_head d-block d-lg-none">
-            <a href="#" class="see_btn">See all</a>
+            <!-- <a href="#" class="see_btn">See all</a> -->
           </div>
         </div>
-        <div class="pictures_box">
+       
+        <!-- <div class="pictures_box">
           <div class="pictures_head">
             <h2>Naomi Carter <span>1 Pictures</span></h2>
             <a href="#" class="see_btn d-none d-lg-block">See all</a>
@@ -58,8 +71,9 @@
           <div class="pictures_head d-block d-lg-none">
             <a href="#" class="see_btn">See all</a>
           </div>
-        </div>
+        </div> -->
       </div>
+      @endforeach
     </section>
   </main>
   <!-- End #main -->
