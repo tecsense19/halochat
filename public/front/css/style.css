@@ -2475,6 +2475,10 @@ a.change_plan_btn {
   justify-content: space-between;
 }
 
+input {
+  color: white;
+}
+
 @media (max-width: 1199px) {
 
   .start_chat_part .content {
