@@ -35,8 +35,8 @@ class UserController extends Controller
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
         } else {
-            //The user is not authenticated. You can redirect them or take other actions.
-            return redirect()->route('login'); // Redirect to the login page, for example.
+            $profileList = Profile::with('profileImages')->get();
+            return view("front.dashboard", compact('profileList'));
         }
     }
 
