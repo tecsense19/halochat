@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Messages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -30,21 +31,83 @@ class UserController extends Controller
     }
     public function dashboard()
     {
-        // if (session()->has('authenticated_user')) {
+        if (session()->has('authenticated_user')) {
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
-        // } else {
-            // The user is not authenticated. You can redirect them or take other actions.
-        //     return redirect()->route('front.login'); // Redirect to the login page, for example.
-        // }
+        } else {
+            //The user is not authenticated. You can redirect them or take other actions.
+            return redirect()->route('login'); // Redirect to the login page, for example.
+        }
     }
-    
 
     public function chat()
     {
-    return view("front.chat.chat");
+        $user = Profile::with('profileImages')->first();
+        $getLoginUser = User::where('id', session('user_id'))->first();
+        $getall_Messages = Messages::where('sender_id', session('user_id'))->first();
+        $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
+    
+        $allReciver = [];
+    
+        foreach ($getAllReciverUser as $value) 
+        {
+            $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
+    
+            if ($user_profile)
+            { 
+                // Create an associative array with both user_profile and value
+                $combinedData = [
+                    'message' => $value,
+                    'user_profile' => $user_profile,
+                ];
+    
+                // Add the combinedData to the $allReciver array
+                $allReciver[] = $combinedData;
+            }
+        }
+    
+        
+    
+        if(empty($allReciver))
+        {
+            $profileList = Profile::with('profileImages')->get();
+            return view("front.dashboard", compact('profileList'));
+        }else{
+            return view("front.chat.chat", compact("allReciver", "user" ,"getall_Messages"));
+        }
+        // Uncomment the lines below for debugging, then remove them when everything works
+        // echo "<pre>";
+        // print_r($allReciver);
+        // die;
     }
 
+    public function mobile()
+    {
+        $getLoginUser = User::where('id', session('user_id'))->first();
+        $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
+    
+        $allReciver = [];
+    
+        foreach ($getAllReciverUser as $value) 
+        {
+            $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
+    
+            if ($user_profile)
+            { 
+                // Create an associative array with both user_profile and value
+                $combinedData = [
+                    'message' => $value,
+                    'user_profile' => $user_profile,
+                ];
+    
+                // Add the combinedData to the $allReciver array
+                $allReciver[] = $combinedData;
+            }
+        }
+
+        return view("front.chat.mobile", compact("allReciver"));
+    }
+    
     public function subscription()
     {
     return view("front.subscription.subscription");

@@ -9,7 +9,11 @@ $userId = isset($user->id) ? $user->id : '';
 $userEmail = isset($user->email) ? $user->email : '';
 $userPassword = isset($user->password) ? $user->password : '';
 $userGender = isset($user->gender) ? $user->gender : '';
-
+$userGender = isset($user->gender) ? $user->gender : '';
+$userCreated_at = isset($user->created_at) ? $user->created_at : '';
+$dateString = $userCreated_at; // Replace with your date string
+$timestamp = strtotime($dateString);
+$formattedDate = date('Y-m-d', $timestamp);
 ?>
 
 <main id="main">
@@ -75,7 +79,7 @@ $userGender = isset($user->gender) ? $user->gender : '';
                 <div class="admin_details">
                   <h3>Danger Zone</h3>
                   <p>If you want to permanently delete this account and all of its data, click button below. </p>
-                  <a href="{{ route('profile.delete') }}" class="delete_btn"><img src="{{ URL::asset('public/front/img/delete.svg') }}"> Delete Account</a>
+                  <a href="" class="delete_btn" id="deleteAccountBtn"><img src="{{ URL::asset('public/front/img/delete.svg') }}"> Delete Account</a>
                 </div>
               </div>
             </div>
@@ -90,7 +94,7 @@ $userGender = isset($user->gender) ? $user->gender : '';
                 <a href="{{ route('subscription.subscription') }}" class="change_plan_btn">Change Plan</a>
               </div>
               <div class="current_plan_txt" id="pay_txt">
-                <p>Payment date: <span></span></p>
+                <p>Payment date: <span>{{ $formattedDate }}</span></p>
                 <p>Subscription <span>200 Credit</span></p>
               </div>
             </div>
@@ -183,4 +187,34 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    // Get a reference to the "Delete Account" button
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+
+    // Add a click event listener to the button
+    deleteAccountBtn.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default behavior (following the href)
+
+        // Here, you can add code to display a confirmation dialog or perform the delete action
+        if (confirm('Are you sure you want to delete your account and all its data?')) {
+
+          axios.post("{{ route('profile.delete') }}") // Replace with the actual delete account endpoint
+                .then(function (response) {
+                    // Handle the response from the server, e.g., show a success message
+                    alert('Account deleted successfully.');
+                    window.location.href = "{{ route('logout') }}";
+                })
+                .catch(function (error) {
+                    // Handle errors, e.g., show an error message
+                    alert('Error deleting the account.');
+                    console.error(error);
+                });
+        } else {
+            // If the user cancels, you can do nothing or provide feedback
+            alert('Account deletion canceled.');
+        }
+    });
 </script>

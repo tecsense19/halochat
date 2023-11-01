@@ -1,23 +1,24 @@
 
 @include('front.layout.front')
 @include('front.layout.header')
+
 <main id="main">
 
 <section class="subscribe_section">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-md-4">
+      <div class="col-6 col-sm-6 col-xl-4 d-none d-xl-block">
         <div class="subscribe-item">
           <img src="{{ URL::asset('public/front/img/crown.svg') }}">
           <p>FIRST SUBSCRIPTION</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-6 col-sm-6 col-xl-4">
         <div class="subscribe-item text-center">
           <h6>Up to 70%  Off</h6>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-6 col-sm-6 col-xl-4">
         <div class="subscribe-item text-end">
           <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
         </div>
@@ -28,56 +29,74 @@
 
 <section class="choose_plan">
   <div class="container">
-    <div class="choose_title">
+    <div class="choose_title d-none d-xl-block">
       <h2>Choose your Plan</h2>
       <p>100% anonymous. You can cancel anytime.</p>
     </div>
     <div class="plans_box">
       <div class="row g-5">
-        <div class="col-md-4">
+        <div class="col-xl-4">
           <div class="discount_box">
             <div class="discount_only_today">
               <h3>Get Exclusive Discount Only Today!</h3>
               <p>Up to <span>70%</span> off for first subscription</p>
-              <div class="text-center">
+              <div class="text-center d-none d-xl-block">
                 <img src="{{ URL::asset('public/front/img/real_left.png') }}">
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-xl-4">
           <div class="discount_box">
-            <a href="#">
-              <div class="pricing_box">
-                <div class="offer_box">50% off</div>
-                <h6>Premium</h6>
-                <h3>$9.99 <span> $19.99 </span><small> / month</small></h3>
-                <p>Cancel anytime, privacy in bank statement</p>
-              </div>
-            </a>
-            <a href="#">
-              <div class="pricing_box">
-                <div class="offer_box">70% off</div>
-                <div class="pupular_plan">
-                  <h6>Premium</h6>
-                  <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/fire.svg') }}"> Popular</div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    <div class="pricing_box">
+                      <div class="offer_box">50% off</div>
+                      <h6>Premium</h6>
+                      <h3>$9.99 <span> $19.99 </span><small> / month</small></h3>
+                      <p>Cancel anytime, privacy in bank statement</p>
+                    </div>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                    <div class="pricing_box">
+                      <div class="offer_box">70% off</div>
+                      <div class="pupular_plan">
+                        <h6>Premium</h6>
+                        <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/fire.svg') }}"> Popular</div>
+                      </div>
+                      <h3>$69.99 <span> $239.88 </span><small> / year</small></h3>
+                      <p>Cancel anytime, privacy in bank statement</p>
+                    </div>
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="pay_btn" id="paypal">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
                 </div>
-                <h3>$69.99 <span> $239.88 </span><small> / year</small></h3>
-                <p>Cancel anytime, privacy in bank statement</p>
+                <div class="pay_btn" id="pay_creditcard">
+                  <a href="#"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                </div>
               </div>
-            </a>
-            <div class="pay_btn" id="paypal">
-              <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
-            </div>
-            <div class="pay_btn" id="pay_creditcard">
-              <a href="#"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
-            </div>
-            <div class="pay_btn" id="pay_bitcoin">
-              <a href="#">Pay with <img src="{{ URL::asset('public/front/img/bitcoin.svg') }}" class="ps-1"> <img src="{{ URL::asset('public/front/img/eth.svg') }}"> <img src="{{ URL::asset('public/front/img/litecoin.svg') }}"></a>
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="pay_btn" id="paypal">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
+                </div>
+                <div class="pay_btn" id="pay_creditcard">
+                  <a href="#"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                </div>
+                <div class="pay_btn" id="pay_bitcoin">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/bitcoin.svg') }}" class="ps-1"> <img src="{{ URL::asset('public/front/img/eth.svg') }}"> <img src="{{ URL::asset('public/front/img/litecoin.svg') }}"></a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-xl-4">
           <div class="discount_box">
             <div class="benefit">
               <h3>Premium Benefits</h3>
@@ -90,7 +109,7 @@
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Listen to voice messages</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Fast response time</li>
               </ul>
-              <img src="{{ URL::asset('public/front/img/manga_right.png') }}">
+              <img src="{{ URL::asset('public/front/img/manga_right.png') }}" class="d-none d-xl-block">
             </div>
           </div>
         </div>
