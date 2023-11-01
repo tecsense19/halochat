@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Managecredit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +17,9 @@ class ProfilesController extends Controller
         $userId = session('user_id');
         // Use the user ID to fetch the user data
         $user = User::where('id', $userId)->first();
+        $managecredit = Managecredit::where('user_id', $userId)->first();
 
-        return view("front.profile.profile", compact('user'));
+        return view("front.profile.profile", compact('user','managecredit'));
     }
 
     public function update(request $request)
@@ -34,7 +36,7 @@ class ProfilesController extends Controller
             $user->gender = $input['gender']; 
             $user->save();
 
-            return view("front.profile.profile", compact('user'));
+            return redirect()->route('profile.index');
         }
         public function delete(request $request)
         {

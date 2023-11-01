@@ -12,8 +12,8 @@ class ProfileController extends Controller
 {
     public function addProfiles(Request $request)
     {
-  
-       return view('admin.profiles.addedit');
+       $get_voice = $this->get_voice();
+       return view('admin.profiles.addedit', compact('get_voice'));
     }
 
     public function profiles()
@@ -45,7 +45,33 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $profileList = Profile::where('profile_id', $id)->first();
-        return view('admin.profiles.addedit', compact('profileList', 'id'));
+        $get_voice = $this->get_voice();
+        return view('admin.profiles.addedit', compact('profileList', 'id', 'get_voice'));
+    }
+
+    public function get_voice()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => env('AI_CHATUSER_URL').'/voices',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+        ),
+        ));
+        
+        $response = curl_exec($curl);
+
+
+        curl_close($curl);
+        return $response;
     }
 
     public function store(Request $request)
@@ -57,23 +83,60 @@ class ProfileController extends Controller
             'profile_name' => 'required|string',
             'profile_ethnicity' => 'required|string',
             'profile_personality' => 'required|string',
-            'profile_age' => 'required|integer',
+            'profile_age' => 'required|string',
             'profile_gender' => 'required|string',
             'profile_occupation' => 'required|string',
             'profile_hobbies' => 'required|string',
             'profile_relationship_status' => 'required|string',
             'profile_body_description' => 'required|string',
-            'profile_description' => 'required|string',
+            'description' => 'required|string',
         ]);
         
         if ($validator->fails()) {
+
             return redirect()->route('admin.profile')->withErrors($validator);
             //return redirect()->route('admin.profile.addProfiles')->withErrors($validator)->withInput();
         }
         else {
+
             $profile_update = Profile::where('profile_id',$input['profile_id'])->first();
             if($profile_update)
             {
+                    // update profile
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => env('AI_CHATUSER_URL').'/personas'.'/'.$profile_update->persona_id,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'PUT',
+                    CURLOPT_POSTFIELDS =>'{
+                        "name": "'.$input['profile_name'].'",
+                        "system_prompt": "You are a helpful assistant.",
+                        "system_instruction": "",
+                        "voice_name": "'.$input['profile_get_voice'].'",
+                        "voice_model": "eleven_multilingual_v2",
+                        "voice_settings": {
+                            "stability": 0.5,
+                            "similarity_boost": 0.75,
+                            "style": 0,
+                            "use_speaker_boost": true
+                        },
+                        "short_description": "'.$input['profile_body_description'].'",
+                        "first_message": "'.$input['first_message'].'"
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json',
+                        'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+                    ),
+                    ));
+
+                    $response = curl_exec($curl);
+                    curl_close($curl);
+
                 $profile_update = Profile::where('profile_id', $input['profile_id'])->update([
                     'name' => $input['profile_name'],
                     'ethnicity' => $input['profile_ethnicity'],
@@ -84,7 +147,10 @@ class ProfileController extends Controller
                     'hobbies' => $input['profile_hobbies'],
                     'relationship_status' => $input['profile_relationship_status'],
                     'body_description' => $input['profile_body_description'],
-                    'description' => $input['profile_description'],
+                    'description' => $input['description'],
+                    'voice_name' => $input['profile_get_voice'],
+                    'voice_preview_url' => $input['audio_url'],
+                    'first_message' => $input['first_message'],
                 ]);
                 $profileId = $input['profile_id'];
                 if ($request->hasFile('profile_img')) {
@@ -98,6 +164,49 @@ class ProfileController extends Controller
                     }
                 }
             }else{
+               // add profile
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                  CURLOPT_URL => env('AI_CHATUSER_URL').'/personas',
+                  CURLOPT_RETURNTRANSFER => true,
+                  CURLOPT_ENCODING => '',
+                  CURLOPT_MAXREDIRS => 10,
+                  CURLOPT_TIMEOUT => 0,
+                  CURLOPT_FOLLOWLOCATION => true,
+                  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                  CURLOPT_CUSTOMREQUEST => 'POST',
+                  CURLOPT_POSTFIELDS =>'{
+                    "name": "'.$input['profile_name'].'",
+                    "system_prompt": "You are a helpful assistant.",
+                    "system_instruction": "",
+                    "voice_name": "'.$input['profile_get_voice'].'",
+                    "voice_model": "eleven_multilingual_v2",
+                    "voice_settings": {
+                        "stability": 0.5,
+                        "similarity_boost": 0.75,
+                        "style": 0,
+                        "use_speaker_boost": true
+                    },
+                    "short_description": "'.$input['profile_body_description'].'",
+                    "first_message": "'.$input['first_message'].'"
+                }',
+                  CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+                  ),
+                ));
+                $response = curl_exec($curl);
+
+                // print_r($response);
+                // die;
+                $responseArray = json_decode($response, true);
+
+                if (isset($responseArray['data']['persona_id'])) {
+                    $personaId = $responseArray['data']['persona_id'];
+                } else {
+                    echo "Persona ID not found in the response.";
+                }
+                
             $profile = new Profile;
             $profile->name = $input['profile_name'];
             $profile->ethnicity = $input['profile_ethnicity'];
@@ -108,7 +217,11 @@ class ProfileController extends Controller
             $profile->hobbies = $input['profile_hobbies'];
             $profile->relationship_status = $input['profile_relationship_status'];
             $profile->body_description = $input['profile_body_description'];
-            $profile->description = $input['profile_description'];
+            $profile->description = $input['description'];
+            $profile->voice_name = $input['profile_name'];
+            $profile->voice_preview_url = $input['audio_url'];
+            $profile->persona_id = $personaId;
+            $profile->first_message = $input['first_message'];
             $profile->save(); // Save the profile data
             $profileId = $profile->id;
                
@@ -132,7 +245,7 @@ class ProfileController extends Controller
     dd($e->getMessage());
     }
         $profileList = Profile::with('profileImages')->get();
-        return view('admin.profiles.list', compact('profileList'));
+        return redirect()->route('admin.profile.list', compact('profileList'));
        
     }
 

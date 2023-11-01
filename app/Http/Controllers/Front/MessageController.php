@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Messages;
 use App\Models\Profile;
+use App\Models\Managecredit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,7 @@ class MessageController extends Controller
     public function userMessage(){
     
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
-      
+        if (session()->has('authenticated_user')) {
             $message = array(
                 'profile_id'=> $user->profile_id,
                 'user_id'=> session('user_id'),
@@ -27,6 +28,25 @@ class MessageController extends Controller
             );
             Messages::create($message);
 
+            $userId = User::where('id', $_POST['sender_id'])->first();
+            if($userId)
+            {   
+                $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
+                // print_r($creditAddManage);
+                // die;
+                 $creditAdd = Managecredit::updateOrInsert(
+                ['user_id' => $userId->id],
+                [
+                    'currentcredit' => $creditAddManage->currentcredit - 1,
+                    'usedcredit' => $creditAddManage->usedcredit + 1,
+                    'totalcredit' => $creditAddManage->totalcredit - 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+
+            }
+    
             $getLoginUser = User::where('id', session('user_id'))->first();
             $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $_POST['receiver_id'])->first();
             $getall_UserMessages = Messages::where('sender_id', $_POST['receiver_id'])->where('receiver_id', session('user_id'))->get();
@@ -52,6 +72,10 @@ class MessageController extends Controller
                 }
             }
             return redirect()->back();
+        }else{
+            
+            return redirect()->route('login');
+        }
         
     }
     public function index($id)
@@ -197,11 +221,6 @@ class MessageController extends Controller
                 }
             }
         
-            // // Uncomment the lines below for debugging, then remove them when everything works
-            // echo "<pre>";
-            // print_r($allReciver);
-            // die;
-        
             return view("front.chat.mobile", compact("allReciver", "user" ,"getall_Messages","getall_UserMessages"));
         }
         
@@ -212,8 +231,9 @@ class MessageController extends Controller
         $id = session('user_id');
         $getall_Picture = Messages::select('*')
         ->where('sender_id', session('user_id'))
+        ->whereNotNull('media_url')
         ->get();
-
+    
         $all_UserProfile = [];
         foreach ($getall_Picture as $key => $value) {
 
@@ -228,9 +248,6 @@ class MessageController extends Controller
             $all_UserProfile[] = $value;
         }
 
-    //    echo "<pre>";
-    //    print_r($all_UserProfile);
-    //    die;
       return view("front.gallery.gallery", compact("all_UserProfile"));
 
     }

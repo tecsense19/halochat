@@ -26,6 +26,11 @@ class User extends Authenticatable
         'password',
         'email_verified',
         'user_avatar',
+        'chatuser_id',
+        'first_message',
+        'voice_preview_url',
+        'voice_name',
+        'persona_id',
     ];
 
     /**
