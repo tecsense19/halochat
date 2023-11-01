@@ -11,25 +11,15 @@ $profileListHobbies = isset($profileList->hobbies) ? $profileList->hobbies : '';
 $profileListRelationship_status = isset($profileList->hobbies) ? $profileList->hobbies : '';
 $profileListBody_description = isset($profileList->body_description) ? $profileList->body_description : '';
 $profileList_description = isset($profileList->description) ? $profileList->description : '';
-
+$profileList_first_message = isset($profileList->first_message) ? $profileList->first_message : '';
+$voice_name = isset($profileList->voice_name) ? $profileList->voice_name : '';
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
+$get_voice = json_decode($get_voice, true);
+// print_r($voice_name);
+// die;
+
 ?>
-<style>
-button.file-upload-browse.btn.btn-primary {
-    margin: 5px;
-}
-.image-container {
-    margin: 10px;
-    display: inline-block;
-    text-align: center;
-}
 
-button {
-    display: block;
-    margin: 5px auto;
-}
-
-</style>
 @include('admin.layout.header')
 
 <div class="container-scroller">
@@ -59,6 +49,27 @@ button {
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                             <div class="form-group">
+                                <label for="exampleSelectGender">Select Voice</label>
+                                <select class="form-control" id="profile_get_voice" name="profile_get_voice">
+                                    @if ($get_voice !== null)
+                                        @foreach ($get_voice['data'] as $item)
+                                            <option data-audio-src="{{ $item['preview_url'] }}" data-profile-gender="{{ isset($item['labels']['gender']) ? $item['labels']['gender'] : '' }}" data-body-discription="{{ isset($item['labels']['description']) ? $item['labels']['description'] : '' }}" data-age="{{ isset($item['labels']['age']) ? $item['labels']['age'] : 0 }}" >{{ $item['name'] }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+
+                                @error('profile_get_voice')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <audio id="audio-preview" name="audio_preview" controls>
+                                    <source src="" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                            </audio>
+                            <input type="hidden" id="audio_url" name="audio_url" value="">
+
+                            <div class="form-group">
                                 <label for="ethnicity">Ethnicity</label>
                                 <input type="text" class="form-control" id="profile_ethnicity" name="profile_ethnicity"
                                     value="{{ $profileListEthnicity }}" placeholder="ethnicity">
@@ -87,13 +98,15 @@ button {
                                 <label for="exampleSelectGender">Gender</label>
                                 <select class="form-control" id="profile_gender" value="{{ $profileListGender }}"
                                     name="profile_gender">
-                                    <option>Male</option>
-                                    <option>Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
                                 </select>
                             </div>
                             @error('profile_gender')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
+                           
+
                             <div class="form-group">
                                 <label>Profile image</label>
                                 <input type="file" name="profile_img[]" id="fileInput" class="file-upload-default"
@@ -102,7 +115,7 @@ button {
                                     <input type="text" class="form-control file-upload-info" disabled
                                         placeholder="Upload Image">
                                     <span class="input-group-append">
-                                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                                        <button class="file-upload-browse btn btn-primary check" type="button">Upload</button>
                                     </span>
                                 </div>
                                 
@@ -160,11 +173,21 @@ button {
                             @enderror
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <input type="text" class="form-control" id="body_description"
-                                    name="profile_description" value="{{ $profileList_description }}"
-                                    placeholder="Body description">
+                                <input type="text" class="form-control" id="description"
+                                    name="description" value="{{ $profileList_description }}"
+                                    placeholder="Description">
                             </div>
-                            @error('profile_body_description')
+                            @error('description')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="first_message">First message</label>
+                                <input type="text" class="form-control" id="first_message"
+                                    name="first_message" value="{{ $profileList_first_message }}"
+                                    placeholder="first message">
+                            </div>
+                            @error('first_message')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 
@@ -296,6 +319,52 @@ fileInput.addEventListener('change', function () {
     }
 });
 
+
+</script>
+
+
+<script>
+        var selectElement = document.getElementById('profile_get_voice');
+        var audioPreview = document.getElementById('audio-preview');
+        var profile_ethnicity = document.getElementById('profile_ethnicity');
+        var body_description = document.getElementById('profile_body_description');
+        var profile_gender = document.getElementById('profile_gender');
+        var audioUrlInput = document.getElementById('audio_url');
+        
+    
+
+        selectElement.addEventListener('change', function () {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var audioSrc = selectedOption.getAttribute('data-audio-src');
+        var dataprofile_ethnicity = selectedOption.getAttribute('data-age');
+        var dataBodyDescription = selectedOption.getAttribute('data-body-discription');
+        var dataGender = selectedOption.getAttribute('data-profile-gender');
+
+        
+
+        if (dataprofile_ethnicity !== null) {
+            profile_ethnicity.value = dataprofile_ethnicity;
+        } else {
+            profile_age.value = 'Age information not available';
+        }
+
+        if (dataBodyDescription !== null) {
+            body_description.value = dataBodyDescription;
+        } else {
+            body_description.value = 'Body description not available';
+        }
+
+        if (dataGender !== null) {
+            profile_gender.value = dataGender;
+        } else {
+            profile_gender.value = 'Gender information not available';
+        }
+
+        audioPreview.src = audioSrc;
+        audioUrlInput.value = audioSrc;
+        audioPreview.load();
+        audioPreview.play();
+});
 
 </script>
 

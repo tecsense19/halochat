@@ -56,6 +56,7 @@ i.mdi.mdi-delete-forever {
                             <th>Hobbies</th>
                             <th>Relationship status</th>
                             <th>Body description</th>
+                            <th>Voice</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -79,6 +80,11 @@ i.mdi.mdi-delete-forever {
                             <td>{{ $profileList->hobbies }}</td>
                             <td>{{ $profileList->relationship_status }}</td>
                             <td>{{ $profileList->body_description }}</td>
+                            <td><audio id="audio-preview" name="audio_preview" controls>
+                                    <source src="{{ $profileList->voice_preview_url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                            </audio>
+                            </td>
                             <td>  
                             
                             <div class="d-flex justify-content-between">

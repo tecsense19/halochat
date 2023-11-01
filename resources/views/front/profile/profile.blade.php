@@ -14,6 +14,8 @@ $userCreated_at = isset($user->created_at) ? $user->created_at : '';
 $dateString = $userCreated_at; // Replace with your date string
 $timestamp = strtotime($dateString);
 $formattedDate = date('Y-m-d', $timestamp);
+$currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcredit : '';
+
 ?>
 
 <main id="main">
@@ -95,7 +97,7 @@ $formattedDate = date('Y-m-d', $timestamp);
               </div>
               <div class="current_plan_txt" id="pay_txt">
                 <p>Payment date: <span>{{ $formattedDate }}</span></p>
-                <p>Subscription <span>200 Credit</span></p>
+                <p>Subscription <span>{{ $currentcredit }} Credit</span></p>
               </div>
             </div>
           </div>
