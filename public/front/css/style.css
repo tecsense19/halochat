@@ -809,7 +809,7 @@ form.search-form svg {
 .chat-admin {
   width: 100%;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   padding: 5px;
   border: 1px solid #545353;
   margin-top: 8px;
