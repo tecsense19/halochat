@@ -43,39 +43,22 @@ class UserController extends Controller
 
     public function chat()
     {
-        $user = Profile::with('profileImages')->first();
-        $getLoginUser = User::where('id', session('user_id'))->first();
-        $getall_Messages = Messages::where('sender_id', session('user_id'))->first();
-        $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-    
-        $allReciver = [];
-    
-        foreach ($getAllReciverUser as $value) 
-        {
-            $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-    
-            if ($user_profile)
-            { 
-                // Create an associative array with both user_profile and value
-                $combinedData = [
-                    'message' => $value,
-                    'user_profile' => $user_profile,
-                ];
-    
-                // Add the combinedData to the $allReciver array
-                $allReciver[] = $combinedData;
-            }
-        }
-    
-        
-    
-        if(empty($allReciver))
-        {
+        if (session()->has('authenticated_user')) {
+           
+            $getAllReciverUser = Messages::where('user_id', session('user_id'))->where('isDeleted', 0)->limit(1)->get();
+            $user = Profile::with('profileImages')->where('profile_id',$getAllReciverUser[0]['receiver_id'])->first();
+            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                            ->groupBy('messages.profile_id')
+                            ->get();
+       
+            return view("front.chat.chat", compact("getAllProfile", "user", "getAllReciverUser"));
+        }else{
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
-        }else{
-            return view("front.chat.chat", compact("allReciver", "user" ,"getall_Messages"));
         }
+        
         // Uncomment the lines below for debugging, then remove them when everything works
         // echo "<pre>";
         // print_r($allReciver);
@@ -84,29 +67,18 @@ class UserController extends Controller
 
     public function mobile()
     {
-        $getLoginUser = User::where('id', session('user_id'))->first();
-        $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-    
-        $allReciver = [];
-    
-        foreach ($getAllReciverUser as $value) 
-        {
-            $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-    
-            if ($user_profile)
-            { 
-                // Create an associative array with both user_profile and value
-                $combinedData = [
-                    'message' => $value,
-                    'user_profile' => $user_profile,
-                ];
-    
-                // Add the combinedData to the $allReciver array
-                $allReciver[] = $combinedData;
-            }
+        if (session()->has('authenticated_user')) {
+            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                            ->groupBy('messages.profile_id')
+                            ->get();
+       
+            return view("front.chat.mobile", compact("getAllProfile"));
+        }else{
+            $profileList = Profile::with('profileImages')->get();
+            return view("front.dashboard", compact('profileList'));
         }
-
-        return view("front.chat.mobile", compact("allReciver"));
     }
     
     public function subscription()

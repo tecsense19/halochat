@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Hash;
 
 class MessageController extends Controller
 {
-    public function userMessage(){
-    
+    public function userMessage(Request $request){
+        
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         if (session()->has('authenticated_user')) {
+            $userId = User::where('id', $_POST['sender_id'])->first();
+
             $message = array(
                 'profile_id'=> $user->profile_id,
                 'user_id'=> session('user_id'),
@@ -28,127 +30,152 @@ class MessageController extends Controller
             );
             Messages::create($message);
 
-            $userId = User::where('id', $_POST['sender_id'])->first();
-            if($userId)
-            {   
-                $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
-                // print_r($creditAddManage);
-                // die;
-                 $creditAdd = Managecredit::updateOrInsert(
-                ['user_id' => $userId->id],
-                [
-                    'currentcredit' => $creditAddManage->currentcredit - 1,
-                    'usedcredit' => $creditAddManage->usedcredit + 1,
-                    'totalcredit' => $creditAddManage->totalcredit - 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+            $getAllReciverUser = [];
+            $user = '';
+            $getAllProfile =[];
+            if(session('user_id')){
+                $getAllReciverUser = Messages::where('profile_id',$_POST['receiver_id'])->get();
+                $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
+                $getAllProfile = Messages::where('sender_id', session('user_id'))
+                                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
+            }
 
-            }
-    
-            $getLoginUser = User::where('id', session('user_id'))->first();
-            $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $_POST['receiver_id'])->first();
-            $getall_UserMessages = Messages::where('sender_id', $_POST['receiver_id'])->where('receiver_id', session('user_id'))->get();
-            $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-            
-        
-            $allReciver = [];
-        
-            foreach ($getAllReciverUser as $value) 
-            {
-                $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-        
-                if ($user_profile)
-                { 
-                    // Create an associative array with both user_profile and value
-                    $combinedData = [
-                        'message' => $value,
-                        'user_profile' => $user_profile,
-                    ];
-        
-                    // Add the combinedData to the $allReciver array
-                    $allReciver[] = $combinedData;
-                }
-            }
+            $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId);
             return redirect()->back();
         }else{
             
             return redirect()->route('login');
         }
-        
+           
+    }
+
+    public function callAPI($id, $message, $profile_id, $userId)
+    {
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "user_message": "'.$message.'"
+        }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $responseArray = json_decode($response, true);
+        if (isset($responseArray['data']['ai_message'])) {
+            $ai_message = $responseArray['data']['ai_message'];
+        } else {
+            echo "ai_message not found in the response.";
+            die;
+        }
+
+        $messageAi = array(
+            'profile_id'=> $profile_id,
+            'user_id'=> session('user_id'),
+            'sender_id'=> session('user_id'),
+            'receiver_id'=>  $profile_id,
+            'status'=> 'Active',
+            'message_text'=> $ai_message,
+            'updated_at' => now(),
+        );
+        Messages::create($messageAi);
+
+    
+        if($userId)
+        {   
+            $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
+            $creditAdd = Managecredit::updateOrInsert(
+            ['user_id' => $userId->id],
+            [
+                'currentcredit' => $creditAddManage->currentcredit - 1,
+                'usedcredit' => $creditAddManage->usedcredit + 1,
+                'totalcredit' => $creditAddManage->totalcredit - 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+        }
     }
     public function index($id)
     {
         $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-        $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id',$user->profile_id)->first();
+        $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id', $user->profile_id)->first();
 
-    
         if(!$MessageData){
-            $message = array(
-                'profile_id'=> $user->profile_id,
-                'user_id'=> session('user_id'),
-                'sender_id'=> session('user_id'),
-                'receiver_id'=>  $user->profile_id,
-                'status'=> 'Active',
-                'message_text'=> 'Hey there… have we met before?',
-                'updated_at' => now(),
-            );
-            Messages::create($message);
-
-            $getLoginUser = User::where('id', session('user_id'))->first();
-            $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $id)->first();
-            $getall_UserMessages = Messages::where('sender_id', $id)->where('receiver_id', session('user_id'))->get();
-            $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-        
-            $allReciver = [];
-        
-            foreach ($getAllReciverUser as $value) 
+            // echo "hi";
+            // die;
+            if(session('user_id'))
             {
-                $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-        
-                if ($user_profile)
-                { 
-                    // Create an associative array with both user_profile and value
-                    $combinedData = [
-                        'message' => $value,
-                        'user_profile' => $user_profile,
-                    ];
-        
-                    // Add the combinedData to the $allReciver array
-                    $allReciver[] = $combinedData;
-                }
+                $message = array(
+                    'profile_id'=> $user->profile_id,
+                    'user_id'=> session('user_id'),
+                    'sender_id'=> session('user_id'),
+                    'receiver_id'=>  $user->profile_id,
+                    'status'=> 'Active',
+                    'message_text'=> $user->first_message,
+                    'updated_at' => now(),
+                );
+            }else{
+                $message = array(
+                    'status'=> 'Active',
+                    'message_text'=> $user->first_message,
+                    'updated_at' => now(),
+                );
             }
-        
-            return view("front.chat.chat", compact("allReciver", "user" ,"getall_Messages", "getall_UserMessages"));
+           
+            Messages::create($message); 
+            $getAllReciverUser = Messages::where('profile_id',$id)->limit(1)->get();
+            $user = Profile::with('profileImages')->where('profile_id',$id)->first();
 
+            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('receiver_id',$id)->where('isDeleted', 0)
+                                        ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                        ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                        ->groupBy('messages.profile_id')
+                                        ->get();
+                                        return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
+            
         }else{
-            $getLoginUser = User::where('id', session('user_id'))->first();
-            $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $id)->first();
-            $getall_UserMessages = Messages::where('sender_id', $id)->where('receiver_id', session('user_id'))->get();
-            $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-        
-            $allReciver = [];
-        
-            foreach ($getAllReciverUser as $value) 
-            {
-                $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-        
-                if ($user_profile)
-                { 
-                    // Create an associative array with both user_profile and value
-                    $combinedData = [
-                        'message' => $value,
-                        'user_profile' => $user_profile,
-                    ];
-        
-                    // Add the combinedData to the $allReciver array
-                    $allReciver[] = $combinedData;
-                }
+            $getAllReciverUser = [];
+            $user = '';
+            $getAllProfile =[];
+            if(session('user_id')){
+                $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->get();
+                $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                            ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id', '=', 'messages.profile_id')
+                                            ->whereNotNull('profiles.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
+            
+                                           
+            }else{
+                $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
+                $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+
+                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('receiver_id',$id)->where('isDeleted', 0)
+                                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
+                                         
             }
-        
-        
-            return view("front.chat.chat", compact("allReciver", "user" ,"getall_Messages", "getall_UserMessages"));
+            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
         }
         
     }
@@ -170,58 +197,34 @@ class MessageController extends Controller
             );
             Messages::create($message);
 
-            $getLoginUser = User::where('id', session('user_id'))->first();
-            $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $id)->first();
-            $getall_UserMessages = Messages::where('sender_id', $id)->where('receiver_id', session('user_id'))->get();
-            $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-        
-            $allReciver = [];
-        
-            foreach ($getAllReciverUser as $value) 
-            {
-                $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-        
-                if ($user_profile)
-                { 
-                    // Create an associative array with both user_profile and value
-                    $combinedData = [
-                        'message' => $value,
-                        'user_profile' => $user_profile,
-                    ];
-        
-                    // Add the combinedData to the $allReciver array
-                    $allReciver[] = $combinedData;
-                }
+            $getAllReciverUser = [];
+            $user = '';
+            $getAllProfile =[];
+            if(session('user_id')){
+                $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->get();
+                $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
             }
-        
-            return view("front.chat.mobile", compact("allReciver", "user" ,"getall_Messages", "getall_UserMessages"));
+            return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
 
         }else{
-            $getLoginUser = User::where('id', session('user_id'))->first();
-            $getall_Messages = Messages::where('sender_id', session('user_id'))->where('receiver_id', $id)->first();
-            $getall_UserMessages = Messages::where('sender_id', $id)->where('receiver_id', session('user_id'))->get();
-            $getAllReciverUser = Messages::where('sender_id', session('user_id'))->get();
-        
-            $allReciver = [];
-        
-            foreach ($getAllReciverUser as $value) 
-            {
-                $user_profile = Profile::with('profileImages')->where('profile_id', $value->receiver_id)->first();
-        
-                if ($user_profile)
-                { 
-                    // Create an associative array with both user_profile and value
-                    $combinedData = [
-                        'message' => $value,
-                        'user_profile' => $user_profile,
-                    ];
-        
-                    // Add the combinedData to the $allReciver array
-                    $allReciver[] = $combinedData;
-                }
-            }
-        
-            return view("front.chat.mobile", compact("allReciver", "user" ,"getall_Messages","getall_UserMessages"));
+            $getAllReciverUser = [];
+            $user = '';
+            $getAllProfile =[];
+            if(session('user_id')){
+                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
+            } 
+            $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->get();
+            $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+            return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
         }
         
     }
@@ -254,10 +257,7 @@ class MessageController extends Controller
 
     public function delete($id)
     {
-
-        Messages::where('sender_id', session('user_id'))
-        ->delete();
-
+        Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
         return redirect()->back();
     }
 }

@@ -1,5 +1,6 @@
 <?php 
 
+
 $user = isset($user) ? $user : '';
 $id = isset($user->profile_id) ? $user->profile_id : '';
 $name = isset($user->name) ? $user->name : '';
@@ -12,8 +13,6 @@ $ethnicity = isset($user->ethnicity) ? $user->ethnicity : '';
 $age = isset($user->age) ? $user->age : '';
 $relationship_status = isset($user->relationship_status) ? $user->relationship_status : '';
 $profileImages = isset($user->profileImages) ? $user->profileImages : [];
-
-$message_text = isset($getall_Messages->message_text) ? $getall_Messages->message_text : '';
 
 
 
@@ -41,29 +40,28 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                     $imgUrl1 = isset($user->profileImages[0]['image_path']) ?
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
                     @endphp
-
-                    @foreach ($allReciver as $chat)
-                    @php
-                    $imgUrl2 = isset($chat['user_profile']->profileImages[0]->image_path) ?
-                    asset('storage/app/public').'/'.$chat['user_profile']->profileImages[0]->image_path : '';
-                    @endphp
-                    <!-- {{ route('chat.message', ['id' => $chat['user_profile']->profile_id]) }} -->
-                    <a href="{{ route('chat.messagemobile', ['id' => $chat['user_profile']->profile_id]) }}"
-                        id="chatLink">
+                    @if(!empty($getAllProfile))
+                        @foreach ($getAllProfile as $chat)
+                        @php
+                            $imgUrl2 = isset($chat->image_path) ?
+                            asset('storage/app/public').'/'.$chat->image_path : '';
+                        @endphp
+                  
+                    <a href="{{ route('chat.message', ['id' => $chat->receiver_id]) }}" data-profile-id="{{ $chat->receiver_id }}" id="chatLink_{{ $chat->receiver_id }}">
                         <div class="chat-admin" id="mobile_view">
                             <div class="chat-profile">
                                 <img src="{{ $imgUrl2 }}">
 
                             </div>
                             <div class="admin_deatail">
-                                <h6>{{ $chat['user_profile']->name }}</h6>
-                                <p>{{ $chat['message']->message_text }}</p>
+                            <h6>{{ $chat->name }}</h6>
+                                <p>{{ $chat->first_message }}</p>
                             </div>
                             </a>
                             <div class="chat_delete">
                             <?php 
-                            $dateString = $chat['message']->created_at;
-                            $dateTime = new DateTime($dateString);
+                            $dateString = $chat->created_at;
+                            $dateTime = new DateTime($dateString);  
                             $time = $dateTime->format('H:i');
                             ?>
                             <p>{{ $time }}</p>
@@ -79,7 +77,7 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                                 fill="currentColor"></path>
                                         </g>
                                     </svg>
-                                    <a href="{{ route('chat.delete', ['id' => $chat['user_profile']->profile_id]) }}">
+                                    <a href="{{ route('chat.delete', ['id' => $chat->profile_id]) }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -94,8 +92,8 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                 </p>
                             </div>
                         </div>
-                    @endforeach
-
+                        @endforeach
+                    @endif
                 </div>
 
                 <div class="start_chat_part">
@@ -122,17 +120,21 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                 </div>
                             </div>
                             <div class="chat_content">
-                                <div class="row">
+                                <div class="row new_message">
+                                
+                                @if(!empty($getAllReciverUser))
+                                    @foreach ($getAllReciverUser as $chat_user)  
+                                        @if($chat_user->sender_id == $chat_user->user_id)
                                     <div class="col-12">
                                         <div class="have_we_met">
                                             <div class="chat_content_box">
-                                                <div class="dot-elastic">
+                                                <!-- <div class="dot-elastic">
                                                     <span class="dot dot1"></span>
                                                     <span class="dot dot2"></span>
                                                     <span class="dot dot3"></span>
-                                                </div>
+                                                </div> -->
 
-                                                <p id="message" style="display: none;">{{ $message_text }}</p>
+                                                <p id="message">{{ $chat_user->message_text }}</p>
                                                 <div class="volume">
                                                     <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
                                                             xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -153,15 +155,16 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                         </div>
 
                                     </div>
-                                    @if(!empty($getall_UserMessages))
-                                    @foreach ($getall_UserMessages as $chat_user)
+                                    @else
                                     <div class="col-12">
                                         <div class="send_message">
-                                            <span><?php echo $chat_user->message_text; ?></span>
+                                            <span id="chat-message">{{ $chat_user->message_text }}</span>
                                         </div>
                                     </div>
+                                    @endif
                                  @endforeach
-                                 @endif
+                                 
+                                @endif
                                     <!-- <div class="col-12">
                                         <div class="chat_content_img">
                                             <img src="{{ URL::asset('public/front/img/2-2.webp') }}">
@@ -175,12 +178,12 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                     <li><a href="#">Hey! How's your day been?</a></li>
                                 </ul>
                                 <div class="type_message">
-                                <form action="{{ route('chat.userMessage') }}" method="POST">
+                                <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
                                     {!! csrf_field() !!}
                                   
-                                        <input type="hidden" name="receiver_id" value="{{ $user->profile_id }}">
+                                    <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
-                                        <input type="text" name="message" placeholder="Type action message">
+                                        <input type="text" name="message" id="type_message" placeholder="Type action message">
                                         <div class="dropdown">
                                             <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
@@ -197,8 +200,9 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
                                                         to use</a></li>
                                             </ul>
                                         </div>
-                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#send"><img
-                                                src="{{ URL::asset('public/front/img/send-message.svg') }}"></button>
+                                        <button type="button" id="new_message">
+                                            <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -384,13 +388,36 @@ $message_text = isset($getall_Messages->message_text) ? $getall_Messages->messag
 </div>
 @include('front.layout.footer')
 <script>
-// $(document).ready(function() {
-//     $('.toggle-button-right').on('click', function() {
-//         $('.sidebar').toggleClass('isClosed');
-//         $('.sidebar ul.nav').toggleClass('isClosed');
-//     });
-// });
+$(document).ready(function() {
+    // $('.toggle-button-right').on('click', function() {
+    //     $('.sidebar').toggleClass('isClosed');
+    //     $('.sidebar ul.nav').toggleClass('isClosed');
+    // });
+
+    $('body').on('click', '#new_message', function() {
+        $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
+
+        $('.new_message').append('<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            // Select the message and dot elements
+            var messageElement = document.getElementById("chat_content_box");
+
+            // Display the three dots animation
+            messageElement.style.display = "block";
+
+            // Hide the three dots animation and show the message after 3 seconds
+            setTimeout(function() {
+                messageElement.style.display = "none";
+            }, 3000); // 3000 milliseconds (3 seconds)
+        });
+
+        $('#message_form').submit();
+    })
+    // $('#new_message').append()
+});
 </script>
+
 
 
 <script>
