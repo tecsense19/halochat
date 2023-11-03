@@ -31,6 +31,8 @@ class Profile extends Authenticatable
         'hobbies',
         'relationship_status',
         'body_description',
+        'system_prompt',
+        'system_instruction',
         'created_at',
         'updated_at',
     ];

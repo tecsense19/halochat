@@ -17,7 +17,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 ?>
 @include('front.layout.front')
 @include('front.layout.header')
-
 <main id="main" class="pt-0">
     <section class="position-relative">
         <div class="container-fluid g-0">
@@ -125,11 +124,12 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             @foreach ($getAllReciverUser as $chat_user)  
                                 @if($chat_user->sender_id == $chat_user->user_id)
                            <!-- style="display: none;" style="display: none;" -->
-                                    <div class="col-12">
+                                    <div class="col-12 scrolltop">
                                         <div class="have_we_met">
                                             <div class="chat_content_box">
                                            
                                             <p id="message">{{ $chat_user->message_text }}</p>
+                                         
                                                 <div class="volume">
                                                     <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
                                                             xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -150,6 +150,14 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         </div>
 
                                     </div>
+                                    @if($chat_user->media_url)
+
+                                              <div class="col-12 mt-4">
+                                                    <div class="chat_content_img">
+                                                        <img src="{{ $chat_user->media_url }}">
+                                                    </div>
+                                                </div>
+                                            @endif
                                     @else
                                     <div class="col-12">
                                         <div class="send_message">
@@ -158,13 +166,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     </div>
                                     @endif
                                  @endforeach
-                                 
                                 @endif
-                                    <!-- <div class="col-12">
-                                        <div class="chat_content_img">
-                                            <img src="{{ URL::asset('public/front/img/2-2.webp') }}">
-                                        </div>
-                                    </div> -->
+                                  
                                 </div>
                             </div>
                             
@@ -378,6 +381,12 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
         </div>
     </div>
 </div>
+
+
+
+               
+
+
 @include('front.layout.footer')
 <script>
 $(document).ready(function() {
@@ -390,6 +399,39 @@ $(document).ready(function() {
         $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
 
         $('.new_message').append('<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
+
+        var inputValue = $('#type_message').val();
+  
+        // Check if the input contains the word "show"
+        if (inputValue.includes('show')) {
+            // The word "show" is present in the input
+            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+            setTimeout(function() {
+                updateLoading('0%', 'Please Wait');
+            }, 1000);
+
+            setTimeout(function() {
+                updateLoading('20%', 'Processing...');
+            }, 5000);
+
+            setTimeout(function() {
+                updateLoading('50%', 'Almost There...');
+            }, 9000);
+
+            setTimeout(function() {
+                updateLoading('80%', 'Complete');
+            }, 13000);
+
+            setTimeout(function() {
+                updateLoading('100%', 'Complete');
+            }, 17000);
+            // You can add your condition or code here
+        } else {
+            // The word "show" is not in the input
+            // console.log('The word "show" is not in the input.');
+            // You can add an alternative condition or code here
+        }
+
         
         document.addEventListener("DOMContentLoaded", function() {
             // Select the message and dot elements
@@ -397,6 +439,7 @@ $(document).ready(function() {
 
             // Display the three dots animation
             messageElement.style.display = "block";
+
 
             // Hide the three dots animation and show the message after 3 seconds
             setTimeout(function() {
@@ -406,9 +449,24 @@ $(document).ready(function() {
 
         $('#message_form').submit();
     })
+
+        setTimeout(function() {
+            $('html, body').animate({
+            scrollTop: $('.new_message').offset().top
+            }, 'slow');
+        }, 500);
     // $('#new_message').append()
+
+
 });
+function updateLoading(progress, text) {
+               $('#loading-progress').text(progress);
+               $('#loading-text').text(progress);
+                loadingtext.val(text);
+            }
+
 </script>
+
 
 <script>
 if (window.innerWidth <= 1199) {

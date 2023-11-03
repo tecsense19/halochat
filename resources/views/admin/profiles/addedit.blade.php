@@ -13,6 +13,8 @@ $profileListBody_description = isset($profileList->body_description) ? $profileL
 $profileList_description = isset($profileList->description) ? $profileList->description : '';
 $profileList_first_message = isset($profileList->first_message) ? $profileList->first_message : '';
 $voice_name = isset($profileList->voice_name) ? $profileList->voice_name : '';
+$system_prompt = isset($profileList->system_prompt) ? $profileList->system_prompt : '';
+$system_instruction = isset($profileList->system_instruction) ? $profileList->system_instruction : '';
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
 // print_r($voice_name);
@@ -68,6 +70,24 @@ $get_voice = json_decode($get_voice, true);
                                     Your browser does not support the audio element.
                             </audio>
                             <input type="hidden" id="audio_url" name="audio_url" value="">
+
+                            <div class="form-group">
+                                <label for="systempromt">System prompt</label>
+                                <input type="text" class="form-control" id="system_prompt" name="system_prompt"
+                                    value="{{ $system_prompt }}" placeholder="System prompt">
+                            </div>
+                            @error('system_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="systempromt">System instruction</label>
+                                <input type="text" class="form-control" id="system_instruction" name="system_instruction"
+                                    value="{{ $system_instruction }}" placeholder="instruction">
+                            </div>
+                            @error('system_instruction')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
 
                             <div class="form-group">
                                 <label for="ethnicity">Ethnicity</label>

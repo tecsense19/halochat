@@ -90,6 +90,8 @@ class ProfileController extends Controller
             'profile_relationship_status' => 'required|string',
             'profile_body_description' => 'required|string',
             'description' => 'required|string',
+            'system_prompt' => 'required|string',
+            'system_instruction' => 'required|string',
         ]);
         
         if ($validator->fails()) {
@@ -115,8 +117,8 @@ class ProfileController extends Controller
                     CURLOPT_CUSTOMREQUEST => 'PUT',
                     CURLOPT_POSTFIELDS =>'{
                         "name": "'.$input['profile_name'].'",
-                        "system_prompt": "You are a helpful assistant.",
-                        "system_instruction": "",
+                        "system_prompt": "'.$input['system_prompt'].'",
+                        "system_instruction": "'.$input['system_instruction'].'",
                         "voice_name": "'.$input['profile_get_voice'].'",
                         "voice_model": "eleven_multilingual_v2",
                         "voice_settings": {
@@ -151,6 +153,8 @@ class ProfileController extends Controller
                     'voice_name' => $input['profile_get_voice'],
                     'voice_preview_url' => $input['audio_url'],
                     'first_message' => $input['first_message'],
+                    'system_prompt' => $input['system_prompt'],
+                    'system_instruction' => $input['system_instruction'],
                 ]);
                 $profileId = $input['profile_id'];
                 if ($request->hasFile('profile_img')) {
@@ -177,8 +181,8 @@ class ProfileController extends Controller
                   CURLOPT_CUSTOMREQUEST => 'POST',
                   CURLOPT_POSTFIELDS =>'{
                     "name": "'.$input['profile_name'].'",
-                    "system_prompt": "You are a helpful assistant.",
-                    "system_instruction": "",
+                    "system_prompt": "'.$input['system_prompt'].'",
+                    "system_instruction": "'.$input['system_instruction'].'",
                     "voice_name": "'.$input['profile_get_voice'].'",
                     "voice_model": "eleven_multilingual_v2",
                     "voice_settings": {
@@ -221,7 +225,9 @@ class ProfileController extends Controller
             $profile->voice_name = $input['profile_name'];
             $profile->voice_preview_url = $input['audio_url'];
             $profile->persona_id = $personaId;
-            $profile->first_message = $input['first_message'];
+            $profile->first_message = $input['first_message'];  
+            $profile->system_prompt = $input['system_prompt'];
+            $profile->system_instruction = $input['system_instruction'];
             $profile->save(); // Save the profile data
             $profileId = $profile->id;
                

@@ -10,18 +10,8 @@
             <div class="col-lg-6">
               <div class="limit_txt">
                 <h3>You have reached the free pictures limit:</h3>
-                @php
-                $totalCount = 0; // Initialize a variable to store the total count
-                @endphp
-
-                @foreach($all_UserProfile as $chat_name)
-                    @php
-                    $totalCount += $chat_name->count; // Add the count of each item to the total count
-                    @endphp
-                    {{ $chat_name->count }}
-                @endforeach
-
-                <span>{{ $totalCount }}/{{ $totalCount }} pictures</span>
+              
+                <span>{{ count($responseArr) }} / {{ $totalCount }} pictures</span>
               </div>
             </div>
             <div class="col-lg-6">
@@ -31,18 +21,18 @@
             </div>
           </div>
         </div>
-        @foreach($all_UserProfile as $chat_name)
+        @foreach($responseArr as $img)
         <div class="pictures_box">
           <div class="pictures_head">
          
-            <h2> {{ $chat_name->profile->name }} <span>{{ $chat_name->count }} Pictures</span></h2>
+            <h2> {{ $img->name }} <span>{{ $img->image_count }} Pictures</span></h2>
             <!-- <a href="#" class="see_btn d-none d-lg-block">See all</a> -->
           </div>
-        
           <div class="row">
+          @foreach($img->images as $img_url)
             <div class="col-6 col-sm-3 col-lg-2">
-              <div class="pictures_item" data-bs-toggle="modal" data-bs-target="#gallery">
-                <p><img src="{{ $chat_name->media_url }}"></p>
+              <div class="pictures_item" data-bs-toggle="modal" data-bs-link="{{ $img_url->media_url }}" data-bs-target="#gallery">
+                <p><img src="{{ $img_url->media_url }}"></p>
               </div>
             </div>
             <!-- <div class="col-6 col-sm-3 col-lg-2">
@@ -50,6 +40,8 @@
                 <p><img src="{{ URL::asset('public/front/img/gallery-img2.webp') }}"></p>
               </div>
             </div> -->
+         
+          @endforeach
           </div>
           <div class="pictures_head d-block d-lg-none">
             <!-- <a href="#" class="see_btn">See all</a> -->
@@ -130,7 +122,7 @@
         </div>
         <div class="modal-body">
           <div class="gallery_popup_img">
-            <img src="{{ URL::asset('public/front/img/gallery-img2.webp') }}">
+            <img src="" id="image_url_put">
           </div>
         </div>
       </div>
@@ -157,6 +149,19 @@
     $('.toggle-button-right').on('click', function () {
       $('.sidebar').toggleClass('isClosed');
       $('.sidebar ul.nav').toggleClass('isClosed');
+    });
+  });
+</script>
+
+<script>
+  // Add a click event listener to elements with the class "pictures_item"
+  document.querySelectorAll('.pictures_item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      // Get the image URL from the data attribute
+      var imageUrl = item.getAttribute('data-bs-link');
+
+      // Set the src attribute of the image element in the modal
+      document.getElementById('image_url_put').src = imageUrl;
     });
   });
 </script>
