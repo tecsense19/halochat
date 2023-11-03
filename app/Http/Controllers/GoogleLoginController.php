@@ -21,8 +21,7 @@ class GoogleLoginController extends Controller
     public function handleGoogleCallback(Request $request)
     {
             $user = Socialite::driver('google')->user();
-            if ($user) {
-                // Add your code to save or authenticate the user here.
+                    // Add your code to save or authenticate the user here.
                     // Get the user ID by querying the database based on the email
                     $userId = User::where('email', $user->email)->first();
                     if($userId)
@@ -107,9 +106,5 @@ class GoogleLoginController extends Controller
                     else {
                     return redirect()->route('login')->withErrors(['email' => 'Your account has been deleted please contact admin!'])->onlyInput('email');
                     }
-
-              }else{
-                return back()->withErrors(['email' => 'Your provided credentials do not match in our records.'])->onlyInput('email');
-              }
         }
     }
