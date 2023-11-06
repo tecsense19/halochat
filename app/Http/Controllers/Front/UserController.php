@@ -54,14 +54,15 @@ class UserController extends Controller
                 return view("front.chat.chat", compact("getAllProfile", "user", "getAllReciverUser"));
         }else{
          
+            Messages::whereNull('profile_id')
+                ->whereNull('user_id')
+                ->whereNull('sender_id')
+                ->whereNull('receiver_id')
+                ->delete();
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
         }
         
-        // Uncomment the lines below for debugging, then remove them when everything works
-        // echo "<pre>";
-        // print_r($allReciver);
-        // die;
     }
 
     public function mobile()
@@ -75,8 +76,13 @@ class UserController extends Controller
        
             return view("front.chat.mobile", compact("getAllProfile"));
         }else{
-            $profileList = Profile::with('profileImages')->get();
-            return view("front.dashboard", compact('profileList'));
+            Messages::whereNull('profile_id')
+            ->whereNull('user_id')
+            ->whereNull('sender_id')
+            ->whereNull('receiver_id')
+            ->delete();
+        $profileList = Profile::with('profileImages')->get();
+        return view("front.dashboard", compact('profileList'));
         }
     }
     

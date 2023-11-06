@@ -156,7 +156,7 @@ class MessageController extends Controller
             $getAllReciverUser = Messages::where('profile_id',$id)->limit(1)->get();
             $user = Profile::with('profileImages')->where('profile_id',$id)->first();
 
-            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('receiver_id',$id)->where('isDeleted', 0)
+            $getAllProfile = Messages::where('sender_id', $id)->where('isDeleted', 0)
                                         ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                         ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                         ->groupBy('messages.profile_id')
@@ -182,7 +182,7 @@ class MessageController extends Controller
                 $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
 
-                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('receiver_id',$id)->where('isDeleted', 0)
+                $getAllProfile = Messages::where('sender_id', $id)->where('isDeleted', 0)
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
@@ -197,20 +197,41 @@ class MessageController extends Controller
     public function mobile($id)
     {
         $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-        $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id',$user->profile_id)->first();
-        
-        if(!$MessageData){
-            $message = array(
-                'profile_id'=> $user->profile_id,
-                'user_id'=> session('user_id'),
-                'sender_id'=> session('user_id'),
-                'receiver_id'=>  $user->profile_id,
-                'status'=> 'Active',
-                'message_text'=> 'Hey there… have we met before?',
-                'updated_at' => now(),
-            );
-            Messages::create($message);
+        $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id', $user->profile_id)->where('isDeleted' , 0)->first();
 
+        if(!$MessageData){
+
+            if(session('user_id'))
+            {
+                $message = array(
+                    'profile_id'=> $user->profile_id,
+                    'user_id'=> session('user_id'),
+                    'sender_id'=> session('user_id'),
+                    'receiver_id'=>  $user->profile_id,
+                    'status'=> 'Active',
+                    'message_text'=> $user->first_message,
+                    'updated_at' => now(),
+                );
+            }else{
+                $message = array(
+                    'status'=> 'Active',
+                    'message_text'=> $user->first_message,
+                    'updated_at' => now(),
+                );
+            }
+
+            Messages::create($message); 
+            $getAllReciverUser = Messages::where('profile_id',$id)->limit(1)->get();
+            $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+
+            $getAllProfile = Messages::where('sender_id', $id)->where('isDeleted', 0)
+                                        ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                        ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                        ->groupBy('messages.profile_id')
+                                        ->get();
+                                        return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
+            
+        }else{
             $getAllReciverUser = [];
             $user = '';
             $getAllProfile =[];
@@ -218,28 +239,27 @@ class MessageController extends Controller
                 $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->get();
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                            ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
+                                            ->join('profile_images', 'profile_images.profile_id', '=', 'messages.profile_id')
+                                            ->whereNotNull('profiles.profile_id')
+                                            ->groupBy('messages.profile_id')
+                                            ->get();
+            
+                                           
+            }else{
+                $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
+                $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+
+                $getAllProfile = Messages::where('sender_id', $id)->where('isDeleted', 0)
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
                                             ->get();
+                                         
             }
             return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
-
-        }else{
-            $getAllReciverUser = [];
-            $user = '';
-            $getAllProfile =[];
-            if(session('user_id')){
-                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
-                                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
-                                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
-                                            ->groupBy('messages.profile_id')
-                                            ->get();
-            } 
-            $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->get();
-            $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-            return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
         }
+     
         
     }
 

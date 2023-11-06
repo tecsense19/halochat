@@ -46,8 +46,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             $imgUrl2 = isset($chat->image_path) ?
                             asset('storage/app/public').'/'.$chat->image_path : '';
                         @endphp
-                  
+                    @if(session('user_id'))
                     <a href="{{ route('chat.message', ['id' => $chat->receiver_id]) }}" data-profile-id="{{ $chat->receiver_id }}" id="chatLink_{{ $chat->receiver_id }}">
+                    @else
+                    <a href="#" data-profile-id="{{ $chat->receiver_id }}">
+                    @endif
                         <div class="chat-admin" id="mobile_view">
                             <div class="chat-profile">
                                 <img src="{{ $imgUrl2 }}">
@@ -180,8 +183,13 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             </div>
                             <div class="searchbar-footer">
                                 <ul class="suggestion">
-                                    <li>Suggestion: </li>
-                                    <li><a href="#">Hey! How's your day been?</a></li>
+                                @if(session('user_id'))
+                                <li>Suggestion: </li>
+                                    <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>    
+                                @else
+                                <li>Suggestion: </li>
+                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#please_register" class="suggestion-link">Hey! How's your day been?</a></li>
+                                @endif    
                                 </ul>
                                 <div class="type_message">
                                 <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
@@ -197,18 +205,24 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                     class="bi bi-chevron-down"></i>
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <li><a href="#">Show me...</a></li>
-                                                <li><a href="#">Send me...</a></li>
-                                                <li><a href="#">Send</a></li>
-                                                <li><a href="#">Can i see...</a></li>
-                                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
+                                            <li><a class="dropdown-item" href="#">Show me...</a></li>
+                                                <li><a class="dropdown-item" href="#">Send me...</a></li>
+                                                <li><a class="dropdown-item" href="#">Send</a></li>
+                                                <li><a class="dropdown-item" href="#">Can i see...</a></li>
+                                                <li><a href="#"  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
                                                             src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
                                                         to use</a></li>
                                             </ul>
                                         </div>
+                                        @if(session('user_id'))
                                         <button type="button" id="new_message">
                                             <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
                                         </button>
+                                        @else
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#please_register" >
+                                            <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                        </button>
+                                        @endif
                                     </form>
                                 </div>
                             </div>
@@ -392,6 +406,40 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
         </div>
     </div>
 </div>
+
+
+
+<div class="how_to_use_popup">
+    <!-- Modal -->
+    <div class="modal fade" id="please_register" tabindex="-1" aria-labelledby="please_registerModalLabel" data-backdrop="true" data-keyboard="true" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+                    <h5 class="modal-title" id="please_registerModalLabel">Modal Title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                <h2 style="color: white;text-align: center;">Members Only!</h2>
+
+                <h7 class="mt-3" style="color: white;text-align: center;display: flex;"> Please login or register in order to use this feature </h7>
+
+                <div class="row mt-4">
+                    <div class="col-6">
+                    <a href="{{ route('register') }}" class="register_btn">Register</a>
+                    <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ route('login') }}" class="login_btn">Login</a>
+                    <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @include('front.layout.footer')
 <script>
 $(document).ready(function() {
@@ -547,5 +595,48 @@ axios.post("{{ route('chat.store', ['id' => ':id']) }}".replace(':id', id))
     .catch(function(error) {
         // Handle errors, e.g., show an error message
         console.error(error);
+    });
+</script>
+
+<script>
+    // Get the suggestion link element
+    const suggestionLink = document.querySelector('.suggestion-link');
+
+    // Get the message input element
+    const messageInput = document.getElementById('type_message');
+
+    // Add a click event listener to the suggestion link
+    suggestionLink.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        // Get the text from the suggestion link
+        const suggestionText = suggestionLink.textContent;
+
+        // Set the input field's value to the suggestion text
+        messageInput.value = suggestionText;
+
+        // Hide the suggestion by setting its display to "none"
+        suggestionLink.parentNode.style.display = "none";
+    });
+</script>
+
+<script>
+    // Get the dropdown items (anchors)
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // Get the message input element
+    const messageInput1 = document.getElementById('type_message');
+
+    // Add a click event listener to each dropdown item
+    dropdownItems.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            // Get the text of the clicked item
+            const selectedText = item.textContent;
+
+            // Set the input field's value to the selected text
+            messageInput1.value = selectedText;
+        });
     });
 </script>
