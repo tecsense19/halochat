@@ -123,7 +123,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
                             </div>
                         </div>
-                        <div class="chat_content">
+                        <div class="chat_content" id="chatContent">
                             <div class="row new_message">
 
                                 @if(!empty($getAllReciverUser))
@@ -539,11 +539,11 @@ $(document).ready(function() {
 
     })
 
-    setTimeout(function() {
-        $('html, body').animate({
-            scrollTop: $('.new_message').offset().top
-        }, 'slow');
-    }, 500);
+    // setTimeout(function() {
+    //     $('html, body').animate({
+    //         scrollTop: $('.new_message').offset().top
+    //     }, 'slow');
+    // }, 500);
     // $('#new_message').append()
 
 
@@ -719,4 +719,19 @@ dropdownItems.forEach(function(item) {
         messageInput1.value = selectedText;
     });
 });
+
 </script>
+<script>
+// Add this script at the end of your HTML body, just before the </body> tag.
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the chat_content element
+    const chatContent = document.querySelector('.chat_content');
+
+    // Scroll to the bottom of the chat_content element
+    chatContent.scrollTop = chatContent.scrollHeight;
+});
+</script>
+
+
+
+

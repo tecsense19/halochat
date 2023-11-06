@@ -20,18 +20,8 @@ class GoogleLoginController extends Controller
 
     public function handleGoogleCallback(Request $request)
     {
-        try {
-            $user = Socialite::driver('google')->user();
-                        // Add your code to save or authenticate the user here.
-                        // Get the user ID by querying the database based on the email
-                        $userId = User::where('email', $user->email)->first();
-                        if($userId)
-                        {
-                             $request->session()->put('authenticated_user', true);
-                             $request->session()->put('user_id', $userId->id);
-                             $request->session()->regenerate();
-                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
-                        }else{
+                 try {
+                            $user = Socialite::driver('google')->user();
 
                             $curl = curl_init();
                             curl_setopt_array($curl, array(
@@ -68,7 +58,7 @@ class GoogleLoginController extends Controller
                                 echo "The 'id' key was not found in the JSON response.";
                                 die;
                             }
-
+                            
                             $result = User::updateOrInsert(
                                 ['email' => $user->email],
                                 [
@@ -83,6 +73,8 @@ class GoogleLoginController extends Controller
                                     'created_at'=> now(),
                                 ]
                             );
+
+                            $userId = User::where('email', $user->email)->first();
                             $creditAdd = Managecredit::updateOrInsert(
                                 ['user_id' => $userId->id],
                                 [
@@ -94,18 +86,18 @@ class GoogleLoginController extends Controller
                                     'updated_at' => now(),
                                 ]
                             );
-                        }
-                        if($userId->deleted_at != null) 
-                        {
+                        // Add your code to save or authenticate the user here.
+                        // Get the user ID by querying the database based on the email
+
+                        if($userId && $userId->deleted_at == null){
+                            $request->session()->put('authenticated_user', true);
+                            $request->session()->put('user_id', $userId->id);
+                            $request->session()->regenerate();
+                            return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                        }else{
                             return redirect()->route('login')->withErrors(['email' => 'Your account has been deleted please contact admin!'])->onlyInput('email');
                         }
-                        else {
-                             // Update the user with the same email if they exist, or create a new user
-                             $request->session()->put('authenticated_user', true);
-                             $request->session()->put('user_id', $userId->id);
-                             $request->session()->regenerate();
-                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
-                        }
+                        
             } catch (\Exception $e) {
                 dd($e->getMessage());
         }

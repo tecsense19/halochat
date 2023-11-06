@@ -49,13 +49,19 @@ class UserController extends Controller
         
         if (session('user_id')) {
             $getAllReciverUser = Messages::where('user_id', session('user_id'))->limit(1)->get();
-            $user = Profile::with('profileImages')->where('profile_id',$getAllReciverUser[0]['receiver_id'])->first();
-            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
-                            ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
-                            ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
-                            ->groupBy('messages.profile_id')
-                            ->get();
-                return view("front.chat.chat", compact("getAllProfile", "user", "getAllReciverUser"));
+            if(empty($getAllReciverUser[0]['receiver_id']))
+            {
+                $profileList = Profile::with('profileImages')->get();
+                return view("front.dashboard", compact('profileList'));
+            }else{
+                $user = Profile::with('profileImages')->where('profile_id',$getAllReciverUser[0]['receiver_id'])->first();
+                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                ->groupBy('messages.profile_id')
+                                ->get();
+                    return view("front.chat.chat", compact("getAllProfile", "user", "getAllReciverUser"));
+            }
         }else{
          
             $profileList = Profile::with('profileImages')->get();

@@ -1038,6 +1038,14 @@ form.search-form svg {
   color: white;
 }
 
+/* .chat_content {
+  width: 100%;
+  padding: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 75%;
+} */
+
 .chat_content {
   width: 100%;
   padding: 30px;
@@ -1045,6 +1053,13 @@ form.search-form svg {
   overflow-x: hidden;
   height: 75%;
 }
+
+/* Add this CSS rule to ensure the content starts at the top */
+.chat_content {
+  scroll-behavior: auto;
+}
+
+
 .chat_content::-webkit-scrollbar {
   width: 5px;
 }
