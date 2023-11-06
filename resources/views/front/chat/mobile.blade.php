@@ -128,7 +128,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 @if(!empty($getAllReciverUser))
                                     @foreach ($getAllReciverUser as $chat_user)  
                                         @if($chat_user->sender_id == $chat_user->user_id)
-                                    <div class="col-12">
+                                    <div class="col-12 mb-2">
                                         <div class="have_we_met">
                                             <div class="chat_content_box">
                                                 <!-- <div class="dot-elastic">
@@ -448,6 +448,8 @@ $(document).ready(function() {
     //     $('.sidebar ul.nav').toggleClass('isClosed');
     // });
     $('body').on('click', '#new_message', function() {
+        if ($('#type_message').val()) {
+            
         $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
 
         $('.new_message').append('<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
@@ -498,6 +500,7 @@ $(document).ready(function() {
         });
 
         $('#message_form').submit();
+    }
     })
 
         setTimeout(function() {
@@ -618,6 +621,19 @@ axios.post("{{ route('chat.store', ['id' => ':id']) }}".replace(':id', id))
         // Hide the suggestion by setting its display to "none"
         suggestionLink.parentNode.style.display = "none";
     });
+
+    
+// Get the "new_message" button element
+const newMessageButton = document.getElementById('new_message');
+
+// Add a click event listener to the button
+newMessageButton.addEventListener('click', function() {
+    // Clear the input field's value
+    setTimeout(function() {
+        messageInput.value = '';
+    }, 500); // 3000 milliseconds (3 seconds)
+
+});
 </script>
 
 <script>

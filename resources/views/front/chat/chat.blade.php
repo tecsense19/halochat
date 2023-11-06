@@ -39,27 +39,28 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
                     @endphp
                     @if(!empty($getAllProfile))
-                        @foreach ($getAllProfile as $chat)
-                        @php
-                            $imgUrl2 = isset($chat->image_path) ?
-                            asset('storage/app/public').'/'.$chat->image_path : '';
-                        @endphp
+                    @foreach ($getAllProfile as $chat)
+                    @php
+                    $imgUrl2 = isset($chat->image_path) ?
+                    asset('storage/app/public').'/'.$chat->image_path : '';
+                    @endphp
                     <!-- {{ route('chat.message', ['id' => $chat->profile_id]) }} -->
                     @if(session('user_id'))
-                    <a href="{{ route('chat.message', ['id' => $chat->receiver_id]) }}" data-profile-id="{{ $chat->receiver_id }}" id="chatLink_{{ $chat->receiver_id }}">
-                    @else
-                    <a href="#" data-profile-id="{{ $chat->receiver_id }}">
-                    @endif
-                        <div class="chat-admin" id="mobile_view">
-                            <div class="chat-profile">
-                                <img src="{{ $imgUrl2 }}">
+                    <a href="{{ route('chat.message', ['id' => $chat->receiver_id]) }}"
+                        data-profile-id="{{ $chat->receiver_id }}" id="chatLink_{{ $chat->receiver_id }}">
+                        @else
+                        <a href="#" data-profile-id="{{ $chat->receiver_id }}">
+                            @endif
+                            <div class="chat-admin" id="mobile_view">
+                                <div class="chat-profile">
+                                    <img src="{{ $imgUrl2 }}">
 
-                            </div>
-                            <div class="admin_deatail">
-                                <h6>{{ $chat->name }}</h6>
-                                <p>{{ $chat->first_message }}</p>
-                            </div>
-                    </a>
+                                </div>
+                                <div class="admin_deatail">
+                                    <h6>{{ $chat->name }}</h6>
+                                    <p>{{ $chat->first_message }}</p>
+                                </div>
+                        </a>
                         <div class="chat_delete">
                             <?php 
                             $dateString = $chat->created_at;
@@ -67,19 +68,19 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             $time = $dateTime->format('H:i');
                             ?>
                             <p>{{ $time }}</p>
-                                <p>
+                            <p>
                                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g id="Group">
-                                            <path id="Vector"
-                                                d="M2.42742 7.17755C2.88001 4.10191 5.7402 1.97552 8.81583 2.42811C9.86518 2.58252 10.8495 3.03026 11.6555 3.71977L10.93 4.44532C10.6868 4.68857 10.6868 5.08292 10.9301 5.3261C11.0469 5.44282 11.2052 5.50842 11.3703 5.50845H14.2265C14.5704 5.50845 14.8493 5.22962 14.8493 4.88565V2.02947C14.8492 1.68551 14.5703 1.40673 14.2263 1.40679C14.0612 1.40682 13.9029 1.47242 13.7862 1.58914L12.9765 2.39877C9.88891 -0.353483 5.1548 -0.0816883 2.40255 3.00586C1.4275 4.09967 0.794753 5.45549 0.582688 6.90538C0.499077 7.41939 0.847973 7.90386 1.36196 7.98748C1.40826 7.99501 1.45503 7.99907 1.50195 7.99965C1.9722 7.99457 2.36693 7.64392 2.42742 7.17755Z"
-                                                fill="currentColor"></path>
-                                            <path id="Vector_2"
-                                                d="M14.4957 7.99965C14.0255 8.00473 13.6307 8.35538 13.5702 8.82175C13.1176 11.8974 10.2575 14.0238 7.18182 13.5712C6.13248 13.4168 5.14812 12.9691 4.34213 12.2796L5.06769 11.554C5.31087 11.3108 5.31082 10.9164 5.06754 10.6732C4.9508 10.5565 4.79245 10.4909 4.62736 10.4909H1.77123C1.42727 10.4909 1.14844 10.7697 1.14844 11.1137V13.9699C1.14853 14.3138 1.42741 14.5926 1.77138 14.5925C1.93647 14.5925 2.09482 14.5269 2.21156 14.4102L3.0212 13.6006C6.10801 16.3531 10.8418 16.0822 13.5943 12.9953C14.5699 11.9013 15.203 10.545 15.415 9.09457C15.4989 8.58061 15.1504 8.0959 14.6364 8.01194C14.5899 8.00432 14.5429 8.0002 14.4957 7.99965Z"
-                                                fill="currentColor"></path>
-                                        </g>
-                                    </svg>
-                                    <a href="{{ route('chat.delete', ['id' => $chat->profile_id]) }}">
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="Group">
+                                        <path id="Vector"
+                                            d="M2.42742 7.17755C2.88001 4.10191 5.7402 1.97552 8.81583 2.42811C9.86518 2.58252 10.8495 3.03026 11.6555 3.71977L10.93 4.44532C10.6868 4.68857 10.6868 5.08292 10.9301 5.3261C11.0469 5.44282 11.2052 5.50842 11.3703 5.50845H14.2265C14.5704 5.50845 14.8493 5.22962 14.8493 4.88565V2.02947C14.8492 1.68551 14.5703 1.40673 14.2263 1.40679C14.0612 1.40682 13.9029 1.47242 13.7862 1.58914L12.9765 2.39877C9.88891 -0.353483 5.1548 -0.0816883 2.40255 3.00586C1.4275 4.09967 0.794753 5.45549 0.582688 6.90538C0.499077 7.41939 0.847973 7.90386 1.36196 7.98748C1.40826 7.99501 1.45503 7.99907 1.50195 7.99965C1.9722 7.99457 2.36693 7.64392 2.42742 7.17755Z"
+                                            fill="currentColor"></path>
+                                        <path id="Vector_2"
+                                            d="M14.4957 7.99965C14.0255 8.00473 13.6307 8.35538 13.5702 8.82175C13.1176 11.8974 10.2575 14.0238 7.18182 13.5712C6.13248 13.4168 5.14812 12.9691 4.34213 12.2796L5.06769 11.554C5.31087 11.3108 5.31082 10.9164 5.06754 10.6732C4.9508 10.5565 4.79245 10.4909 4.62736 10.4909H1.77123C1.42727 10.4909 1.14844 10.7697 1.14844 11.1137V13.9699C1.14853 14.3138 1.42741 14.5926 1.77138 14.5925C1.93647 14.5925 2.09482 14.5269 2.21156 14.4102L3.0212 13.6006C6.10801 16.3531 10.8418 16.0822 13.5943 12.9953C14.5699 11.9013 15.203 10.545 15.415 9.09457C15.4989 8.58061 15.1504 8.0959 14.6364 8.01194C14.5899 8.00432 14.5429 8.0002 14.4957 7.99965Z"
+                                            fill="currentColor"></path>
+                                    </g>
+                                </svg>
+                                <a href="{{ route('chat.delete', ['id' => $chat->profile_id]) }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -90,171 +91,171 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                 fill="currentColor"></path>
                                         </g>
                                     </svg>
-                                    </a>
-                                </p>
-                            </div>
+                                </a>
+                            </p>
                         </div>
-                    
-                    @endforeach
-                    @endif
                 </div>
 
-                <div class="start_chat_part">
-                    <div id="wrapper" class="wrapper">
-                        <div id="content" class="content">
-                            <div class="chat-profile-bar">
+                @endforeach
+                @endif
+            </div>
 
-                                <div class="backtochat" style="display: none;">
-                                    <img src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg"
-                                        class="">
+            <div class="start_chat_part">
+                <div id="wrapper" class="wrapper">
+                    <div id="content" class="content">
+                        <div class="chat-profile-bar">
+
+                            <div class="backtochat" style="display: none;">
+                                <img src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg"
+                                    class="">
+                            </div>
+
+                            <div class="asuna-saito">
+                                <div class="asuna-image">
+                                    <img src="{{ $imgUrl1 }}">
                                 </div>
+                                <div class="asuna-name">
 
-                                <div class="asuna-saito">
-                                    <div class="asuna-image">
-                                        <img src="{{ $imgUrl1 }}">
-                                    </div>
-                                    <div class="asuna-name">
-
-                                        <h6>{{ $name }}</h6>
-                                    </div>
-                                </div>
-                                <div class="toggle-button-right" id="show-toggle-btn">
-                                    <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
+                                    <h6>{{ $name }}</h6>
                                 </div>
                             </div>
-                            <div class="chat_content">
-                                <div class="row new_message">
-                                
-                        @if(!empty($getAllReciverUser))
-                            @foreach ($getAllReciverUser as $chat_user)  
+                            <div class="toggle-button-right" id="show-toggle-btn">
+                                <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
+                            </div>
+                        </div>
+                        <div class="chat_content">
+                            <div class="row new_message">
+
+                                @if(!empty($getAllReciverUser))
+                                @foreach ($getAllReciverUser as $chat_user)
                                 @if($chat_user->sender_id == $chat_user->user_id)
-                           <!-- style="display: none;" style="display: none;" -->
-                                    <div class="col-12 scrolltop">
-                                        <div class="have_we_met">
-                                            <div class="chat_content_box">
-                                           
-                                            <p id="message">{{ $chat_user->message_text }}</p>
-                                         
-                                                <div class="volume">
-                                                    <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
-                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z">
-                                                            </path>
-                                                        </svg></span>
-                                                </div>
-                                            </div>
-                                            <div class="message_feedback">
-                                                <a href="#"><img
-                                                        src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                                <a href="#"><img
-                                                        src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
+                                <!-- style="display: none;" style="display: none;" -->
+                                <div class="col-12 scrolltop mb-2">
+                                    <div class="have_we_met">
+                                        <div class="chat_content_box">
+                                            <p id="message">{{ $chat_user->message_text }}</p>  
+                                            <div class="volume">
+                                                <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z">
+                                                        </path>
+                                                    </svg></span>
                                             </div>
                                         </div>
-
-                                    </div>
-                                    @if($chat_user->media_url)
-
-                                              <div class="col-12 mt-4">
-                                                    <div class="chat_content_img">
-                                                        <img src="{{ $chat_user->media_url }}">
-                                                    </div>
-                                                </div>
-                                            @endif
-                                    @else
-                                    <div class="col-12">
-                                        <div class="send_message">
-                                            <span id="chat-message">{{ $chat_user->message_text }}</span>
+                                        <div class="message_feedback">
+                                            <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
+                                            <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
                                         </div>
                                     </div>
-                                    @endif
-                                 @endforeach
+
+                                </div>
+                                @if($chat_user->media_url)
+
+                                <div class="col-12 mt-4">
+                                    <div class="chat_content_img">
+                                        <img src="{{ $chat_user->media_url }}">
+                                    </div>
+                                </div>
                                 @endif
-                                  
-                                </div>
-                            </div>
-                            
-                            <div class="searchbar-footer">
-                                <ul class="suggestion">
-                                @if(session('user_id'))
-                                <li>Suggestion: </li>
-                                    <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>    
                                 @else
-                                <li>Suggestion: </li>
-                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#please_register" class="suggestion-link">Hey! How's your day been?</a></li>
-                                @endif    
-                                </ul>
-                                <div class="type_message">
-                                    <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
-                                    {!! csrf_field() !!}
-                                        <input type="text" name="message" id="type_message" placeholder="Type action message">
-                                        <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
-                                        <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
-                                        <div class="dropdown">
-                                            <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <img src="{{ URL::asset('public/front/img/ask-pic.svg') }}"> Ask <i
-                                                    class="bi bi-chevron-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <li><a class="dropdown-item" href="#">Show me...</a></li>
-                                                <li><a class="dropdown-item" href="#">Send me...</a></li>
-                                                <li><a class="dropdown-item" href="#">Send</a></li>
-                                                <li><a class="dropdown-item" href="#">Can i see...</a></li>
-                                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
-                                                            src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
-                                                        to use</a></li>
-                                            </ul>
-                                        </div>
-                                        @if(session('user_id'))
-                                        <button type="button" id="new_message">
-                                            <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
-                                        </button>
-                                        @else
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#please_register" >
-                                            <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
-                                        </button>
-                                        @endif
-                                    </form>
+                                <div class="col-12">
+                                    <div class="send_message">
+                                        <span id="chat-message">{{ $chat_user->message_text }}</span>
+                                    </div>
                                 </div>
-                            </div>
+                                @endif
+                                @endforeach
+                                @endif
 
+                            </div>
                         </div>
 
-
-                        <div id="aside" class="sidebar">
-                            <div class="sidebar_main_carousel">
-                                <div id="carouselExampleFade" class="carousel slide carousel-fade"
-                                    data-bs-ride="carousel">
-                                    <div class="carousel-indicators">
-                                        <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
-                                            class="active" aria-current="true" aria-label="Slide 1"></button>
-                                        <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="1"
-                                            aria-label="Slide 2"></button>
-                                        <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
-                                            aria-label="Slide 3"></button>
+                        <div class="searchbar-footer">
+                            <ul class="suggestion">
+                                @if(session('user_id'))
+                                <li>Suggestion: </li>
+                                <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
+                                @else
+                                <li>Suggestion: </li>
+                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#please_register"
+                                        class="suggestion-link">Hey! How's your day been?</a></li>
+                                @endif
+                            </ul>
+                            <div class="type_message">
+                                <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
+                                    {!! csrf_field() !!}
+                                    <input type="text" name="message" id="type_message"
+                                        placeholder="Type action message" required>
+                                    <input type="hidden" name="receiver_id"
+                                        value="{{ request()->segment(count(request()->segments())) }}">
+                                    <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
+                                    <div class="dropdown">
+                                        <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <img src="{{ URL::asset('public/front/img/ask-pic.svg') }}"> Ask <i
+                                                class="bi bi-chevron-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" href="#">Show me...</a></li>
+                                            <li><a class="dropdown-item" href="#">Send me...</a></li>
+                                            <li><a class="dropdown-item" href="#">Send</a></li>
+                                            <li><a class="dropdown-item" href="#">Can i see...</a></li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#How_to_use"><img
+                                                        src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
+                                                    to use</a></li>
+                                        </ul>
                                     </div>
-                                    <div class="back_btn" style="display: none;">
-                                        <img
-                                            src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg">
-                                        <div class="text-white text-sm font-semibold leading-normal">Back</div>
-                                    </div>
-                                    <div class="carousel-inner">
-                                        @foreach($profileImages as $key => $profileImages)
-                                        @php
-                                        $imgUrl = isset($profileImages->image_path) ?
-                                        asset('storage/app/public').'/'.$profileImages->image_path : '';
-                                        @endphp
+                                    @if(session('user_id'))
+                                    <button type="button" id="new_message">
+                                        <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                    </button>
+                                    @else
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#please_register">
+                                        <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                    </button>
+                                    @endif
+                                </form>
+                            </div>
+                        </div>
 
-                                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                            <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
-                                            <img src="{{ $imgUrl }}" class="d-block w-100">
-                                            1
-                                        </div>
-                                        @endforeach
-                                        <!-- <div class="carousel-item">
+                    </div>
+
+
+                    <div id="aside" class="sidebar">
+                        <div class="sidebar_main_carousel">
+                            <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
+                                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                                    <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="1"
+                                        aria-label="Slide 2"></button>
+                                    <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
+                                        aria-label="Slide 3"></button>
+                                </div>
+                                <div class="back_btn" style="display: none;">
+                                    <img
+                                        src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg">
+                                    <div class="text-white text-sm font-semibold leading-normal">Back</div>
+                                </div>
+                                <div class="carousel-inner">
+                                    @foreach($profileImages as $key => $profileImages)
+                                    @php
+                                    $imgUrl = isset($profileImages->image_path) ?
+                                    asset('storage/app/public').'/'.$profileImages->image_path : '';
+                                    @endphp
+
+                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                        <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
+                                        <img src="{{ $imgUrl }}" class="d-block w-100">
+                                        1
+                                    </div>
+                                    @endforeach
+                                    <!-- <div class="carousel-item">
                                           <img src="{{ URL::asset('public/front/img/slider-img2.webp') }}" class="d-block w-100">
                                           <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
                                           2
@@ -264,103 +265,103 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                           <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
                                           3
                                         </div> -->
-                                    </div>
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
                                 </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
-                            <div class="waitress">
-                                <h5>{{ $name }}</h5>
-                                <p>{{ $description }}</p>
-                            </div>
-                            <div class="attributes_box">
-                                <h5>Personality Attributes:</h5>
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/personality.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>PERSONALITY</span>
-                                            <h6>{{ $personality }}</h6>
-                                        </div>
+                        </div>
+                        <div class="waitress">
+                            <h5>{{ $name }}</h5>
+                            <p>{{ $description }}</p>
+                        </div>
+                        <div class="attributes_box">
+                            <h5>Personality Attributes:</h5>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/personality.svg') }}">
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/occupation.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>Occupation</span>
-                                            <h6>{{ $occupation }}</h6>
-                                        </div>
-                                    </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/hobbies.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>HOBBIES</span>
-                                            <h6>{{ $hobbies }}</h6>
-                                        </div>
-                                    </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/roleplay.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>RELATIONSHIP</span>
-                                            <h6>{{ $relationship_status }}</h6>
-                                        </div>
+                                    <div class="attributes_txt">
+                                        <span>PERSONALITY</span>
+                                        <h6>{{ $personality }}</h6>
                                     </div>
                                 </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/occupation.svg') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>Occupation</span>
+                                        <h6>{{ $occupation }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/hobbies.svg') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>HOBBIES</span>
+                                        <h6>{{ $hobbies }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/roleplay.svg') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>RELATIONSHIP</span>
+                                        <h6>{{ $relationship_status }}</h6>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="attributes_box">
-                                <h5>Physical Attributes:</h5>
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/body.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>BODY</span>
-                                            <h6>{{ $body_description }}</h6>
-                                        </div>
+                        </div>
+                        <div class="attributes_box">
+                            <h5>Physical Attributes:</h5>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/body.svg') }}">
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/age.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>AGE</span>
-                                            <h6>{{ $age }}</h6>
-                                        </div>
+                                    <div class="attributes_txt">
+                                        <span>BODY</span>
+                                        <h6>{{ $body_description }}</h6>
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/ethinicity.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>ETHNICITY</span>
-                                            <h6>{{ $ethnicity }}</h6>
-                                        </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/age.svg') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>AGE</span>
+                                        <h6>{{ $age }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img src="{{ URL::asset('public/front/img/ethinicity.svg') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>ETHNICITY</span>
+                                        <h6>{{ $ethnicity }}</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
+
             </div>
+
+        </div>
         </div>
     </section>
 
@@ -402,7 +403,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 <div class="how_to_use_popup">
     <!-- Modal -->
-    <div class="modal fade" id="please_register" tabindex="-1" aria-labelledby="please_registerModalLabel" data-backdrop="true" data-keyboard="true" aria-hidden="true">
+    <div class="modal fade" id="please_register" tabindex="-1" aria-labelledby="please_registerModalLabel"
+        data-backdrop="true" data-keyboard="true" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <!-- <div class="modal-header">
@@ -410,19 +412,20 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> -->
                 <div class="modal-body">
-                <h2 style="color: white;text-align: center;">Members Only!</h2>
+                    <h2 style="color: white;text-align: center;">Members Only!</h2>
 
-                <h7 class="mt-3" style="color: white;text-align: center;display: flex;"> Please login or register in order to use this feature </h7>
+                    <h7 class="mt-3" style="color: white;text-align: center;display: flex;"> Please login or register in
+                        order to use this feature </h7>
 
-                <div class="row mt-4">
-                    <div class="col-6">
-                    <a href="{{ route('register') }}" class="register_btn">Register</a>
-                    <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
-                    </div>
-                    <div class="col-6">
-                        <a href="{{ route('login') }}" class="login_btn">Login</a>
-                    <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
-                    </div>
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <a href="{{ route('register') }}" class="register_btn">Register</a>
+                            <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ route('login') }}" class="login_btn">Login</a>
+                            <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -430,7 +433,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     </div>
 </div>
 
-               
+
 
 
 @include('front.layout.footer')
@@ -442,75 +445,84 @@ $(document).ready(function() {
     });
 
     $('body').on('click', '#new_message', function() {
-        $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
+        if ($('#type_message').val()) {
+            $('.new_message').append(
+                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+                $('#type_message').val() + '</span></div></div>');
 
-        $('.new_message').append('<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
+            $('.new_message').append(
+                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+                );
 
-        var inputValue = $('#type_message').val();
-  
-        // Check if the input contains the word "show"
-        if (inputValue.includes('show')) {
-            // The word "show" is present in the input
-            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-            setTimeout(function() {
-                updateLoading('0%', 'Please Wait');
-            }, 1000);
+            var inputValue = $('#type_message').val();
 
-            setTimeout(function() {
-                updateLoading('20%', 'Processing...');
-            }, 5000);
+            // Check if the input contains the word "show"
+            if (inputValue.includes('show')) {
+                // The word "show" is present in the input
+                $('.new_message').append(
+                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
+                    );
+                setTimeout(function() {
+                    updateLoading('0%', 'Please Wait');
+                }, 1000);
 
-            setTimeout(function() {
-                updateLoading('50%', 'Almost There...');
-            }, 9000);
+                setTimeout(function() {
+                    updateLoading('20%', 'Processing...');
+                }, 5000);
 
-            setTimeout(function() {
-                updateLoading('80%', 'Complete');
-            }, 13000);
+                setTimeout(function() {
+                    updateLoading('50%', 'Almost There...');
+                }, 9000);
 
-            setTimeout(function() {
-                updateLoading('100%', 'Complete');
-            }, 17000);
-            // You can add your condition or code here
-        } else {
-            // The word "show" is not in the input
-            // console.log('The word "show" is not in the input.');
-            // You can add an alternative condition or code here
+                setTimeout(function() {
+                    updateLoading('80%', 'Complete');
+                }, 13000);
+
+                setTimeout(function() {
+                    updateLoading('100%', 'Complete');
+                }, 17000);
+                // You can add your condition or code here
+            } else {
+                // The word "show" is not in the input
+                // console.log('The word "show" is not in the input.');
+                // You can add an alternative condition or code here
+            }
+
+
+            document.addEventListener("DOMContentLoaded", function() {
+                // Select the message and dot elements
+                var messageElement = document.getElementById("chat_content_box");
+
+                // Display the three dots animation
+                messageElement.style.display = "block";
+
+
+                // Hide the three dots animation and show the message after 3 seconds
+                setTimeout(function() {
+                    messageElement.style.display = "none";
+                }, 3000); // 3000 milliseconds (3 seconds)
+            });
+
+            $('#message_form').submit();
         }
 
-        
-        document.addEventListener("DOMContentLoaded", function() {
-            // Select the message and dot elements
-            var messageElement = document.getElementById("chat_content_box");
-
-            // Display the three dots animation
-            messageElement.style.display = "block";
-
-
-            // Hide the three dots animation and show the message after 3 seconds
-            setTimeout(function() {
-                messageElement.style.display = "none";
-            }, 3000); // 3000 milliseconds (3 seconds)
-        });
-
-        $('#message_form').submit();
     })
 
-        setTimeout(function() {
-            $('html, body').animate({
+    setTimeout(function() {
+        $('html, body').animate({
             scrollTop: $('.new_message').offset().top
-            }, 'slow');
-        }, 500);
+        }, 'slow');
+    }, 500);
     // $('#new_message').append()
 
 
 });
-function updateLoading(progress, text) {
-               $('#loading-progress').text(progress);
-               $('#loading-text').text(progress);
-                loadingtext.val(text);
-            }
 
+function updateLoading(progress, text) {
+    $('#loading-progress').text(progress);
+    $('#loading-text').text(progress);
+    loadingtext.val(text);
+}
 </script>
 
 
@@ -565,23 +577,22 @@ if (window.innerWidth <= 1199) {
 
 <script>
 function updateLink() {
-  var links = document.querySelectorAll('a[data-profile-id]');
-  var isMobile = window.innerWidth <= 1199; // Adjust the width threshold as needed
+    var links = document.querySelectorAll('a[data-profile-id]');
+    var isMobile = window.innerWidth <= 1199; // Adjust the width threshold as needed
 
-  for (var i = 0; i < links.length; i++) {
-    var link = links[i];
-    var profileId = link.getAttribute('data-profile-id');
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var profileId = link.getAttribute('data-profile-id');
 
-    if (isMobile) {
-      link.href = link.href.replace('/chat/message/', '/chat/mobile/message/');
+        if (isMobile) {
+            link.href = link.href.replace('/chat/message/', '/chat/mobile/message/');
+        }
     }
-  }
 }
 
 // Update the links when the script is executed
 updateLink();
-
-  </script>
+</script>
 
 
 <script>
@@ -621,47 +632,60 @@ axios.post("{{ route('chat.store', ['id' => ':id']) }}".replace(':id', id))
 </script>
 
 <script>
-    // Get the suggestion link element
-    const suggestionLink = document.querySelector('.suggestion-link');
+// Get the suggestion link element
+const suggestionLink = document.querySelector('.suggestion-link');
 
-    // Get the message input element
-    const messageInput = document.getElementById('type_message');
+// Get the message input element
+const messageInput = document.getElementById('type_message');
 
-    // Add a click event listener to the suggestion link
-    suggestionLink.addEventListener('click', function (event) {
-        event.preventDefault(); // Prevent the default link behavior
+// Add a click event listener to the suggestion link
+suggestionLink.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
 
-        // Get the text from the suggestion link
-        const suggestionText = suggestionLink.textContent;
+    // Get the text from the suggestion link
+    const suggestionText = suggestionLink.textContent;
 
-        // Set the input field's value to the suggestion text
-        messageInput.value = suggestionText;
+    // Set the input field's value to the suggestion text
+    messageInput.value = suggestionText;
 
-        // Hide the suggestion by setting its display to "none"
-        suggestionLink.parentNode.style.display = "none";
-    });
+    // Hide the suggestion by setting its display to "none"
+    suggestionLink.parentNode.style.display = "none";
+});
+
+
+// Get the "new_message" button element
+const newMessageButton = document.getElementById('new_message');
+
+// Add a click event listener to the button
+newMessageButton.addEventListener('click', function() {
+    // Clear the input field's value
+    setTimeout(function() {
+        messageInput.value = '';
+    }, 500); // 3000 milliseconds (3 seconds)
+
+});
 </script>
+
+
 
 
 <script>
-    // Get the dropdown items (anchors)
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+// Get the dropdown items (anchors)
+const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-    // Get the message input element
-    const messageInput1 = document.getElementById('type_message');
+// Get the message input element
+const messageInput1 = document.getElementById('type_message');
 
-    // Add a click event listener to each dropdown item
-    dropdownItems.forEach(function (item) {
-        item.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default link behavior
+// Add a click event listener to each dropdown item
+dropdownItems.forEach(function(item) {
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
 
-            // Get the text of the clicked item
-            const selectedText = item.textContent;
+        // Get the text of the clicked item
+        const selectedText = item.textContent;
 
-            // Set the input field's value to the selected text
-            messageInput1.value = selectedText;
-        });
+        // Set the input field's value to the selected text
+        messageInput1.value = selectedText;
     });
+});
 </script>
-
-
