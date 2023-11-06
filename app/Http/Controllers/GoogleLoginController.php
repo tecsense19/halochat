@@ -27,7 +27,10 @@ class GoogleLoginController extends Controller
                         $userId = User::where('email', $user->email)->first();
                         if($userId)
                         {
-                            echo "ok";
+                             $request->session()->put('authenticated_user', true);
+                             $request->session()->put('user_id', $userId->id);
+                             $request->session()->regenerate();
+                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
                         }else{
 
                             $curl = curl_init();
@@ -80,8 +83,6 @@ class GoogleLoginController extends Controller
                                     'created_at'=> now(),
                                 ]
                             );
-
-                            $userId = User::where('email', $user->email)->first();
                             $creditAdd = Managecredit::updateOrInsert(
                                 ['user_id' => $userId->id],
                                 [
@@ -100,7 +101,6 @@ class GoogleLoginController extends Controller
                         }
                         else {
                              // Update the user with the same email if they exist, or create a new user
-                             $userId = User::where('email', $user->email)->first();
                              $request->session()->put('authenticated_user', true);
                              $request->session()->put('user_id', $userId->id);
                              $request->session()->regenerate();
