@@ -390,7 +390,38 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         </ul>
                         <div class="pasination">
                             <p>Step 1 of 2</p>
-                            <a href="#">next</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#How_to_usestep2" >next</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="how_to_use_popup">
+    <!-- Modal -->
+    <div class="modal fade" id="How_to_usestep2" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><img src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How to use</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="prompt_for_image">
+                        <h6>Complete the sentence by specifying what you'd like to see.</h6>
+                        <p>Examples:</p>
+                        <ul>
+                            <li>"Send me a selfie"</li>
+                            <li>"Show me your face"</li>
+                            <li>"Can I see a picture of you"</li>
+                        </ul>
+                        <div class="pasination">
+                            <p>Step 2 of 2</p>
+                            <a href="#" data-bs-dismiss="modal" aria-label="Close">Got it</a>
                         </div>
                     </div>
                 </div>
