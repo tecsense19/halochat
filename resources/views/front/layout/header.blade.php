@@ -22,7 +22,7 @@
 
     <div class="d-flex justify-content-between align-items-center">
     <div class="logo">
-        <a href="#"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
+        <a href="{{ route('dashboard') }}"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
     </div>
     <ul>
         @if(auth()->check() || session()->has('authenticated_user'))
