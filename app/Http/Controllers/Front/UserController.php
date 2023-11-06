@@ -43,6 +43,10 @@ class UserController extends Controller
 
     public function chat()
     {
+        Messages::whereNull('user_id')
+        ->whereNull('sender_id')
+        ->delete();
+        
         if (session('user_id')) {
             $getAllReciverUser = Messages::where('user_id', session('user_id'))->limit(1)->get();
             $user = Profile::with('profileImages')->where('profile_id',$getAllReciverUser[0]['receiver_id'])->first();
@@ -54,11 +58,6 @@ class UserController extends Controller
                 return view("front.chat.chat", compact("getAllProfile", "user", "getAllReciverUser"));
         }else{
          
-            Messages::whereNull('profile_id')
-                ->whereNull('user_id')
-                ->whereNull('sender_id')
-                ->whereNull('receiver_id')
-                ->delete();
             $profileList = Profile::with('profileImages')->get();
             return view("front.dashboard", compact('profileList'));
         }
