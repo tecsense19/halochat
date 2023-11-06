@@ -46,7 +46,7 @@
         <div class="explore_ai_title">
           <h2><span>Explore</span> AI Characters</h2>
         </div>
-        <div class="explore_tabs">
+        <!-- <div class="explore_tabs">
           <div class="row">
             <div class="col-lg-12 d-flex justify-content-center">
               <ul id="portfolio-flters">
@@ -55,7 +55,7 @@
                 <li data-filter=".filter-card" class="">Anime</li>
               </ul>
             </div>
-          </div>
+          </div> -->
   
           <div class="row portfolio-container">
             <!-- <div class="col-xl-3 col-md-6 portfolio-item filter-app">
