@@ -94,18 +94,17 @@ class GoogleLoginController extends Controller
                                 ]
                             );
                         }
-
-                        if($user->deleted_at == null) 
+                        if($userId->deleted_at != null) 
                         {
-                            // Update the user with the same email if they exist, or create a new user
-                            $userId = User::where('email', $user->email)->first();
-                            $request->session()->put('authenticated_user', true);
-                            $request->session()->put('user_id', $userId->id);
-                            $request->session()->regenerate();
-                            return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                            return redirect()->route('login')->withErrors(['email' => 'Your account has been deleted please contact admin!'])->onlyInput('email');
                         }
                         else {
-                        return redirect()->route('login')->withErrors(['email' => 'Your account has been deleted please contact admin!'])->onlyInput('email');
+                             // Update the user with the same email if they exist, or create a new user
+                             $userId = User::where('email', $user->email)->first();
+                             $request->session()->put('authenticated_user', true);
+                             $request->session()->put('user_id', $userId->id);
+                             $request->session()->regenerate();
+                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
                         }
             } catch (\Exception $e) {
                 dd($e->getMessage());
