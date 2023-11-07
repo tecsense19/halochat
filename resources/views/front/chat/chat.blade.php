@@ -36,6 +36,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         <h3>Chat</h3>
                     </div>
                     <form action="#" class="search-form">
+
                         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
                                 d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
@@ -52,8 +53,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     @foreach ($getAllProfile as $chat)
 
                     @php
-                     $imgUrl2 = isset($chat->image_path) ?
-                     asset('storage/app/public').'/'.$chat->image_path : '';
+                    $imgUrl2 = isset($chat->image_path) ?
+                    asset('storage/app/public').'/'.$chat->image_path : '';
                     @endphp
                     <!-- {{ route('chat.message', ['id' => $chat->profile_id]) }} -->
                     @if(session('user_id'))
@@ -155,15 +156,25 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                     </svg></span>
                                             </div>
                                         </div>
-                                    <div class="message_feedback">
-                                        @if($chat_user->message_liked == 'Liked')
-                                        <a href="#"><img src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
-                                        @else
-                                        <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
+                                        <div class="message_feedback">
+                                            @if($chat_user->message_liked == 'Liked')
+                                            <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
+                                            @else
+
+                                            @if($chat_user->message_liked == 'Unliked')
+                                            <a href="#"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumb"><img
+                                            <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/active-thumb.svg') }}"></a>
+                                            @else
+                                            <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumb"
+                                                data-bs-messageid="{{ $chat_user->message_id }}"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
-                                        @endif
+                                            @endif
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -218,8 +229,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                             <li><a class="dropdown-item" href="#">Send me...</a></li>
                                             <li><a class="dropdown-item" href="#">Send</a></li>
                                             <li><a class="dropdown-item" href="#">Can i see...</a></li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#How_to_use"><img
+                                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
                                                         src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
                                                     to use</a></li>
                                         </ul>
@@ -385,13 +395,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                 <div class="modal-body">
                     <div class="prompt_for_image">
                         <p>Write your message here.</p>
-                        <div class="edit_txt">
-                            <textarea placeholder="What is the issue, how could it be improved?" rows="4" cols="34"
-                                style="background: black;color: white;"></textarea>
-                        </div>
+                        <textarea id="messageTextarea" placeholder="What is the issue, how could it be improved?"
+                            rows="4" cols="34" style="background: black;color: white;"></textarea>
                         <div class="pasination">
 
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">send</a>
+                            <a href="#" id="sendLink" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">send</a>
                         </div>
                     </div>
                 </div>
@@ -416,7 +424,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         <p>Your message has been sent.</p>
                         <div class="pasination">
 
-                            <a href="#" data-bs-dismiss="modal" aria-label="Close">close</a>
+                            <a href="#" data-bs-dismiss="modal" id="close_feedback" aria-label="Close">close</a>
                         </div>
                     </div>
                 </div>
@@ -541,7 +549,7 @@ $(document).ready(function() {
             $('.new_message').append(
                 '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
             );
-
+           
             var inputValue = $('#type_message').val();
 
             // Check if the input contains the word "show"
@@ -572,7 +580,9 @@ $(document).ready(function() {
                 // You can add your condition or code here
             }
 
-
+            const chatContentScrollnewchat = document.querySelector('.chat_content');
+            chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
+            
             document.addEventListener("DOMContentLoaded", function() {
                 // Select the message and dot elements
                 var messageElement = document.getElementById("chat_content_box");
@@ -733,7 +743,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-
 <script>
 function likedMessage(id) {
     var str = "{{URL::to('chat/liked')}}/" + id;
@@ -747,14 +756,32 @@ function likedMessage(id) {
     });
 }
 
+document.getElementById('sendLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    var messageTextarea = document.getElementById('messageTextarea');
+    var messageId = document.querySelector('[data-bs-messageid]').getAttribute('data-bs-messageid');
+    unlikedMessage(messageTextarea.value, messageId);
+});
 
-function unlikedMessage(id) {
-    var str = "{{URL::to('chat/liked')}}/" + id;
+document.getElementById('close_feedback').addEventListener('click', function(e) {
+    e.preventDefault();
+    location.reload();
+});
 
+
+function unlikedMessage(message, messageId) {
+    console.log("Message: " + message);
+    console.log("Message ID: " + messageId);
+
+    var str = "{{URL::to('chat/unliked')}}/" + messageId;
     $.ajax({
+        type: "GET",
         url: str,
+        data: {
+            message: message
+        },
         success: function(result) {
-            location.reload();
+            // location.reload();
             console.log(result); // Example: Display the response in the console
         }
     });

@@ -1,6 +1,4 @@
 <?php 
-
-
 $user = isset($user) ? $user : '';
 $id = isset($user->profile_id) ? $user->profile_id : '';
 $name = isset($user->name) ? $user->name : '';
@@ -13,8 +11,6 @@ $ethnicity = isset($user->ethnicity) ? $user->ethnicity : '';
 $age = isset($user->age) ? $user->age : '';
 $relationship_status = isset($user->relationship_status) ? $user->relationship_status : '';
 $profileImages = isset($user->profileImages) ? $user->profileImages : [];
-
-
 
 ?>
 @include('front.layout.front')
@@ -150,14 +146,25 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                 </div>
                                             </div>
                                             <div class="message_feedback">
-                                                <a href="#"><img
-                                                        src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                                <a href="#"><img
-                                                        src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
-                                            </div>
+                                        @if($chat_user->message_liked == 'Liked')
+                                        <a href="#"><img src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
+                                        @else
+                                       
+                                        @if($chat_user->message_liked == 'Unliked')  
+                                        <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>         
+                                        <a href="#"><img
+                                                    src="{{ URL::asset('public/front/img/active-thumb.svg') }}"></a>
+                                                    @else
+                                        <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumb" data-bs-messageid="{{ $chat_user->message_id }}"><img
+                                                    src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
+                                                    @endif
+                                        @endif
                                         </div>
-
                                     </div>
+                                </div>
                                     @if($chat_user->media_url)
                                     <div class="col-12 mt-4">
                                         <div class="chat_content_img">
@@ -374,6 +381,56 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 
 
+<div class="how_to_use_popup">
+    <!-- Modal -->
+    <div class="modal fade" id="false_thumb" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 style="color: white;font-size: larger;">Provide additional feedback</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="prompt_for_image">
+                        <p>Write your message here.</p>
+                            <textarea id="messageTextarea" placeholder="What is the issue, how could it be improved?" rows="4" cols="26"
+                                style="background: black;color: white;"></textarea>
+                        <div class="pasination">
+                       
+                        <a href="#" id="sendLink" data-bs-toggle="modal" data-bs-target="#false_thumbstep2" >send</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="how_to_use_popup">
+    <!-- Modal -->
+    <div class="modal fade" id="false_thumbstep2" tabindex="-1" aria-labelledby="How_to_useModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="prompt_for_image">
+                        <h6>Thank you for your message!</h6>
+                        <p>Your message has been sent.</p>
+                        <div class="pasination">
+
+                            <a href="#" data-bs-dismiss="modal" id="close_feedback" aria-label="Close">close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="how_to_use_popup">
@@ -511,10 +568,10 @@ $(document).ready(function() {
                 updateLoading('100%', 'Complete');
             }, 17000);
             // You can add your condition or code here
-        } else {
-           
-        }
+        } 
 
+        const chatContentScrollnewchat = document.querySelector('.chat_content');
+        chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
         
         document.addEventListener("DOMContentLoaded", function() {
             // Select the message and dot elements
@@ -686,4 +743,63 @@ newMessageButton.addEventListener('click', function() {
             messageInput1.value = selectedText;
         });
     });
+</script>
+
+
+<script>
+// Add this script at the end of your HTML body, just before the </body> tag.
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the chat_content element
+    const chatContent = document.querySelector('.chat_content');
+
+    // Scroll to the bottom of the chat_content element
+    chatContent.scrollTop = chatContent.scrollHeight;
+});
+</script>
+
+
+
+<script>
+function likedMessage(id) {
+    var str = "{{URL::to('chat/liked')}}/" + id;
+
+    $.ajax({
+        url: str,
+        success: function(result) {
+            location.reload();
+            console.log(result); // Example: Display the response in the console
+        }
+    });
+}
+
+document.getElementById('sendLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    var messageTextarea = document.getElementById('messageTextarea');
+    var messageId = document.querySelector('[data-bs-messageid]').getAttribute('data-bs-messageid');
+    unlikedMessage(messageTextarea.value, messageId);
+});
+
+document.getElementById('close_feedback').addEventListener('click', function(e) {
+    e.preventDefault();
+    location.reload();
+});
+
+
+function unlikedMessage(message, messageId) {
+    console.log("Message: " + message);
+    console.log("Message ID: " + messageId);
+
+    var str = "{{URL::to('chat/unliked')}}/" + messageId;
+    $.ajax({
+        type: "GET",
+        url: str,
+        data: {
+        message : message
+        },
+        success: function(result) {
+            // location.reload();
+            console.log(result); // Example: Display the response in the console
+        }
+    });
+}
 </script>

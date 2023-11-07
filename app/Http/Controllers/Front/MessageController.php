@@ -450,10 +450,12 @@ class MessageController extends Controller
         return true;
     }
 
-    public function unliked($id , $feedback)
+    public function unliked($id)
     {
-        echo "hi";
-        //Messages::where('message_id', $id)->update(['message_liked' => 'Liked']);
-        //return true;
+        Messages::where('message_id', $id)->update([
+            'feedback' => $_GET['message'],
+            'message_liked' => 'Unliked'
+        ]);
+        return true;
     }
 }

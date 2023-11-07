@@ -67,6 +67,8 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/gallery', [MessageController::class, 'gallery'])->name('gallery.gallery');
     Route::get('/chat/delete/{id}', [MessageController::class, 'delete'])->name('chat.delete');
     Route::get('/chat/liked/{id}', [MessageController::class, 'liked'])->name('chat.liked');
+    Route::get('/chat/unliked/{id}', [MessageController::class, 'unliked'])->name('chat.unliked');
+    
     
 
 
