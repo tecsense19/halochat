@@ -1,5 +1,4 @@
 
-
 @include('front.layout.front')
 @include('front.layout.header')
 

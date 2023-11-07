@@ -9,31 +9,34 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id('message_id');
-            $table->integer('profile_id')->nullable();
-            $table->bigInteger('user_id')->nullable();
-            $table->bigInteger('sender_id')->nullable();
-            $table->bigInteger('receiver_id')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('profile_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('sender_id')->nullable();
+            $table->unsignedBigInteger('receiver_id')->nullable();
             $table->enum('status', ['Active', 'Archived', 'Deleted']);
             $table->text('message_text');
+            $table->enum('message_liked', ['Liked', 'Unliked'])->nullable();
+            $table->string('feedback')->nullable();
             $table->timestamp('timestamp');
-            $table->string('media_url', 255)->nullable();
-            $table->timestamps(); // This will add 'created_at' and 'updated_at' columns.
+            $table->string('media_url')->nullable();
+            $table->integer('isDeleted');
+            $table->timestamps();
+        });
 
+        // Define primary key and secondary indexes here
+        Schema::table('messages', function (Blueprint $table) {
+            $table->primary('message_id');
             $table->index('user_id');
             $table->index('sender_id');
             $table->index('receiver_id');
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('messages');
     }

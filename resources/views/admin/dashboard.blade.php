@@ -1,4 +1,7 @@
 @include('admin.layout.header')
+<link rel="icon" href="{{ URL::asset('public/front/img/fav48x48.ico') }}" type="image/x-icon" sizes="48x48">
+<link rel="icon" href="{{ URL::asset('public/front/img/fav16x16.ico') }}" type="image/x-icon" sizes="16x16">
+<link rel="icon" href="{{ URL::asset('public/front/img/fav32x32.ico') }}" type="image/x-icon" sizes="32x32">
 <div class="container-scroller">
       <div class="row p-0 m-0 proBanner" id="proBanner">
         <!-- <div class="col-md-12 p-0 m-0">

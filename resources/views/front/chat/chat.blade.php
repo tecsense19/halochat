@@ -381,11 +381,9 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 </main><!-- End #main -->
 
-
-
 <div class="how_to_use_popup">
     <!-- Modal -->
-    <div class="modal fade" id="false_thumb" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+    <div class="modal fade" id="false_thumb" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -396,10 +394,10 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <div class="prompt_for_image">
                         <p>Write your message here.</p>
                         <textarea id="messageTextarea" placeholder="What is the issue, how could it be improved?"
-                            rows="4" cols="34" style="background: black;color: white;"></textarea>
+                            rows="4" cols="34" style="background: black;color: white;width: 100%;border-radius: 5px;padding: 5px 10px;"></textarea>
                         <div class="pasination">
 
-                            <a href="#" id="sendLink" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">send</a>
+                            <a href="#" id="sendLink"  style="width: 100%;text-align: center;" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">Send</a>
                         </div>
                     </div>
                 </div>
@@ -540,7 +538,80 @@ $(document).ready(function() {
         $('.sidebar ul.nav').toggleClass('isClosed');
     });
 
+    $('body').on('keypress', '#type_message', function(event) {
+    if (event.which === 13) {
+        if ($('#type_message').val()) {
+            $('.new_message').append(
+                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+                $('#type_message').val() + '</span></div></div>');
+
+            $('.new_message').append(
+                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+            );
+           
+            var inputValue = $('#type_message').val();
+
+            // Check if the input contains the word "show"
+            if (inputValue.includes('show')) {
+                // The word "show" is present in the input
+                $('.new_message').append(
+                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
+                );
+                setTimeout(function() {
+                    updateLoading('0%', 'Please Wait');
+                }, 1000);
+
+                setTimeout(function() {
+                    updateLoading('20%', 'Processing...');
+                }, 5000);
+
+                setTimeout(function() {
+                    updateLoading('50%', 'Almost There...');
+                }, 9000);
+
+                setTimeout(function() {
+                    updateLoading('80%', 'Complete');
+                }, 13000);
+
+                setTimeout(function() {
+                    updateLoading('100%', 'Complete');
+                }, 17000);
+                // You can add your condition or code here
+            }
+
+            const chatContentScrollnewchat = document.querySelector('.chat_content');
+            chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
+            const messageInputclear = document.getElementById('type_message');
+            // Get the "new_message" button element
+                // Clear the input field's value
+                setTimeout(function() {
+                    messageInputclear.value = '';
+                }, 500); // 3000 milliseconds (3 seconds)
+
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                // Select the message and dot elements
+                var messageElement = document.getElementById("chat_content_box");
+
+                // Display the three dots animation
+                messageElement.style.display = "block";
+
+
+                // Hide the three dots animation and show the message after 3 seconds
+                setTimeout(function() {
+                    messageElement.style.display = "none";
+                }, 3000); // 3000 milliseconds (3 seconds)
+            });
+
+            $('#message_form').submit();
+        }
+
+    }
+});
+
+
     $('body').on('click', '#new_message', function() {
+        
         if ($('#type_message').val()) {
             $('.new_message').append(
                 '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +

@@ -26,4 +26,5 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ URL::asset('public/images/favicon.png') }}">
   </head>
+
   

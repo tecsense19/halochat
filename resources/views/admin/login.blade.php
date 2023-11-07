@@ -11,7 +11,9 @@
     
     <link rel="stylesheet" href="{{ URL::asset('public/css/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{ URL::asset('public/images/favicon.png') }}" />
+    <link rel="icon" href="{{ URL::asset('public/front/img/fav48x48.ico') }}" type="image/x-icon" sizes="48x48">
+<link rel="icon" href="{{ URL::asset('public/front/img/fav16x16.ico') }}" type="image/x-icon" sizes="16x16">
+<link rel="icon" href="{{ URL::asset('public/front/img/fav32x32.ico') }}" type="image/x-icon" sizes="32x32">
   </head>
   <body>
     <div class="container-scroller">

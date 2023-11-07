@@ -93,7 +93,13 @@
   </div>
 </section>
 
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
+<script>
+   function onSubmit(token) {
+     document.getElementById("demo-form").submit();
+   }
+ </script>
 
   <!-- Vendor JS Files -->
   <script src="{{ URL::asset('public/front/vendor/purecounter/purecounter_vanilla.js') }}"></script>

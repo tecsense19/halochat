@@ -1,8 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
 
-@include('front.layout.front')
-@include('front.layout.header')
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title></title>
 
-<main id="main">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Mobile nav toggle button ======= -->
+  <!-- <i class="bi bi-list mobile-nav-toggle d-xl-none"></i> -->
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
+      <nav id="navbar" class="nav-menu navbar">
+        <ul>
+          <li><a href="index.html" class="nav-link scrollto active"><img src="assets/img/explore.svg"> <span>Explore</span></a></li>
+          <li><a href="chat.html" class="nav-link scrollto"><img src="assets/img/chat.svg"> <span>Chat</span></a></li>
+          <li><a href="gallery.html" class="nav-link scrollto"><img src="assets/img/gallery.svg"> <span>Gallery</span></a></li>
+          <!-- <li><a href="#" class="nav-link scrollto"><img src="assets/img/magic-wand.svg"> <span>Create</span></a></li>
+          <li><a href="#" class="nav-link scrollto"><img src="assets/img/love-lady.svg"> <span>My Ai</span></a></li> -->
+        </ul>
+      </nav><!-- .nav-menu -->
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs_top">
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="logo">
+          <a href="index.html"><img src="assets/img/halochat.ai.png"></a>
+        </div>
+        <div class="profile_dropdown"><!--Navigation Bar Starts Here-->
+          <ul>
+            <a href="#" class="display-picture"><img src="assets/img/man.svg"> <span>My Profile</span> 
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
+            </svg></a><!--Profile Image-->
+            </ul>
+            <div class="card hidden"><!--ADD TOGGLE HIDDEN CLASS ATTRIBUTE HERE-->
+              <ul><!--MENU-->
+                <li><a href="profile-settings.html"><img src="assets/img/settings.svg"> Settings</a></li>
+                <li><a href="gallery.html"><img src="assets/img/gallery.svg"> Gallery</a></li>
+                <li><a href="subscriptions.html"><img src="assets/img/premium-white.svg"> Subscription</a></li>
+                <li><a href="#"><img src="assets/img/affiliate.svg"> Affiliate</a></li>
+                <li><a href="index.html"><img src="assets/img/logout.svg"> Log Out</a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End Breadcrumbs -->
+
+  <main id="main">
     <section class="terms-of-services">
       <div class="container">
         <div class="services_content">
@@ -195,5 +264,61 @@
     
   </main><!-- End #main -->
 
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container_fluid">
+      <div class="footer_content">
+        <ul class="social_txt">
+          <li><a href="#">Discord</a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contact">Contact</a></li>
+          <li><a href="#">Affiliate</a></li>
+        </ul>
+        <ul class="links">
+          <li><a href="terms-of-services.html">Terms of Service</a></li>
+          <li><a href="privacy-policies.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
 
-@include('front.layout.footer')
+  <!-- Modal -->
+<div class="contact_popup">
+  <div class="modal fade" id="contact" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="contact_details">
+            <h5>Contact Us</h5>
+            <p>Write your message here.</p>
+            <form action="#">
+              <textarea name="message" rows="4" placeholder="Description"></textarea>
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+</body>
+
+</html>

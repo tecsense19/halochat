@@ -55,6 +55,7 @@ use Illuminate\Support\Facades\Artisan;
     
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
     Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
+    Route::get('/privacy', [UserController::class, 'privacy'])->name('privacy.privacy');
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
     Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');

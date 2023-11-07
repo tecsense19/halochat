@@ -100,6 +100,10 @@ class UserController extends Controller
     {
     return view("front.terms.terms");
     }
+    public function privacy()
+    {
+    return view("front.privacy.privacy");
+    }
     
     public function profile()
     {
