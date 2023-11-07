@@ -15,7 +15,16 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 // $message_text = isset($getall_Messages->message_text) ? $getall_Messages->message_text : '';
 
 ?>
-
+<style>
+.edit_txt {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(255, 255, 255, 0.8);
+    background: none;
+    border-radius: 8px;
+    color: #fff;
+}
+</style>
 @include('front.layout.front')
 @include('front.layout.header')
 <main id="main" class="pt-0">
@@ -38,11 +47,13 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     $imgUrl1 = isset($user->profileImages[0]['image_path']) ?
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
                     @endphp
+
                     @if(!empty($getAllProfile))
                     @foreach ($getAllProfile as $chat)
+
                     @php
-                    $imgUrl2 = isset($chat->image_path) ?
-                    asset('storage/app/public').'/'.$chat->image_path : '';
+                     $imgUrl2 = isset($chat->image_path) ?
+                     asset('storage/app/public').'/'.$chat->image_path : '';
                     @endphp
                     <!-- {{ route('chat.message', ['id' => $chat->profile_id]) }} -->
                     @if(session('user_id'))
@@ -133,7 +144,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <div class="col-12 scrolltop mb-2">
                                     <div class="have_we_met">
                                         <div class="chat_content_box">
-                                            <p id="message">{{ $chat_user->message_text }}</p>  
+                                            <p id="message">{{ $chat_user->message_text }}</p>
                                             <div class="volume">
                                                 <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -144,14 +155,17 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                     </svg></span>
                                             </div>
                                         </div>
-                                        <div class="message_feedback">
-                                            <a href="#"><img
+                                    <div class="message_feedback">
+                                        @if($chat_user->message_liked == 'Liked')
+                                        <a href="#"><img src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
+                                        @else
+                                        <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                            <a href="#"><img
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumb"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
+                                        @endif
                                         </div>
                                     </div>
-
                                 </div>
                                 @if($chat_user->media_url)
 
@@ -255,16 +269,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         1
                                     </div>
                                     @endforeach
-                                    <!-- <div class="carousel-item">
-                                          <img src="{{ URL::asset('public/front/img/slider-img2.webp') }}" class="d-block w-100">
-                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                                          2
-                                        </div>
-                                        <div class="carousel-item">
-                                          <img src="{{ URL::asset('public/front/img/slider-img3.webp') }}" class="d-block w-100">
-                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                                          3
-                                        </div> -->
                                 </div>
                                 <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselExampleFade" data-bs-slide="prev">
@@ -371,6 +375,60 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 <div class="how_to_use_popup">
     <!-- Modal -->
+    <div class="modal fade" id="false_thumb" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 style="color: white;font-size: larger;">Provide additional feedback</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="prompt_for_image">
+                        <p>Write your message here.</p>
+                        <div class="edit_txt">
+                            <textarea placeholder="What is the issue, how could it be improved?" rows="4" cols="34"
+                                style="background: black;color: white;"></textarea>
+                        </div>
+                        <div class="pasination">
+
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">send</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="how_to_use_popup">
+    <!-- Modal -->
+    <div class="modal fade" id="false_thumbstep2" tabindex="-1" aria-labelledby="How_to_useModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="prompt_for_image">
+                        <h6>Thank you for your message!</h6>
+                        <p>Your message has been sent.</p>
+                        <div class="pasination">
+
+                            <a href="#" data-bs-dismiss="modal" aria-label="Close">close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="how_to_use_popup">
+    <!-- Modal -->
     <div class="modal fade" id="How_to_use" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -390,7 +448,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         </ul>
                         <div class="pasination">
                             <p>Step 1 of 2</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#How_to_usestep2" >next</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#How_to_usestep2">next</a>
                         </div>
                     </div>
                 </div>
@@ -403,7 +461,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 <div class="how_to_use_popup">
     <!-- Modal -->
-    <div class="modal fade" id="How_to_usestep2" tabindex="-1" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+    <div class="modal fade" id="How_to_usestep2" tabindex="-1" aria-labelledby="How_to_useModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -465,8 +524,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 </div>
 
 
-
-
 @include('front.layout.footer')
 <script>
 $(document).ready(function() {
@@ -483,7 +540,7 @@ $(document).ready(function() {
 
             $('.new_message').append(
                 '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-                );
+            );
 
             var inputValue = $('#type_message').val();
 
@@ -492,7 +549,7 @@ $(document).ready(function() {
                 // The word "show" is present in the input
                 $('.new_message').append(
                     '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
-                    );
+                );
                 setTimeout(function() {
                     updateLoading('0%', 'Please Wait');
                 }, 1000);
@@ -513,10 +570,6 @@ $(document).ready(function() {
                     updateLoading('100%', 'Complete');
                 }, 17000);
                 // You can add your condition or code here
-            } else {
-                // The word "show" is not in the input
-                // console.log('The word "show" is not in the input.');
-                // You can add an alternative condition or code here
             }
 
 
@@ -538,15 +591,6 @@ $(document).ready(function() {
         }
 
     })
-
-    // setTimeout(function() {
-    //     $('html, body').animate({
-    //         scrollTop: $('.new_message').offset().top
-    //     }, 'slow');
-    // }, 500);
-    // $('#new_message').append()
-
-
 });
 
 function updateLoading(progress, text) {
@@ -562,49 +606,6 @@ if (window.innerWidth <= 1199) {
     $('.start_chat_part').hide();
 }
 </script>
-<!-- <script>
-if (window.innerWidth <= 1199) {
-
-    $('#mobile_view').on('click', function() {
-
-        $('.content').show();
-        $('.start_chat_part').show();
-        $('.chat-menu').hide();
-
-
-    });
-
-    $('#show-toggle-btn').on('click', function() {
-
-        $('#aside').show();
-        $('.content').hide();
-        $('.chat-menu').hide();
-
-    });
-
-    $('.back_btn').on('click', function() {
-
-        $('.content').show();
-        $('.start_chat_part').show();
-        $('.chat-menu').hide();
-        $('#aside').hide();
-
-
-    });
-
-    $('.backtochat').on('click', function() {
-
-        $('.content').hide();
-        $('.start_chat_part').hide();
-        $('.chat-menu').show();
-        $('#aside').hide();
-
-
-    });
-
-
-}
-</script> -->
 
 <script>
 function updateLink() {
@@ -620,7 +621,6 @@ function updateLink() {
         }
     }
 }
-
 // Update the links when the script is executed
 updateLink();
 </script>
@@ -665,7 +665,6 @@ axios.post("{{ route('chat.store', ['id' => ':id']) }}".replace(':id', id))
 <script>
 // Get the suggestion link element
 const suggestionLink = document.querySelector('.suggestion-link');
-
 // Get the message input element
 const messageInput = document.getElementById('type_message');
 
@@ -681,14 +680,18 @@ suggestionLink.addEventListener('click', function(event) {
 
     // Hide the suggestion by setting its display to "none"
     suggestionLink.parentNode.style.display = "none";
-});
 
+    // Scroll to the bottom of the chat_content element
+
+});
 
 // Get the "new_message" button element
 const newMessageButton = document.getElementById('new_message');
-
+const chatContentScroll = document.querySelector('.chat_content');
 // Add a click event listener to the button
 newMessageButton.addEventListener('click', function() {
+
+    chatContentScroll.scrollTop = chatContentScroll.scrollHeight;
     // Clear the input field's value
     setTimeout(function() {
         messageInput.value = '';
@@ -696,8 +699,6 @@ newMessageButton.addEventListener('click', function() {
 
 });
 </script>
-
-
 
 
 <script>
@@ -719,7 +720,6 @@ dropdownItems.forEach(function(item) {
         messageInput1.value = selectedText;
     });
 });
-
 </script>
 <script>
 // Add this script at the end of your HTML body, just before the </body> tag.
@@ -734,4 +734,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+<script>
+function likedMessage(id) {
+    var str = "{{URL::to('chat/liked')}}/" + id;
 
+    $.ajax({
+        url: str,
+        success: function(result) {
+            location.reload();
+            console.log(result); // Example: Display the response in the console
+        }
+    });
+}
+
+
+function unlikedMessage(id) {
+    var str = "{{URL::to('chat/liked')}}/" + id;
+
+    $.ajax({
+        url: str,
+        success: function(result) {
+            location.reload();
+            console.log(result); // Example: Display the response in the console
+        }
+    });
+}
+</script>

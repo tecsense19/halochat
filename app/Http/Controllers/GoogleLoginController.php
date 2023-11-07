@@ -95,7 +95,7 @@ class GoogleLoginController extends Controller
                             $request->session()->regenerate();
                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
                         }else{
-                            return redirect()->route('login')->withErrors(['email' => 'Your account has been deleted please contact admin!'])->onlyInput('email');
+                            return redirect()->route('login')->withErrors(['deleted' => 'Your account has been deleted please contact admin!'])->onlyInput('deleted');
                         }
                         
             } catch (\Exception $e) {

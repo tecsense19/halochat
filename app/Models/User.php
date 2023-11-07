@@ -52,5 +52,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function credit()
+    {
+        return $this->hasMany(Managecredit::class, 'user_id', 'id');
+    }
     
 }

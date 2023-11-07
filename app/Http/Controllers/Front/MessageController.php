@@ -442,4 +442,18 @@ class MessageController extends Controller
             return $imageUrl;
        
     }
+
+
+    public function liked($id)
+    {
+        Messages::where('message_id', $id)->update(['message_liked' => 'Liked']);
+        return true;
+    }
+
+    public function unliked($id , $feedback)
+    {
+        echo "hi";
+        //Messages::where('message_id', $id)->update(['message_liked' => 'Liked']);
+        //return true;
+    }
 }

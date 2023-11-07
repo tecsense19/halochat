@@ -103,4 +103,18 @@
 
 </body>
 
+<script>
+  const passwordField = document.getElementById('passwordField');
+    const showPassword = document.getElementById('showPassword');
+
+    showPassword.addEventListener('mouseover', function () {
+        passwordField.type = 'text';
+    });
+
+    showPassword.addEventListener('mouseout', function () {
+        passwordField.type = 'password';
+});
+
+</script>
+
 </html>

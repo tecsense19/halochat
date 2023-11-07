@@ -32,12 +32,12 @@ i.mdi.mdi-delete-forever {
           <div class="content-wrapper">
             <div class="page-header">
               <h3 class="page-title"> Manage Users </h3>
-              <nav aria-label="breadcrumb">
+              <!-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Users</li>
                 </ol>
-              </nav>
+              </nav> -->
             </div>
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
@@ -50,9 +50,14 @@ i.mdi.mdi-delete-forever {
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>name</th>
-                            <th>email</th>
-                            <th>Created</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Role</th>
+                            <th>Current credit</th>
+                            <th>Total credit</th>
+                            <th>Plans</th>
+                            <th>Created date</th>
                             <!-- <th>Action</th> -->
                           </tr>
                         </thead>
@@ -60,11 +65,17 @@ i.mdi.mdi-delete-forever {
                         @if(count($usersList) > 0)
                             @php $i = 1; @endphp
                             @foreach($usersList as $usersList)
+                              @foreach($usersList->credit as $usersListcredit)
                           <tr>
                             <td>{{ $i }}</td>
                             <td>{{ $usersList->name }}</td>
                             <td>{{ $usersList->email }}</td>
-                            <td>{{ $usersList->password }}</td>
+                            <td>{{ $usersList->gender }}</td>
+                            <td>{{ $usersList->role }}</td>
+                            <td>{{ $usersListcredit->currentcredit }}</td>
+                            <td>{{ $usersListcredit->totalcredit + $usersListcredit->usedcredit }}</td>
+                            <td>{{ $usersList->plans }}</td>
+                            <td>{{ $usersList->created_at }}</td>
                             <!-- <td>  
                             <div class="d-flex justify-content-between">
                                 <button class="btn btn-danger btn-rounded btn-icon" id="get_id" value=""
@@ -77,6 +88,7 @@ i.mdi.mdi-delete-forever {
                           </tr>
                          
                           @php $i++; @endphp
+                          @endforeach
                         @endforeach
                     @else
                     <tr scope="row" style="text-align: center;">

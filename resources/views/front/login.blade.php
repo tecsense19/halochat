@@ -66,7 +66,7 @@
             </svg>
           </div>
           @error('email')
-                            <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
           @enderror
           <div class="contact_details">
             <input type="password" name="password" id="passwordField" required="required" placeholder="Password">
@@ -85,6 +85,9 @@
         <div class="account-yet">
           <p>Already have an account yet? <a href="{{ route('register') }}">Sign Up</a></p>
         </div>
+        @error('deleted')
+                <span class="text-danger">{{ $message }}</span>
+          @enderror
       </div>
     </div>
   </div>

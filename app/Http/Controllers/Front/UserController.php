@@ -188,17 +188,25 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        
-
-        if(Auth::attempt($credentials) && auth()->user()->role === "User" && auth()->user()->deleted_at === null)
+        $userId = User::where('email', $request->email)->first();
+        if(!empty($userId->deleted_at))
         {
-            $request->session()->put('authenticated_user', true);
-            $request->session()->put('user_id', auth()->user()->id);
-            $request->session()->regenerate();
-            return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+            return back()->withErrors(['deleted' => 'Your account has been deleted please contact admin!'])->onlyInput('deleted');
         }
-
-        return back()->withErrors(['email' => 'Your provided credentials do not match in our records.'])->onlyInput('email');
-
+        else
+        {
+        if(Auth::attempt($credentials) && auth()->user()->role === "User")
+            {
+            
+                $request->session()->put('authenticated_user', true);
+                $request->session()->put('user_id', auth()->user()->id);
+                $request->session()->regenerate();
+                return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+            }
+            else{
+            return back()->withErrors(['email' => 'Your provided credentials do not match in our records.'])->onlyInput('email');
+        }
+     }
+        
     } 
 }

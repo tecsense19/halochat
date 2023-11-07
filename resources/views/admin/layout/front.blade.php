@@ -25,7 +25,7 @@
                   <span></span>
                 </div>
               </div>
-              <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <!-- <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                 <a href="#" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
@@ -61,18 +61,18 @@
                 </a>
               </div>
             </div>
-          </li>
-          <li class="nav-item nav-category">
+          </li> -->
+          <!-- <li class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
-          </li>
-          <li class="nav-item menu-items">
+          </li> -->
+          <!-- <li class="nav-item menu-items">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Dashboard</span>
             </a>
-          </li>
+          </li> -->
           
           <li class="nav-item menu-items">
             <a class="nav-link" href="{{ route('admin.users') }}">

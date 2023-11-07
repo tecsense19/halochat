@@ -43,7 +43,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                         </div>
                         <h6>{{ $userName }}</h6>
                       </div>
-                      <input type="hidden" value="{{$userId }}" name="id" id="id">
+                      <input type="hidden" value="{{ $userId }}" name="id" id="id">
                       <div class="admin_name mb-0">
                         <div class="nickname">
                           <h5>E-mail</h5>

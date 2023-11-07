@@ -45,7 +45,7 @@
                 </div>
               </div>
             </div> -->
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -255,8 +255,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+            </div> -->
+            <!-- <div class="row">
               <div class="col-sm-4 grid-margin">
                 <div class="card">
                   <div class="card-body">
@@ -452,8 +452,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+            </div> -->
+            <!-- <div class="row">
               <div class="col-md-6 col-xl-4 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -612,8 +612,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
+            </div> -->
+            <!-- <div class="row">
               <div class="col-12">
                 <div class="card">
                   <div class="card-body">
@@ -678,7 +678,7 @@
                       <div class="col-md-7">
                         <div id="audience-map" class="vector-map"></div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>

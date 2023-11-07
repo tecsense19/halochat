@@ -27,20 +27,19 @@ i.mdi.mdi-delete-forever {
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Manage Users </h3>
-              <nav aria-label="breadcrumb">
+              <h3 class="page-title"> Manage Profiles </h3>
+              <!-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Users</li>
                 </ol>
-              </nav>
+              </nav> -->
             </div>
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Users</h4>
-                
+                    <h4 class="card-title">Profiles</h4>
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
