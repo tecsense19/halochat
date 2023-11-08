@@ -127,15 +127,21 @@ class UserController extends Controller
     {
         if($request->all() != null) {
             $input = $request->all();
-            Passwordresets::updateOrInsert(
-                ['token' => $input['_token']],
-                ['email' => $input['email']],
-                ['created_at' => now()]
-                
-            );
-        Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
-        }
-        return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
+            $userexit = User::where('email', $input['email'])->first(); // Replace $userId with the actual user's ID
+            if(!$userexit)
+            {
+                return back()->withErrors(['emailNot' => 'Email not register with us'])->withInput();  
+            }else{
+                Passwordresets::updateOrInsert(
+                    ['token' => $input['_token']],
+                    ['email' => $input['email']],
+                    ['created_at' => now()]
+                    
+                );
+            Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
+            }
+            return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
+            }
     }
 
     public function confirmpass(Request $request, $token, $email)

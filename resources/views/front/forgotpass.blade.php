@@ -36,7 +36,7 @@
                   {{ session('success') }}
               </div>
           @endif
-          
+
         <div class="welcome_to_halochat">
                   <h5>Reset Password</h5>
                   <h6 class="mb-3" style="color: rgb(163 163 163);">Enter your e-mail and we will send you the instructions to reset password</h6>
@@ -50,6 +50,10 @@
           @error('email')
                 <span class="text-danger">{{ $message }}</span>
           @enderror
+          @error('emailNot')
+                <span class="text-danger">{{ $message }}</span>
+          @enderror
+
           <div class="contact_details">
             <button type="submit">Reset Password</button>
           </div>
