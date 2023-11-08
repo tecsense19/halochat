@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Models\Messages;
 use App\Models\Managecredit;
+use App\Models\Passwordresets;
+use App\Mail\Resetpasslink;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -114,6 +117,71 @@ class UserController extends Controller
     {
     return view("front.gallery.gallery");
     }
+
+    public function forgotpass(Request $request)
+    {
+         return view("front.forgotpass");
+    }
+
+    public function checkforgotpass(Request $request)
+    {
+        if($request->all() != null) {
+            $input = $request->all();
+            Passwordresets::updateOrInsert(
+                ['token' => $input['_token']],
+                ['email' => $input['email']],
+                ['created_at' => now()]
+                
+            );
+        Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
+        }
+        return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
+    }
+
+    public function confirmpass(Request $request, $token, $email)
+    {
+        // Mail::to('gautam@tec-sense.com')->send(new Resetpasslink($input['_token'], $input['email']));
+        return view("front.newpassword");
+    }
+
+    public function checkconfirmpass(Request $request)
+    {
+        $input = $request->all();
+        $uPasswordresetsser = Passwordresets::where('token', $input['_token'])->first();
+        if($uPasswordresetsser->flag == 1) {
+            return redirect()->route('login')->withSuccess('Link hasbeen expired!');
+        }else{
+        $request->validate([
+            'password' => 'required|min:8',
+            'confirm_password' => 'required|min:8'
+        ]);
+
+      
+        $checktoken = Passwordresets::where('token', $input['_token'])->first();
+
+        if($checktoken->token = $input['_token'])
+        {
+            $user = User::where('email', $checktoken->email)->first(); // Replace $userId with the actual user's ID
+
+            if ($user) {
+                if($input['password'] === $input['confirm_password']){
+                    $user->password = Hash::make($input['confirm_password']);
+                    $user->save();  
+
+                    Passwordresets::updateOrInsert(
+                        ['token' => $input['_token']],
+                        ['flag' => 1]
+                    );
+                }else{
+                    return view("front.newpassword")->withErrors(['wrong' => 'Confirm password not matched'])->withInput('wrong');  
+                }
+                // Update the password field with the new hashed password
+               
+            }
+        }
+    }
+        return redirect()->route('login')->withSuccess('Password has been reset successfully');
+    }
     
     public function store(Request $request)
     {
@@ -213,4 +281,14 @@ class UserController extends Controller
      }
         
     } 
+
+    public function contact(Request $request)
+    {
+        $input = $request->all();
+        User::updateOrInsert(
+            ['id' => $input['user_id']],
+            ['contact_us' => $input['message']]
+        );
+        return true;
+    }
 }

@@ -539,6 +539,7 @@ $(document).ready(function() {
     });
 
     $('body').on('keypress', '#type_message', function(event) {
+
     if (event.which === 13) {
         if ($('#type_message').val()) {
             $('.new_message').append(

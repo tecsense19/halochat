@@ -19,53 +19,28 @@
 
   <!-- Template Main CSS File -->
   <link href="{{ URL::asset('public/front/css/style.css') }}" rel="stylesheet">
-  <style>
-
-  </style>
 </head>
+
 <body>
 
-   <!-- ======= Header ======= -->
-   <header id="header" class="d-block d-lg-none">
-    <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#" class="nav-link scrollto active"><img src="{{ URL::asset('public/front/img/explore.svg') }}"> <span>Explore</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/chat.svg') }}"> <span>Chat</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/gallery.svg') }}"> <span>Gallery</span></a></li>
-          <!-- <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/magic-wand.svg') }}"> <span>Create</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/love-lady.svg') }}"> <span>My Ai</span></a></li> -->
-        </ul>
-      </nav><!-- .nav-menu -->
-    </div>
-  </header><!-- End Header -->
- 
 <section class="form_section">
   <div class="container">
     <div class="account_box">
-      <div class="welcome_to_halochat">
-        <h5>Welcome!</h5>
-        <span>Sign up to your account</span>
-      </div>
-      <form action="{{ route('authenticate') }}" method="POST">
-        {!! csrf_field() !!}
+      
       <div class="form_sing_up">
-          <div class="sign_in_google_btn">
-          <a href="{{ route('google.login') }}"><img src="{{ URL::asset('public/front/img/connect-with-ai.png')}}"></a>
-            <div class="org">
-              <hr>
-                <span>OR</span>
-              <hr>
-            </div>
-          </div>
-
-          @if(session('success'))
+        <form action="{{ route('checkforgotpass') }}" method="POST">
+        {!! csrf_field() !!}
+        
+        @if(session('success'))
               <div class="alert alert-success">
                   {{ session('success') }}
               </div>
           @endif
-
-        
+          
+        <div class="welcome_to_halochat">
+                  <h5>Reset Password</h5>
+                  <h6 class="mb-3" style="color: rgb(163 163 163);">Enter your e-mail and we will send you the instructions to reset password</h6>
+           </div>
           <div class="contact_details">
             <input type="email" name="email" required="required" placeholder="Email">
             <svg class="text-[#8D8D8D]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20">
@@ -76,37 +51,13 @@
                 <span class="text-danger">{{ $message }}</span>
           @enderror
           <div class="contact_details">
-            <input type="password" name="password" id="passwordField" required="required" placeholder="Password">
-            <img src="{{ URL::asset('public/front/img/eye.svg')}}" class="eye-icon" id="showPassword">
-            <img src="{{ URL::asset('public/front/img/lock.svg')}}" class="lock-icon">
-          </div>
-          @error('password')
-                            <span class="text-danger">{{ $message }}</span>
-          @enderror
-          <p class="forgot-password"><a href="{{ route('forgotpass') }}">Forgot your password?</a></p>
-          <div class="contact_details">
-            <button type="submit">Sign up</button>
-            <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
+            <button type="submit">Reset Password</button>
           </div>
         </form>
-        <div class="account-yet">
-          <p>Already have an account yet? <a href="{{ route('register') }}">Sign Up</a></p>
-        </div>
-        @error('deleted')
-                <span class="text-danger">{{ $message }}</span>
-          @enderror
       </div>
     </div>
   </div>
 </section>
-
-<script src="https://www.google.com/recaptcha/api.js"></script>
-
-<script>
-   function onSubmit(token) {
-     document.getElementById("demo-form").submit();
-   }
- </script>
 
   <!-- Vendor JS Files -->
   <script src="{{ URL::asset('public/front/vendor/purecounter/purecounter_vanilla.js') }}"></script>
@@ -121,6 +72,9 @@
   <!-- Template Main JS File -->
   <script src="{{ URL::asset('public/front/js/main.js') }}"></script>
 
+
+</body>
+
 <script>
   const passwordField = document.getElementById('passwordField');
     const showPassword = document.getElementById('showPassword');
@@ -134,6 +88,5 @@
 });
 
 </script>
-</body>
 
 </html>

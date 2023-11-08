@@ -54,12 +54,19 @@ use Illuminate\Support\Facades\Artisan;
   
     
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
-    Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
-    Route::get('/privacy', [UserController::class, 'privacy'])->name('privacy.privacy');
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
     Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
     Route::post('/profile/delete', [ProfilesController::class, 'delete'])->name('profile.delete');
+    Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
+    Route::get('/privacy', [UserController::class, 'privacy'])->name('privacy.privacy');
+
+
+    Route::get('/forgotpassword', [UserController::class, 'forgotpass'])->name('forgotpass');
+    Route::post('/forgotpasswordcheck', [UserController::class, 'checkforgotpass'])->name('checkforgotpass');
+    Route::get('/confirmpassword/{id}/{email}', [UserController::class, 'confirmpass'])->name('newpassword');
+    Route::post('/checkconfirmpass', [UserController::class, 'checkconfirmpass'])->name('checkconfirmpass');
+    
 
     Route::get('/chat/message/{id}', [MessageController::class, 'index'])->name('chat.message');
     Route::get('/chat/mobile/message/{id}', [MessageController::class, 'mobile'])->name('chat.messagemobile');
@@ -69,20 +76,18 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/chat/delete/{id}', [MessageController::class, 'delete'])->name('chat.delete');
     Route::get('/chat/liked/{id}', [MessageController::class, 'liked'])->name('chat.liked');
     Route::get('/chat/unliked/{id}', [MessageController::class, 'unliked'])->name('chat.unliked');
+
+    Route::post('/contact-us', [UserController::class, 'contact'])->name('contact');
     
+    Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
+    Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+
+    Route::get('/clear-cache', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('config:clear');
     
-
-
-Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
-Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
-
-
-
-Route::get('/clear-cache', function () {
-	Artisan::call('cache:clear');
-	Artisan::call('route:clear');
-	Artisan::call('view:clear');
-	Artisan::call('config:clear');
- 
-	return "Cache cleared successfully";
-});
+        return "Cache cleared successfully";
+    });
