@@ -15,7 +15,12 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 ?>
 @include('front.layout.front')
 @include('front.layout.header')
-
+@if ($errors->has('ai_message'))
+    <script>
+        // Display an alert message using JavaScript
+        alert("{{ $errors->first('ai_message') }}");
+    </script>
+@endif
 <main id="main" class="mobile_view" class="pt-0">
     <section class="position-relative">
         <div class="container-fluid g-0">
