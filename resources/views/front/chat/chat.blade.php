@@ -25,6 +25,15 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     color: #fff;
 }
 </style>
+
+@if ($errors->has('ai_message'))
+    <script>
+        // Display an alert message using JavaScript
+        alert("{{ $errors->first('ai_message') }}");
+    </script>
+@endif
+
+
 @include('front.layout.front')
 @include('front.layout.header')
 <main id="main" class="pt-0">
@@ -538,77 +547,7 @@ $(document).ready(function() {
         $('.sidebar ul.nav').toggleClass('isClosed');
     });
 
-    $('body').on('keypress', '#type_message', function(event) {
 
-    if (event.which === 13) {
-        if ($('#type_message').val()) {
-            $('.new_message').append(
-                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-                $('#type_message').val() + '</span></div></div>');
-
-            $('.new_message').append(
-                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-            );
-           
-            var inputValue = $('#type_message').val();
-
-            // Check if the input contains the word "show"
-            if (inputValue.includes('show')) {
-                // The word "show" is present in the input
-                $('.new_message').append(
-                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
-                );
-                setTimeout(function() {
-                    updateLoading('0%', 'Please Wait');
-                }, 1000);
-
-                setTimeout(function() {
-                    updateLoading('20%', 'Processing...');
-                }, 5000);
-
-                setTimeout(function() {
-                    updateLoading('50%', 'Almost There...');
-                }, 9000);
-
-                setTimeout(function() {
-                    updateLoading('80%', 'Complete');
-                }, 13000);
-
-                setTimeout(function() {
-                    updateLoading('100%', 'Complete');
-                }, 17000);
-                // You can add your condition or code here
-            }
-
-            const chatContentScrollnewchat = document.querySelector('.chat_content');
-            chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
-            const messageInputclear = document.getElementById('type_message');
-            // Get the "new_message" button element
-                // Clear the input field's value
-                setTimeout(function() {
-                    messageInputclear.value = '';
-                }, 500); // 3000 milliseconds (3 seconds)
-
-            
-            document.addEventListener("DOMContentLoaded", function() {
-                // Select the message and dot elements
-                var messageElement = document.getElementById("chat_content_box");
-
-                // Display the three dots animation
-                messageElement.style.display = "block";
-
-
-                // Hide the three dots animation and show the message after 3 seconds
-                setTimeout(function() {
-                    messageElement.style.display = "none";
-                }, 3000); // 3000 milliseconds (3 seconds)
-            });
-
-            $('#message_form').submit();
-        }
-
-    }
-});
 
 
     $('body').on('click', '#new_message', function() {
@@ -673,6 +612,79 @@ $(document).ready(function() {
         }
 
     })
+});
+
+
+$("#type_message").keypress(function(e) {
+    
+    if (e.which == 13) {
+        if ($('#type_message').val()) {
+            $('.new_message').append(
+                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+                $('#type_message').val() + '</span></div></div>');
+
+            $('.new_message').append(
+                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+            );
+           
+            var inputValuekey = $('#type_message').val();
+
+            // Check if the input contains the word "show"
+            if (inputValuekey.includes('show')) {
+                // The word "show" is present in the input
+                $('.new_message').append(
+                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
+                );
+                setTimeout(function() {
+                    updateLoading('0%', 'Please Wait');
+                }, 1000);
+
+                setTimeout(function() {
+                    updateLoading('20%', 'Processing...');
+                }, 5000);
+
+                setTimeout(function() {
+                    updateLoading('50%', 'Almost There...');
+                }, 9000);
+
+                setTimeout(function() {
+                    updateLoading('80%', 'Complete');
+                }, 13000);
+
+                setTimeout(function() {
+                    updateLoading('100%', 'Complete');
+                }, 17000);
+                // You can add your condition or code here
+            }
+
+            const chatContentScrollnewchatkey = document.querySelector('.chat_content');
+            chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
+            
+            // Get the "new_message" button element
+                // Clear the input field's value
+                setTimeout(function() {
+                    $("#type_message").css('color', 'transparent');
+                }, 1000); // 3000 milliseconds (3 seconds)
+
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                // Select the message and dot elements
+                var messageElementkey = document.getElementById("chat_content_box");
+
+                // Display the three dots animation
+                messageElementkey.style.display = "block";
+
+
+                // Hide the three dots animation and show the message after 3 seconds
+                setTimeout(function() {
+                    messageElementkey.style.display = "none";
+                }, 3000); // 3000 milliseconds (3 seconds)
+            });
+
+            $('#message_form').submit();
+        }
+
+    }
 });
 
 function updateLoading(progress, text) {

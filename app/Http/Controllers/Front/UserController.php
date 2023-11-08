@@ -196,7 +196,8 @@ class UserController extends Controller
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8'
         ]);
-    
+
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://159.89.22.38:8080/users',

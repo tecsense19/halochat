@@ -16,7 +16,7 @@ class MessageController extends Controller
 {
 
     public function userMessage(Request $request){
-         
+        
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         $message_show = $_POST['message']; // Assuming you're getting the message from a form input
         $message_url = "";
@@ -90,14 +90,15 @@ class MessageController extends Controller
                     'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
                 ),
                 ));
-        
+
                 $response = curl_exec($curl);
+
                 curl_close($curl);
                 $responseArray = json_decode($response, true);
                 if (isset($responseArray['data']['ai_message'])) {
                     $ai_message = $responseArray['data']['ai_message'];
                 } else {
-                    echo "ai_message not found in the response.";
+                    return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
                     die;
                 }
         
@@ -342,7 +343,7 @@ class MessageController extends Controller
             if (isset($responseArray['data']['system_prompt'])) {
                 $responseArray = $responseArray['data']['system_prompt'];
             } else {
-                echo "ai_message not found in the response 123.";
+                return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
                 die;
             }
                 $curl = curl_init();
@@ -389,7 +390,7 @@ class MessageController extends Controller
                 if (isset($response_image['id'])) {
                     $response_image = $response_image['id'];
                 } else {
-                    echo "ai_message not found in the response.";
+                    echo "ai_message not found in the response. ";
                     die;
                 }
                 sleep(10);
@@ -418,7 +419,7 @@ class MessageController extends Controller
                 if (isset($response_Base64['output']['images'][0])) {
                     $response_image = $response_Base64['output']['images'][0];
                 } else {
-                    echo "ai_message not found in the response.";
+                    return back()->withErrors(['ai_message' => 'Message and image not found in the response'])->withInput();
                     die;
                 }   
                 $base64Image = $response_image;
