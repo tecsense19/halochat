@@ -70,26 +70,8 @@
   </main>
   <!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="container_fluid">
-      <div class="footer_content">
-        <ul class="social_txt">
-          <li><a href="#">Discord</a></li>
-          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contact">Contact</a></li>
-          <li><a href="#">Affiliate</a></li>
-        </ul>
-        <ul class="links">
-          <li><a href="terms-of-services.html">Terms of Service</a></li>
-          <li><a href="privacy-policies.html">Privacy Policy</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer><!-- End  Footer -->
-
-
 <!-- Modal -->
-<div class="contact_popup">
+<!-- <div class="contact_popup">
   <div class="modal fade" id="contact" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -109,7 +91,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
 <!-- Modal -->
