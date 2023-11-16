@@ -32,7 +32,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                   <div class="row">
                     <div class="col-lg-3 col-12">
                       <div class="admin_img">
-                        <img src="{{ URL::asset('public/front/img/man.svg') }}">
+                        <img src="{{ URL::asset('public/front/img/man-pur.svg') }}">
                       </div>
                     </div>
                     <div class="col-lg-5 col-6">

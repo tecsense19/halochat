@@ -9,7 +9,7 @@
     <div class="row align-items-center">
       <div class="col-6 col-sm-6 col-xl-4 d-none d-xl-block">
         <div class="subscribe-item">
-          <img src="{{ URL::asset('public/front/img/crown.svg') }}">
+          <img src="{{ URL::asset('public/front/img/crown-pur.svg') }}">
           <p>FIRST SUBSCRIPTION</p>
         </div>
       </div>
@@ -65,7 +65,7 @@
                       <div class="offer_box">70% off</div>
                       <div class="pupular_plan">
                         <h6>Premium</h6>
-                        <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/fire.svg') }}"> Popular</div>
+                        <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
                       </div>
                       <h3>$69.99 <span> $239.88 </span><small> / year</small></h3>
                       <p>Cancel anytime, privacy in bank statement</p>
@@ -142,5 +142,35 @@
 
 
 </main><!-- End #main -->
+<script>
+  function showTime(){
+  var date = new Date();
+  var h = date.getHours(); // 0 - 23
+  var m = date.getMinutes(); // 0 - 59
+  var s = date.getSeconds(); // 0 - 59
+  var session = "AM";
+  
+  if(h == 0){
+      h = 12;
+  }
+  
+  if(h > 12){
+      h = h - 12;
+  }
+  
+  h = (h < 10) ? "0" + h : h;
+  m = (m < 10) ? "0" + m : m;
+  s = (s < 10) ? "0" + s : s;
+  
+  var time = h + ":" + m + ":" + s + " " ;
+  document.getElementById("MyClockDisplay").innerText = time;
+  document.getElementById("MyClockDisplay").textContent = time;
+  
+  setTimeout(showTime, 1000);
+  
+}
+
+showTime();
+</script>
 
 @include('front.layout.footer')
