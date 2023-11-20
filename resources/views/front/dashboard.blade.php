@@ -13,13 +13,13 @@
                   <h2 class="d-none d-md-block">Create your own <span>AI Girlfriend</span></h2>
                   <h2 class="d-block d-md-none">Craft Your Perfect <br> <span>AI Girlfriend</span></h2>
                   <p>Your dream companion awaits! Create your Virtual Girlfriend, shape her look, personality, relationship, and bring her to life in one click. 100% powered by Artificial Intelligence.</p>
-                  <a href="#" class="ai_btn"><img src="{{ URL::asset('public/front/img/magic-wand.svg') }}"> Create your AI</a>
+                  <a href="#" class="ai_btn"><img width="20" height="20" src="{{ URL::asset('public/front/img/design-tool.png') }}"> Create your AI</a>
                 </div>
               </div>
               <div class="col col-md-7 col-xl-6">
                 <div class="own_ai_img">
                   <img src="{{ URL::asset('public/front/img/purpule-cross-aee.svg') }}" class="red-cross-aee">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="528" height="313" viewBox="0 0 528 313" fill="none">
+                  <!-- <svg xmlns="http://www.w3.org/2000/svg" width="528" height="313" viewBox="0 0 528 313" fill="none">
                     <path opacity="0.1" fill-rule="evenodd" clip-rule="evenodd" d="M146.667 117.333C146.667 52.5319 199.199 0 264 0C328.801 0 381.333 52.5319 381.333 117.333V146.667H410.667C475.468 146.667 528 199.199 528 264C528 328.801 475.468 381.333 410.667 381.333H381.333V410.667C381.333 475.468 328.801 528 264 528C199.199 528 146.667 475.468 146.667 410.667V381.333H117.333C52.5319 381.333 0 328.801 0 264C0 199.199 52.5319 146.667 117.333 146.667H146.667V117.333ZM139.333 267.667C186.775 278.896 249.983 347.563 264 403.333C278.017 347.563 341.225 278.896 388.667 267.667C341.225 256.437 278.017 187.77 264 132C249.983 187.77 186.775 256.437 139.333 267.667Z" fill="url(#paint0_radial_6435_61112)"></path>
                     <defs>
                       <radialGradient id="paint0_radial_6435_61112" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(264 264) rotate(90) scale(264)">
@@ -28,8 +28,8 @@
                         <stop offset="1" stop-color="#131313"></stop>
                       </radialGradient>
                     </defs>
-                  </svg>
-                  <img class="Girlfriend" src="{{ URL::asset('public/front/img/cma-banner.png') }}">
+                  </svg> -->
+                  <img class="Girlfriend" src="{{ URL::asset('public/front/img/10005.svg') }}">
                 </div>
               </div>
             </div>
@@ -112,7 +112,7 @@
                     <p>{{ $item->description }}</p>
                   </div>
                   <div class="chat_icon">
-                    <span><img src="{{ URL::asset('public/front/img/chat-profile.svg') }}"></span>
+                    <span><img width="20" height="20" src="{{ URL::asset('public/front/img/chatting.png') }}"></span>
                   </div>
                 </a>
               </div>

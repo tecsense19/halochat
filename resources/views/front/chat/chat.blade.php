@@ -132,17 +132,19 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             </div>
 
                             <div class="asuna-saito">
+                                <div class="toggle-button-right" id="show-toggle-btn">
+                                    <img src="{{ URL::asset('public/front/img/toggle-button1.svg') }}">
+                                </div>
                                 <div class="asuna-image">
                                     <img src="{{ $imgUrl1 }}">
                                 </div>
+                                
                                 <div class="asuna-name">
 
                                     <h6>{{ $name }}</h6>
                                 </div>
                             </div>
-                            <div class="toggle-button-right" id="show-toggle-btn">
-                                <img src="{{ URL::asset('public/front/img/toggle-button.svg') }}">
-                            </div>
+                            
                         </div>
                         <div class="chat_content" id="chatContent">
                             <div class="row new_message">
@@ -310,7 +312,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/personality.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/personality.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>PERSONALITY</span>
@@ -319,7 +321,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/occupation.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/Occupation.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>Occupation</span>
@@ -328,7 +330,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/hobbies.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/hobbies.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>HOBBIES</span>
@@ -337,7 +339,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/roleplay.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/relationship.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>RELATIONSHIP</span>
@@ -351,7 +353,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/body.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/body.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>BODY</span>
@@ -360,7 +362,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/age.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/age.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>AGE</span>
@@ -369,7 +371,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img src="{{ URL::asset('public/front/img/ethinicity.svg') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/ethnicity.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>ETHNICITY</span>
