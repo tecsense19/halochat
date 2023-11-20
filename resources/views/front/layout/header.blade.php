@@ -60,8 +60,8 @@
           </section><!-- End Breadcrumbs -->
         @else
             <!-- User is not logged in, display the register and login links -->
-            <li><a href="{{ route('register') }}" class="register_btn"><img src="http://localhost/halochat/public/front/img/edit.png" width="15" height="15">&nbsp;Register</a></li>
-            <li><a href="{{ route('login') }}" class="login_btn"><img src="http://localhost/halochat/public/front/img/enter.png" width="15" height="15">&nbsp;&nbsp;Login</a></li>
+            <li><a href="{{ route('register') }}" class="register_btn"><img src="{{ URL::asset('public/front/img/edit.png') }}" width="15" height="15">&nbsp;Register</a></li>
+            <li><a href="{{ route('login') }}" class="login_btn"><img src="{{ URL::asset('public/front/img/enter.png') }}" width="15" height="15">&nbsp;&nbsp;Login</a></li>
         @endif
     </ul>
 </div>
