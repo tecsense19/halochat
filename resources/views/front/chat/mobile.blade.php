@@ -300,75 +300,75 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <p>{{ $description }}</p>
                             </div>
                             <div class="attributes_box">
-                                <h5>Personality Attributes:</h5>
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/personality.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>PERSONALITY</span>
-                                            <h6>{{ $personality }}</h6>
-                                        </div>
+                            <h5>Personality Attributes:</h5>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/personality.png') }}">
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/occupation.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>Occupation</span>
-                                            <h6>{{ $occupation }}</h6>
-                                        </div>
+                                    <div class="attributes_txt">
+                                        <span>PERSONALITY</span>
+                                        <h6>{{ $personality }}</h6>
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/hobbies.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>HOBBIES</span>
-                                            <h6>{{ $hobbies }}</h6>
-                                        </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/Occupation.png') }}">
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/roleplay.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>RELATIONSHIP</span>
-                                            <h6>{{ $relationship_status }}</h6>
-                                        </div>
+                                    <div class="attributes_txt">
+                                        <span>Occupation</span>
+                                        <h6>{{ $occupation }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/hobbies.png') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>HOBBIES</span>
+                                        <h6>{{ $hobbies }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/relationship.png') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>RELATIONSHIP</span>
+                                        <h6>{{ $relationship_status }}</h6>
                                     </div>
                                 </div>
                             </div>
-                            <div class="attributes_box">
-                                <h5>Physical Attributes:</h5>
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/body.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>BODY</span>
-                                            <h6>{{ $body_description }}</h6>
-                                        </div>
+                        </div>
+                        <div class="attributes_box">
+                            <h5>Physical Attributes:</h5>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/body.png') }}">
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/age.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>AGE</span>
-                                            <h6>{{ $age }}</h6>
-                                        </div>
+                                    <div class="attributes_txt">
+                                        <span>BODY</span>
+                                        <h6>{{ $body_description }}</h6>
                                     </div>
-                                    <div class="attributes_item">
-                                        <div class="attributes_icon">
-                                            <img src="{{ URL::asset('public/front/img/ethinicity.svg') }}">
-                                        </div>
-                                        <div class="attributes_txt">
-                                            <span>ETHNICITY</span>
-                                            <h6>{{ $ethnicity }}</h6>
-                                        </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/age.png') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>AGE</span>
+                                        <h6>{{ $age }}</h6>
+                                    </div>
+                                </div>
+                                <div class="attributes_item">
+                                    <div class="attributes_icon">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/ethnicity.png') }}">
+                                    </div>
+                                    <div class="attributes_txt">
+                                        <span>ETHNICITY</span>
+                                        <h6>{{ $ethnicity }}</h6>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
