@@ -304,7 +304,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/personality.png') }}">
+                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/Personality.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>PERSONALITY</span>
