@@ -232,7 +232,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     <div class="dropdown">
                                         <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            <img src="{{ URL::asset('public/front/img/ask-pic.svg') }}"> Ask <i
+                                            <img height="24" width="24" src="{{ URL::asset('public/front/img/add-photo.png') }}"> Ask <i
                                                 class="bi bi-chevron-down"></i>
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -247,11 +247,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     </div>
                                     @if(session('user_id'))
                                     <button type="button" id="new_message">
-                                        <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                        <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
                                     </button>
                                     @else
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#please_register">
-                                        <img src="{{ URL::asset('public/front/img/send-message.svg') }}">
+                                        <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
                                     </button>
                                     @endif
                                 </form>
@@ -526,11 +526,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
                     <div class="row mt-4">
                         <div class="col-6">
-                            <a href="{{ route('register') }}" class="register_btn">Register</a>
+                            <a href="{{ route('register') }}" class="register_btn"><img src="{{ URL::asset('public/front/img/edit.png') }}" width="15" height="15">&nbsp;Register</a>
                             <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
                         </div>
                         <div class="col-6">
-                            <a href="{{ route('login') }}" class="login_btn">Login</a>
+                            <a href="{{ route('login') }}" class="login_btn"><img src="{{ URL::asset('public/front/img/enter.png') }}" width="15" height="15">&nbsp;&nbsp;Login</a>
                             <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
                         </div>
                     </div>
