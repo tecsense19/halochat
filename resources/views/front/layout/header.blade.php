@@ -6,9 +6,9 @@
     <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
       <nav id="navbar" class="nav-menu navbar">
         <ul>
-          <li><a href="{{ route('dashboard') }}" class="nav-link scrollto active"><img src="http://localhost/halochat/public/front/img/compass.png" width="35" height="35"> <span>Explore</span></a></li>
-          <li><a href="{{ route('chat.chat') }}" class="nav-link scrollto"><img src="http://localhost/halochat/public/front/img/chatting.png" width="35" height="35"> <span>Chat</span></a></li>
-          <li><a href="{{ route('gallery.gallery') }}" class="nav-link scrollto"><img src="http://localhost/halochat/public/front/img/image-gallery.png" width="35" height="35"> <span>Gallery</span></a></li>
+          <li><a href="{{ route('dashboard') }}" class="nav-link scrollto active"><img src="{{ URL::asset('public/front/img/compass.png') }}" width="35" height="35"> <span>Explore</span></a></li>
+          <li><a href="{{ route('chat.chat') }}" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/chatting.png') }}" width="35" height="35"> <span>Chat</span></a></li>
+          <li><a href="{{ route('gallery.gallery') }}" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/image-gallery.png') }}" width="35" height="35"> <span>Gallery</span></a></li>
           <!-- <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/magic-wand.svg') }}"> <span>Create</span></a></li>
           <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/love-lady.svg') }}"> <span>My Ai</span></a></li> -->
         </ul>
