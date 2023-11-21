@@ -358,7 +358,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     </div>
                                     <div class="attributes_txt">
                                         <span>AGE</span>
-                                        <h6>{{ $age }}</h6>
+                                        <h6 style="text-align: center;">{{ $age }}</h6>
                                     </div>
                                 </div>
                                 <div class="attributes_item">
@@ -367,7 +367,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     </div>
                                     <div class="attributes_txt">
                                         <span>ETHNICITY</span>
-                                        <h6>{{ $ethnicity }}</h6>
+                                        <h6 style="text-align: center;">{{ $ethnicity }}</h6>
                                     </div>
                                     </div>
                                 </div>
