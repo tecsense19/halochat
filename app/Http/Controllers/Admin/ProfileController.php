@@ -199,8 +199,9 @@ class ProfileController extends Controller
                     'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
                   ),
                 ));
-                $response = curl_exec($curl);
 
+                $response = curl_exec($curl);
+                // echo "<pre>";
                 // print_r($response);
                 // die;
                 $responseArray = json_decode($response, true);
@@ -208,6 +209,8 @@ class ProfileController extends Controller
                 if (isset($responseArray['data']['persona_id'])) {
                     $personaId = $responseArray['data']['persona_id'];
                 } else {
+                    return back()->withErrors(['ai_persona' => 'Persona ID not found in the response.'])->withInput();
+                    die;
                     echo "Persona ID not found in the response.";
                 }
                 
