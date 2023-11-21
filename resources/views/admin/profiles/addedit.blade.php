@@ -21,6 +21,12 @@ $get_voice = json_decode($get_voice, true);
 // die;
 
 ?>
+@if ($errors->has('ai_persona'))
+    <script>
+        // Display an alert message using JavaScript
+        alert("{{ $errors->first('ai_persona') }}");
+    </script>
+@endif
 
 @include('admin.layout.header')
 
