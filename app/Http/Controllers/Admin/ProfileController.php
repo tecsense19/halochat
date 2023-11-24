@@ -232,8 +232,6 @@ class ProfileController extends Controller
                     $personaId = $responseArray['data']['persona_id'];
                 } else {
                     return back()->withErrors(['ai_persona' => 'Persona ID not found in the response.'])->withInput();
-                    die;
-                    echo "Persona ID not found in the response.";
                 }
                 
             $profile = new Profile;

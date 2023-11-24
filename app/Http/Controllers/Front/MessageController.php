@@ -20,9 +20,7 @@ class MessageController extends Controller
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         $message_show = $_POST['message']; // Assuming you're getting the message from a form input
         $message_url = "";
-        if (str_contains($message_show, 'show')) {
-            $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt);
-            } 
+      
 
             if(empty($user->profile_id)){
                 return back()->withErrors(['chat_persona' => 'Please select persona'])->withInput();  
@@ -57,7 +55,11 @@ class MessageController extends Controller
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
             if($creditAddManage->currentcredit == 0){
                 return redirect()->route('subscription.subscription');
+                
             }else{
+                if (str_contains($message_show, 'show')) {
+                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt);
+                    } 
                 $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId, $message_url);
             }
             return redirect()->back();
@@ -385,7 +387,6 @@ class MessageController extends Controller
                 $responseArray = $responseArray['data']['system_prompt'];
             } else {
                 return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
-                die;
             }
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
@@ -461,7 +462,6 @@ class MessageController extends Controller
                     $response_image = $response_Base64['output']['images'][0];
                 } else {
                     return back()->withErrors(['ai_message' => 'Message and image not found in the response'])->withInput();
-                    die;
                 }   
                 // echo "<pre>";
                 // print_r($response_Base64);
