@@ -15,11 +15,18 @@ class ProfilesController extends Controller
     {
         // Retrieve the user ID from the session
         $userId = session('user_id');
-        // Use the user ID to fetch the user data
-        $user = User::where('id', $userId)->first();
-        $managecredit = Managecredit::where('user_id', $userId)->first();
+        if(session('user_id'))
+        {
+            // Use the user ID to fetch the user data
+            $user = User::where('id', $userId)->first();
+            $managecredit = Managecredit::where('user_id', $userId)->first();
 
-        return view("front.profile.profile", compact('user','managecredit'));
+            return view("front.profile.profile", compact('user','managecredit'));
+        }
+        else {
+            return redirect()->route('login');
+        }
+       
     }
 
     public function update(request $request)
