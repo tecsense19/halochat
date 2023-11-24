@@ -33,6 +33,8 @@ class Profile extends Authenticatable
         'body_description',
         'system_prompt',
         'system_instruction',
+        'prompt',
+        'negative_prompt',
         'created_at',
         'updated_at',
     ];

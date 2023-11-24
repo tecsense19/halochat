@@ -25,6 +25,9 @@
                 <h3 class="card-title text-left mb-3">Login</h3>
                 <form  action="{{ route('admin.authenticate') }}" method="post" >
                 {!! csrf_field() !!}
+
+        
+
                   <div class="form-group">
                     <label>Username or email *</label>
                     <input type="text" class="form-control p_input" name="email" id="email">

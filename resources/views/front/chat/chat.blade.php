@@ -24,12 +24,40 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     border-radius: 8px;
     color: #fff;
 }
+.picture_circle {
+  width: 50px; /* Set the width of the loader circle */
+  height: 50px; /* Set the height of the loader circle */
+  border-radius: 50%; /* Create a circular shape */
+  border: 5px solid #3498db; /* Set the border color and thickness */
+  border-top: 5px solid #ffffff; /* Set the color of the loader */
+  animation: spin 1s linear infinite; /* Apply the rotation animation */
+  border-top: 5px solid #1a1a1a !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loading-text {
+  text-align: center;
+  color: #3498db; /* Set the color of the loader text */
+}
+
+
 </style>
 
 @if ($errors->has('ai_message'))
     <script>
         // Display an alert message using JavaScript
         alert("{{ $errors->first('ai_message') }}");
+    </script>
+@endif
+
+@if ($errors->has('chat_persona'))
+    <script>
+        // Display an alert message using JavaScript
+        alert("{{ $errors->first('chat_persona') }}");
     </script>
 @endif
 
@@ -203,6 +231,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         <span id="chat-message">{{ $chat_user->message_text }}</span>
                                     </div>
                                 </div>
+                              
                                 @endif
                                 @endforeach
                                 @endif
@@ -211,14 +240,14 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         </div>
 
                         <div class="searchbar-footer">
-                            <ul class="suggestion">
-                                @if(session('user_id'))
-                                <li>Suggestion: </li>
+                        @if(isset($getAllReciverUser[1]->message_text))
+                            <ul class="suggestion" style="display: none;">
+                            <li>Suggestion: </li>
                                 <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @else
+                                <ul class="suggestion">
                                 <li>Suggestion: </li>
-                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#please_register"
-                                        class="suggestion-link">Hey! How's your day been?</a></li>
+                                <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @endif
                             </ul>
                             <div class="type_message">
@@ -568,9 +597,7 @@ $(document).ready(function() {
             // Check if the input contains the word "show"
             if (inputValue.includes('show')) {
                 // The word "show" is present in the input
-                $('.new_message').append(
-                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
-                );
+                $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
                 setTimeout(function() {
                     updateLoading('0%', 'Please Wait');
                 }, 1000);
@@ -634,9 +661,7 @@ $("#type_message").keypress(function(e) {
             // Check if the input contains the word "show"
             if (inputValuekey.includes('show')) {
                 // The word "show" is present in the input
-                $('.new_message').append(
-                    '<div class="col-12"><div class="show_picture"><div class="picture_circle"><p id="loading-progress">0%</p></div><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
-                );
+                $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
                 setTimeout(function() {
                     updateLoading('0%', 'Please Wait');
                 }, 1000);

@@ -79,7 +79,7 @@
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
                 </div>
                 <div class="pay_btn" id="pay_creditcard">
-                  <a href="#"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                  <a href="{{ url('payment') }}"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
                 </div>
               </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -87,7 +87,7 @@
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
                 </div>
                 <div class="pay_btn" id="pay_creditcard">
-                  <a href="#"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                  <a href="{{ url('payment') }}"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
                 </div>
                 <div class="pay_btn" id="pay_bitcoin">
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/bitcoin.svg') }}" class="ps-1"> <img src="{{ URL::asset('public/front/img/eth.svg') }}"> <img src="{{ URL::asset('public/front/img/litecoin.svg') }}"></a>

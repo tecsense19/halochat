@@ -12,14 +12,20 @@ class ProfileController extends Controller
 {
     public function addProfiles(Request $request)
     {
+    if(!session()->has('authenticated_user')){
+        return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+    }
        $get_voice = $this->get_voice();
        return view('admin.profiles.addedit', compact('get_voice'));
     }
 
     public function profiles()
     {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         try{
-            $profileList = Profile::with('profileImages')->get();
+            $profileList = Profile::with('profileImages')->paginate(5);
             return view('admin.profiles.list' , compact('profileList'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
@@ -28,6 +34,9 @@ class ProfileController extends Controller
 
     public function destroy($id)
     {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         // Find the resource you want to delete
         $profile = Profile::where('profile_id', $id)->first();
 
@@ -44,6 +53,9 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         $profileList = Profile::where('profile_id', $id)->first();
         $get_voice = $this->get_voice();
         return view('admin.profiles.addedit', compact('profileList', 'id', 'get_voice'));
@@ -51,6 +63,9 @@ class ProfileController extends Controller
 
     public function get_voice()
     {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -76,6 +91,9 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         try {
         $input = $request->all();
 
@@ -92,6 +110,8 @@ class ProfileController extends Controller
             'description' => 'required|string',
             'system_prompt' => 'required|string',
             'system_instruction' => 'required|string',
+            'prompt' => 'required|string',
+            'negative_prompt' => 'required|string',
         ]);
         
         if ($validator->fails()) {
@@ -155,6 +175,8 @@ class ProfileController extends Controller
                     'first_message' => $input['first_message'],
                     'system_prompt' => $input['system_prompt'],
                     'system_instruction' => $input['system_instruction'],
+                    'prompt' => $input['prompt'],
+                    'negative_prompt' => $input['negative_prompt'],
                 ]);
                 $profileId = $input['profile_id'];
                 if ($request->hasFile('profile_img')) {
@@ -260,6 +282,9 @@ class ProfileController extends Controller
 
     public function deleteImage(Request $request)
         {
+            if(!session()->has('authenticated_user')){
+                return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+            }
             // Delete the old profile image file from the server
             if (ProfileImage::exists(public_path($request->image_path))) {
                 ProfileImage::where('image_path', $request->image_path)->delete();

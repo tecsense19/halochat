@@ -1,9 +1,8 @@
 
-
-
-   <!-- ======= Header ======= -->
- <header id="header">
+<!-- ======= Header ======= -->
+ <header id="header" class="mobile_view">
     <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
+      
       <nav id="navbar" class="nav-menu navbar">
         <ul>
           <li><a href="{{ route('dashboard') }}" class="nav-link scrollto active"><img src="{{ URL::asset('public/front/img/compass.png') }}" width="30" height="30"> <span>Explore</span></a></li>
@@ -13,6 +12,7 @@
           <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/love-lady.svg') }}"> <span>My Ai</span></a></li> -->
         </ul>
       </nav><!-- .nav-menu -->
+      
     </div>
   </header><!-- End Header -->
 

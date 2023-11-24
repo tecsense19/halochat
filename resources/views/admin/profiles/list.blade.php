@@ -93,22 +93,16 @@ i.mdi.mdi-delete-forever {
                                                 </audio>
                                             </td>
                                             <td>
-
-                                                <div class="d-flex justify-content-between">
-                                                    <a
-                                                        href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileList1->profile_id]) }}"><button
+                                                    <a href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileList1->profile_id]) }}"><button
                                                             class="btn btn-primary btn-rounded btn-icon"
                                                             onclick="editProfile('{{$profileList1->profile_id}}')"
                                                             id="get_id" value="" type="submit"> <i
                                                                 class="mdi mdi-tooltip-edit"></i> </button></a>
 
-                                                    <div class="d-flex justify-content-between">
                                                         <button class="btn btn-danger btn-rounded btn-icon"
                                                             onclick="deleteProfile('{{$profileList1->profile_id}}')"
                                                             id="get_id" value="" type="submit"> <i
                                                                 class="mdi mdi-delete-forever"></i> </button>
-
-                                                    </div>
 
                                             </td>
                                         </tr>
@@ -121,9 +115,9 @@ i.mdi.mdi-delete-forever {
                                         </tr>
                                         @endif
                                     </tbody>
-
+                                   
                                 </table>
-                               
+                                {!! $profileList->links('pagination') !!}
                             </div>
                            
                         </div>

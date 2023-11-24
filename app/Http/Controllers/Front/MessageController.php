@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Messages;
 use App\Models\Profile;
 use App\Models\Managecredit;
+use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,15 +15,18 @@ use Illuminate\Support\Facades\Hash;
 
 class MessageController extends Controller
 {
-
     public function userMessage(Request $request){
         
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         $message_show = $_POST['message']; // Assuming you're getting the message from a form input
         $message_url = "";
         if (str_contains($message_show, 'show')) {
-            $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id);
+            $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt);
             } 
+
+            if(empty($user->profile_id)){
+                return back()->withErrors(['chat_persona' => 'Please select persona'])->withInput();  
+            }
 
         if (session()->has('authenticated_user')) {
             $userId = User::where('id', $_POST['sender_id'])->first();
@@ -99,7 +103,6 @@ class MessageController extends Controller
                     $ai_message = $responseArray['data']['ai_message'];
                 } else {
                     return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
-                    die;
                 }
         
                 $messageAi = array(
@@ -112,17 +115,49 @@ class MessageController extends Controller
                     'media_url' => $message_url,
                     'updated_at' => now(),
                 );
-                Messages::create($messageAi);
-                $creditAdd = Managecredit::updateOrInsert(
-                    ['user_id' => $userId->id],
-                    [
-                        'currentcredit' => $creditAddManage->currentcredit - 1,
-                        'usedcredit' => $creditAddManage->usedcredit + 1,
-                        'totalcredit' => $creditAddManage->totalcredit - 1,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
+                if($message_url){
+                    Messages::create($messageAi);
+                    $creditAdd = Managecredit::updateOrInsert(
+                        ['user_id' => $userId->id],
+                        [
+                            'currentcredit' => $creditAddManage->currentcredit - 5,
+                            'usedcredit' => $creditAddManage->usedcredit + 1,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+
+                    Usedcredites::Insert(
+                        [
+                            'user_id' => $userId->id,
+                            'debit' => 5,
+                            'credit_debit_date' => now(),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                }else{
+                    Messages::create($messageAi);
+                    $creditAdd = Managecredit::updateOrInsert(
+                        ['user_id' => $userId->id],
+                        [
+                            'currentcredit' => $creditAddManage->currentcredit - 1,
+                            'usedcredit' => $creditAddManage->usedcredit + 1,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                    Usedcredites::Insert(
+                        [
+                            'user_id' => $userId->id,
+                            'debit' => 1,
+                            'credit_debit_date' => now(),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                }
+              
             }
         }
     }
@@ -313,13 +348,19 @@ class MessageController extends Controller
 
     }
 
+    public function gallery_image_delete($id)
+    {
+        Messages::where('message_id', $id)->update(['media_url' => null]);
+        return true;
+    }
+
     public function delete($id)
     {
         Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
         return redirect()->back();
     }
 
-    public function checkStringForWord($show, $persona_id) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt) {
 
         $curl = curl_init();
 
@@ -359,9 +400,9 @@ class MessageController extends Controller
                 CURLOPT_POSTFIELDS =>'{
                     "input": {
                         "api_name": "txt2img",
-                        "prompt": '.json_encode($responseArray).',
+                        "prompt": "'.$prompt.'",
                         "restore_faces": true,
-                        "negative_prompt": "('.$show.')",
+                        "negative_prompt": "'.$negative_prompt.'",
                         "seed": 3302206224,
                         "override_settings": {
                             "sd_model_checkpoint": ""
@@ -384,13 +425,12 @@ class MessageController extends Controller
                 ));
                 $response_image = curl_exec($curl);
                 curl_close($curl);
-                // echo $response_image;
-
+                // echo $response_image;    
                 $response_image = json_decode($response_image, true);
                 if (isset($response_image['id'])) {
                     $response_image = $response_image['id'];
                 } else {
-                    echo "ai_message not found in the response. ";
+                    return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
                 sleep(10);
@@ -413,7 +453,8 @@ class MessageController extends Controller
 
                 $response_Base64 = curl_exec($curl);
                 curl_close($curl);
-                
+
+           
 
                 $response_Base64 = json_decode($response_Base64, true);
                 if (isset($response_Base64['output']['images'][0])) {
@@ -422,6 +463,9 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message and image not found in the response'])->withInput();
                     die;
                 }   
+                // echo "<pre>";
+                // print_r($response_Base64);
+                // die;
                 $base64Image = $response_image;
 
                 // Decode the Base64 image data

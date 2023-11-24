@@ -27,21 +27,6 @@
 <link rel="icon" href="{{ URL::asset('public/front/img/fav16x16.ico') }}" type="image/x-icon" sizes="16x16">
 <link rel="icon" href="{{ URL::asset('public/front/img/fav32x32.ico') }}" type="image/x-icon" sizes="32x32">
 <body>
-
-   <!-- ======= Header ======= -->
-   <header id="header" class="d-block d-lg-none">
-    <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#" class="nav-link scrollto active"><img src="{{ URL::asset('public/front/img/explore.svg') }}"> <span>Explore</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/chat.svg') }}"> <span>Chat</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/gallery.svg') }}"> <span>Gallery</span></a></li>
-          <!-- <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/magic-wand.svg') }}"> <span>Create</span></a></li>
-          <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/love-lady.svg') }}"> <span>My Ai</span></a></li> -->
-        </ul>
-      </nav><!-- .nav-menu -->
-    </div>
-  </header><!-- End Header -->
  
 <section class="form_section">
   <div class="container">
@@ -88,7 +73,7 @@
           @enderror
           <p class="forgot-password"><a href="{{ route('forgotpass') }}">Forgot your password?</a></p>
           <div class="contact_details">
-            <button type="submit">Sign up</button>
+            <button type="submit">Sign in</button>
             <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
           </div>
         </form>

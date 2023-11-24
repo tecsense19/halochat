@@ -19,6 +19,7 @@
 
   <!-- Template Main CSS File -->
   <link href="{{ URL::asset('public/front/css/style.css') }}" rel="stylesheet">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <link rel="icon" href="{{ URL::asset('public/front/img/fav48x48.ico') }}" type="image/x-icon" sizes="48x48">

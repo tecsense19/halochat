@@ -41,7 +41,7 @@ class LoginRegisterController extends Controller
 
     public function dashboard()
     {
-        if(Auth::check())
+        if(Auth::check() && session()->has('authenticated_user'))
         {
             return view('admin.dashboard');
         }
@@ -60,6 +60,7 @@ class LoginRegisterController extends Controller
         if(Auth::attempt($credentials) && auth()->user()->role === "Admin")
         {
             $request->session()->regenerate();
+            $request->session()->put('authenticated_user', true);
             return redirect()->route('admin.dashboard')->withSuccess('You have successfully logged in!');
         }
 

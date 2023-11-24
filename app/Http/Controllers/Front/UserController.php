@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Models\Messages;
 use App\Models\Managecredit;
+use App\Models\Usedcredites;
 use App\Models\Passwordresets;
 use App\Mail\Resetpasslink;
 use Illuminate\Support\Facades\Mail;
@@ -209,7 +210,7 @@ class UserController extends Controller
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS =>'{
-            "user_name": "'.$request->email.'"
+            "user_name": "'.$request->name.'"
         }',
         CURLOPT_HTTPHEADER => array(
             'Content-Type: application/json',
@@ -234,6 +235,7 @@ class UserController extends Controller
         }
 
         User::create([
+            'name' => $request->name,
             'email' => $request->email,
             'role' => 'User',
             'chatuser_id' => $chatuser_id,
@@ -242,13 +244,26 @@ class UserController extends Controller
 
         $userId = User::where('email', $request->email)->first();
         $request->session()->put('user_id', $userId->id);
-        $creditAdd = Managecredit::updateOrInsert(
+
+        Managecredit::updateOrInsert(
             ['user_id' => $userId->id],
             [
                 'user_id' => $userId->id,
                 'currentcredit' => 200,
                 'usedcredit' => 0,
                 'totalcredit' => 200,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+       Usedcredites::updateOrInsert(
+            ['user_id' => $userId->id],
+            [
+                'user_id' => $userId->id,
+                'credit' => 200,
+                'credit_debit_date' => now(),
+                'payment_id' => 1111,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
@@ -276,7 +291,9 @@ class UserController extends Controller
         {
         if(Auth::attempt($credentials) && auth()->user()->role === "User")
             {
-            
+                if( auth()->user()->status === "Suspend"){
+                    return back()->withErrors(['deleted' => 'Your account has been suspended'])->onlyInput('email');
+                }
                 $request->session()->put('authenticated_user', true);
                 $request->session()->put('user_id', auth()->user()->id);
                 $request->session()->regenerate();

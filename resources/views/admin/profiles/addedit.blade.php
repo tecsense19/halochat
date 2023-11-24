@@ -15,11 +15,12 @@ $profileList_first_message = isset($profileList->first_message) ? $profileList->
 $voice_name = isset($profileList->voice_name) ? $profileList->voice_name : '';
 $system_prompt = isset($profileList->system_prompt) ? $profileList->system_prompt : '';
 $system_instruction = isset($profileList->system_instruction) ? $profileList->system_instruction : '';
+$prompt = isset($profileList->prompt) ? $profileList->prompt : '';
+$negative_prompt = isset($profileList->negative_prompt) ? $profileList->negative_prompt : '';
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
 // print_r($voice_name);
 // die;
-
 ?>
 @if ($errors->has('ai_persona'))
     <script>
@@ -95,6 +96,27 @@ $get_voice = json_decode($get_voice, true);
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 
+
+                            
+                            <div class="form-group">
+                                <label for="promt">Image Prompt</label>
+                                <input type="text" class="form-control" id="prompt" name="prompt"
+                                    value="{{ $prompt }}" placeholder="Image prompt">
+                            </div>
+                            @error('prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            
+                            <div class="form-group">
+                                <label for="negative_prompt">Negative prompt</label>
+                                <input type="text" class="form-control" id="negative_prompt" name="negative_prompt"
+                                    value="{{ $negative_prompt }}" placeholder="Negative prompt">
+                            </div>
+                            @error('negative_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
                             <div class="form-group">
                                 <label for="ethnicity">Ethnicity</label>
                                 <input type="text" class="form-control" id="profile_ethnicity" name="profile_ethnicity"
@@ -124,8 +146,8 @@ $get_voice = json_decode($get_voice, true);
                                 <label for="exampleSelectGender">Gender</label>
                                 <select class="form-control" id="profile_gender" value="{{ $profileListGender }}"
                                     name="profile_gender">
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="male" <?php if($profileListGender == "male") { ?> selected <?php } ?> >Male</option>
+                                    <option value="female" <?php if($profileListGender == "female") { ?> selected <?php } ?>>Female</option>
                                 </select>
                             </div>
                             @error('profile_gender')
@@ -220,8 +242,10 @@ $get_voice = json_decode($get_voice, true);
 
 
                             <button type="submit" class="btn btn-primary me-2">Submit</button>
-                            <button class="btn btn-dark">Cancel</button>
-                        </form>
+                            <a href="{{ redirect()->back()->getTargetUrl() }}"><button type="button" class="btn btn-dark">Cancel</button></a>
+                            </form> 
+                           
+                      
                     </div>
                 </div>
             </div>

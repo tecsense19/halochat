@@ -1095,6 +1095,7 @@ form.search-form svg {
   line-height: 20px;
   color: #fff;
   margin: 0;
+  
 }
 .send_message {
   width: 100%;
@@ -1128,6 +1129,7 @@ form.search-form svg {
   justify-content: center;
   margin-left: 5px;
   cursor: pointer;
+  min-width: 35px;
 }
 
 .chat_content_box .volume span {
@@ -2590,7 +2592,7 @@ input {
 
 /* new loader image while sending */
 
-.show_picture {
+/* .show_picture {
   background: #1A1A1A;
   border: 1px solid #3F3F46;
   border-radius: 10px;
@@ -2598,9 +2600,9 @@ input {
   margin-top: 30px;
   text-align: center;
   padding: 130px 30px 170px;
-}
+} */
 
-.picture_circle {
+/* .picture_circle {
   width: 130px;
   height: 130px;
   border: 5px solid #B473E0;
@@ -2609,7 +2611,7 @@ input {
   align-items: center;
   justify-content: center;
   margin: auto;
-}
+} */
 
 .picture_circle p {
   margin: 0;
@@ -2662,3 +2664,52 @@ input {
   color: #fff;
   line-height: 1.25;
 }
+
+
+
+
+.show_picture {
+  background: #1A1A1A;
+  border: 1px solid #3F3F46;
+  border-radius: 10px;
+  max-width: 450px;
+  margin-top: 30px;
+  text-align: center;
+  padding: 0px 30px 0px;
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.picture_circle {
+  width: 130px;
+  height: 130px;
+  border: 5px solid #B473E0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+   margin: 0 auto;
+  position: relative;
+}
+
+#loading-progress {
+  position: absolute;
+  margin: 0;
+  color: #B473E0;
+  left: 0;
+  right: 0;
+  height: 79%;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 35px;
+}
+

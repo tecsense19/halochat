@@ -10,6 +10,8 @@ use App\Http\Controllers\Front\ProfilesController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\PaymentController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,8 +33,15 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
     Route::get('/users', [UsersController::class, 'users'])->name('users');
+    Route::get('users/edit/{id}', [UsersController::class, 'edit'])->name('users.edit');
+    Route::post('users/store', [UsersController::class, 'store'])->name('users.store');
+    Route::get('users/suspend/{id}', [UsersController::class, 'suspend'])->name('users.suspend');
+    Route::get('users/active/{id}', [UsersController::class, 'active'])->name('users.active');
     
-
+    Route::get('/users/credit_debit/{id}', [UsersController::class, 'used_credit_debit'])->name('used_credit_debit');
+    Route::get('/users/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
+    
+    
    // ::Profiles
     Route::get('/profiles', [ProfileController::class, 'addProfiles'])->name('profile');
     Route::get('profiles/list', [ProfileController::class, 'profiles'])->name('profile.list');
@@ -72,15 +81,21 @@ use Illuminate\Support\Facades\Artisan;
     Route::get('/chat/mobile/message/{id}', [MessageController::class, 'mobile'])->name('chat.messagemobile');
     Route::post('/chat/message/store/{id}', [MessageController::class, 'store'])->name('chat.store');
     Route::post('/chat/message/userMessage', [MessageController::class, 'userMessage'])->name('chat.userMessage');
-    Route::get('/gallery', [MessageController::class, 'gallery'])->name('gallery.gallery');
     Route::get('/chat/delete/{id}', [MessageController::class, 'delete'])->name('chat.delete');
     Route::get('/chat/liked/{id}', [MessageController::class, 'liked'])->name('chat.liked');
     Route::get('/chat/unliked/{id}', [MessageController::class, 'unliked'])->name('chat.unliked');
+
+    Route::get('/gallery', [MessageController::class, 'gallery'])->name('gallery.gallery');
+    Route::get('/gallary/delete/{id}', [MessageController::class, 'gallery_image_delete'])->name('gallery.delete');
 
     Route::post('/contact-us', [UserController::class, 'contact'])->name('contact');
     
     Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
     Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+    Route::get('/payment', [PaymentController::class, 'showForm']);
+    Route::post('/payment', [PaymentController::class, 'makePayment']);
+
 
 
     Route::get('/clear-cache', function () {

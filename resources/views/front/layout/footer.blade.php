@@ -82,6 +82,8 @@
 
   <!-- Template Main JS File -->
   <script src="{{ URL::asset('public/front/js/main.js') }}"></script>
+  <script src="{{ URL::asset('public/js/select2.js') }}"></script>
+  <script src="{{ URL::asset('public/vendors/select2/select2.min.js') }}"></script>
 
   <script>
 $(document).ready(function() {
@@ -118,6 +120,22 @@ $(document).ready(function() {
     });
 });
 </script>
+
+
+@if(!session('user_id'))
+<script>
+if (window.innerWidth <= 1199) {
+    $('.mobile_view').hide();
+}
+</script>
+@else
+<script>
+if (window.innerWidth <= 1199) {
+    $('.mobile_view').show();
+}
+</script>
+@endif
+
 
 </body> 
 
