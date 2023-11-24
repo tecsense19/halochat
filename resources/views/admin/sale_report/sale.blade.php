@@ -83,15 +83,16 @@ i.mdi.mdi-rocket {
                           @php $i++; @endphp
                           @endforeach
                         @endforeach
+                        <tr>
+                            <td colspan="6">Total:</td>
+                            <td>${{ isset($totalCredit) ? $totalCredit : '' }}</td>
+                        </tr>
                     @else
                     <tr scope="row" style="text-align: center;">
                             <td colspan="6">No credit debit Found.</td>
                         </tr>
                         @endif
-                        <tr>
-                            <td colspan="6">Total:</td>
-                            <td>${{ $totalCredit }}</td>
-                        </tr>
+                       
                         </tbody>
                       </table>
                       {!! $credit_debit->links('pagination') !!}

@@ -81,7 +81,7 @@ i.mdi.mdi-rocket {
                             <td>{{ $usersList1->gender }}</td>
                             <td>{{ $usersList1->role }}</td>
                             <td>{{ $usersListcredit->currentcredit }}</td>
-                            <td>{{ $usersListcredit->totalcredit + $usersListcredit->usedcredit }}</td>
+                            <td>{{ $usersListcredit->totalcredit }}</td>
                             <td>{{ $usersList1->plans }}</td>
                             <td>{{ $usersList1->status }}</td>
                             <td>{{ $usersList1->created_at }}</td>
