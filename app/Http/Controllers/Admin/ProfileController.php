@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Models\Globle_prompts;
 use App\Models\ProfileImage;
 use Illuminate\Support\Facades\Validator;
 
@@ -88,6 +89,101 @@ class ProfileController extends Controller
         curl_close($curl);
         return $response;
     }
+    public function addGlobleprompts(Request $request) 
+    {
+        $profilegloble = Globle_prompts::where('type', 'anime')->first();
+        return view('admin.profiles.globleprompt', compact('profilegloble'));
+    }
+    public function addGloblepromptrealist(Request $request) 
+    {
+        $profilegloble = Globle_prompts::where('type', 'realistic')->first();
+        return view('admin.profiles.globlepromptrealist', compact('profilegloble'));
+    }
+
+    public function store_globleprompts(Request $request)
+    {
+        if(!session()->has('authenticated_user')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
+        try {
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'restore_faces' => 'required|string',
+                'seed' => 'required|string',
+                'denoising_strength' => 'required|string',
+                'enable_hr' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+
+                return redirect()->route('admin.profile.globleprompt')->withErrors($validator);
+                //return redirect()->route('admin.profile.addProfiles')->withErrors($validator)->withInput();
+            }
+
+            // Find or create the record based on a unique column (assuming 'id' is the primary key)
+          if($input['type'] == 'anime')
+          {
+            Globle_prompts::updateOrCreate(
+                ['type' => $input['type']], // The unique column (in this case, assuming 'id' is the primary key)
+                [
+                    'globle_realistic_prompts' => isset($input['globle_realistic_prompts']) ? $input['globle_realistic_prompts'] : '',
+                    'globle_anime_prompts' => isset($input['globle_anime_prompts']) ? $input['globle_anime_prompts'] : '',
+                    'globle_realistic_terms' => isset($input['globle_realistic_terms']) ? $input['globle_realistic_terms'] : '',
+                    'globle_anime_terms' => isset($input['globle_anime_terms']) ? $input['globle_anime_terms'] : '',
+                    'restore_faces' => isset($input['restore_faces']) ? $input['restore_faces'] : '',
+                    'seed' => isset($input['seed']) ? $input['seed'] : '',
+                    'denoising_strength' => isset($input['denoising_strength']) ? $input['denoising_strength'] : '',
+                    'enable_hr' => isset($input['enable_hr']) ? $input['enable_hr'] : '',
+                    'hr_scale' => isset($input['hr_scale']) ? $input['hr_scale'] : '',
+                    'hr_upscaler' => isset($input['hr_upscaler']) ? $input['hr_upscaler'] : '',
+                    'sampler_index' => isset($input['sampler_index']) ? $input['sampler_index'] : '',
+                    'email' => isset($input['email']) ? $input['email'] : '',
+                    'steps' => isset($input['steps']) ? $input['steps'] : '',
+                    'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
+                    'type' => $input['type'],
+                ]
+            );
+            
+          $profilegloble = Globle_prompts::where('type', 'anime')->first();
+         return view('admin.profiles.globleprompt', compact('profilegloble'));
+          }
+
+          if($input['type'] == 'realistic')
+          {
+            Globle_prompts::updateOrCreate(
+                ['type' => $input['type']], // The unique column (in this case, assuming 'id' is the primary key)
+                [
+                    'globle_realistic_prompts' => isset($input['globle_realistic_prompts']) ? $input['globle_realistic_prompts'] : '',
+                    'globle_anime_prompts' => isset($input['globle_anime_prompts']) ? $input['globle_anime_prompts'] : '',
+                    'globle_realistic_terms' => isset($input['globle_realistic_terms']) ? $input['globle_realistic_terms'] : '',
+                    'globle_anime_terms' => isset($input['globle_anime_terms']) ? $input['globle_anime_terms'] : '',
+                    'restore_faces' => isset($input['restore_faces']) ? $input['restore_faces'] : '',
+                    'seed' => isset($input['seed']) ? $input['seed'] : '',
+                    'denoising_strength' => isset($input['denoising_strength']) ? $input['denoising_strength'] : '',
+                    'enable_hr' => isset($input['enable_hr']) ? $input['enable_hr'] : '',
+                    'hr_scale' => isset($input['hr_scale']) ? $input['hr_scale'] : '',
+                    'hr_upscaler' => isset($input['hr_upscaler']) ? $input['hr_upscaler'] : '',
+                    'sampler_index' => isset($input['sampler_index']) ? $input['sampler_index'] : '',
+                    'email' => isset($input['email']) ? $input['email'] : '',
+                    'steps' => isset($input['steps']) ? $input['steps'] : '',
+                    'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
+                    'type' => $input['type'],
+                ]
+            );
+            
+            $profilegloble = Globle_prompts::where('type', 'realistic')->first();
+        return view('admin.profiles.globlepromptrealist', compact('profilegloble'));
+          }
+            
+    }
+    catch (\Exception $e) {
+        dd($e->getMessage());
+        }
+            $profilegloble = Globle_prompts::first();
+            return redirect()->route('admin.profiles.globleprompt', compact('profilegloble'));
+           
+    }
+
 
     public function store(Request $request)
     {
@@ -112,6 +208,7 @@ class ProfileController extends Controller
             'system_instruction' => 'required|string',
             'prompt' => 'required|string',
             'negative_prompt' => 'required|string',
+            'profile_personatype' => 'required',
         ]);
         
         if ($validator->fails()) {
@@ -177,6 +274,7 @@ class ProfileController extends Controller
                     'system_instruction' => $input['system_instruction'],
                     'prompt' => $input['prompt'],
                     'negative_prompt' => $input['negative_prompt'],
+                    'personatype' => $input['profile_personatype'],
                 ]);
                 $profileId = $input['profile_id'];
                 if ($request->hasFile('profile_img')) {

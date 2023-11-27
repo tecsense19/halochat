@@ -171,7 +171,7 @@
 <script>
 function gallaryimage(imageid) {
 
-  var str = "{{ URL::to('gallary/delete') }}/" + imageid;
+  var str = "{{ URL::to('gallary/delete', [], true) }}/" + imageid;
     swal({
             title: "Are you sure?",
             text: "Once deleted, you will not be able to recover this imaginary file!",

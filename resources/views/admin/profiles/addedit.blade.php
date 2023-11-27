@@ -17,6 +17,7 @@ $system_prompt = isset($profileList->system_prompt) ? $profileList->system_promp
 $system_instruction = isset($profileList->system_instruction) ? $profileList->system_instruction : '';
 $prompt = isset($profileList->prompt) ? $profileList->prompt : '';
 $negative_prompt = isset($profileList->negative_prompt) ? $profileList->negative_prompt : '';
+$profileListpersona = isset($profileList->personatype) ? $profileList->personatype : '';
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
 // print_r($voice_name);
@@ -77,6 +78,20 @@ $get_voice = json_decode($get_voice, true);
                                     Your browser does not support the audio element.
                             </audio>
                             <input type="hidden" id="audio_url" name="audio_url" value="">
+
+
+                            <div class="form-group">
+                                <label for="exampleSelectpersonatype">Select persona Type</label>
+                                <select class="form-control" id="profile_personatype" value="{{ $profileListpersona }}"
+                                    name="profile_personatype">
+                                    <option value="realistic" <?php if($profileListpersona == "realistic") { ?> selected <?php } ?> >Realistic</option>
+                                    <option value="anime" <?php if($profileListpersona == "anime") { ?> selected <?php } ?>>Anime</option>
+                                </select>
+                            </div>
+                            @error('profile_personatype')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
 
                             <div class="form-group">
                                 <label for="systempromt">System prompt</label>
@@ -266,7 +281,7 @@ $get_voice = json_decode($get_voice, true);
         
     $('.remove-image').click(function(e) {
       
-        var url = "{{ URL::to('admin/profiles/delete') }}"
+        var url = "{{ URL::to('admin/profiles/delete', [], true) }}"
 
         e.preventDefault();
       var container = $(this).closest('.image-container');

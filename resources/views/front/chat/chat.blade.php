@@ -856,7 +856,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 function likedMessage(id) {
-    var str = "{{URL::to('chat/liked')}}/" + id;
+    var str = "{{URL::to('chat/liked', [], true) }}/" + id;
 
     $.ajax({
         url: str,
@@ -884,7 +884,7 @@ function unlikedMessage(message, messageId) {
     console.log("Message: " + message);
     console.log("Message ID: " + messageId);
 
-    var str = "{{URL::to('chat/unliked')}}/" + messageId;
+    var str = "{{URL::to('chat/unliked', [], true) }}/" + messageId;
     $.ajax({
         type: "GET",
         url: str,

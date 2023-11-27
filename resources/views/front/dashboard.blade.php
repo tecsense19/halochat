@@ -49,9 +49,9 @@
           <div class="row">
             <div class="col-lg-12 d-flex ">
               <ul id="portfolio-flters">
-                <li data-filter="*" class="filter-active">All Models</li>
-                <li data-filter=".filter-app" class="">Realistic</li>
-                <li data-filter=".filter-card" class="">Anime</li>
+                <li data-filter="*" class="filter-active allmodel">All Models</li>
+                <li data-filter=".filter-app" class="realisticmodel">Realistic</li>
+                <li data-filter=".filter-card" class="animemodel">Anime</li>
               </ul>
             </div>
           </div>
@@ -99,7 +99,7 @@
       $imgUrl = isset($item->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$item->profileImages[0]['image_path'] : ''; 
       $imgUrl2 = isset($item->profileImages[1]) ? asset('storage/app/public').'/'.$item->profileImages[1]['image_path'] : ''; 
   @endphp
-            <div class="col-xl-3 col-md-6 portfolio-item filter-app">
+            <div class="col-xl-3 col-md-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
               <div class="portfolio-wrap">
                 <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}">
                   <div>
@@ -375,3 +375,23 @@
 
   </main><!-- End #main -->
   @include('front.layout.footer')
+
+  <script>
+
+$('.allmodel').click(function() {
+  $('.model-anime').show();
+  $('.model-realistic').show();
+});
+
+$('.realisticmodel').click(function() {
+  $('.model-realistic').show();
+  $('.model-anime').hide();
+});
+
+$('.animemodel').click(function() {
+  $('.model-anime').show();
+  $('.model-realistic').hide();
+ 
+});
+
+</script>

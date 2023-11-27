@@ -1099,16 +1099,20 @@ form.search-form svg {
 }
 .send_message {
   width: 100%;
-  margin: 30px 0px;
+  padding: 16px 25px;
+  border-radius: 15px 0 15px 15px;
+  /* margin: 30px 0px; */
   text-align: end;
 }
 .send_message span {
   background: rgb(38 38 38);
-  padding: 16px 25px;
-  border-radius: 15px 0 15px 15px;
   font-size: 14px;
   color: #fff;
   font-weight: 500;
+  word-break: break-all;
+  padding: 16px 25px;
+  border-radius: 15px 0 15px 15px;
+  display: inline-block;
 }
 .chat_content_img {
   width: 100%;
@@ -2286,8 +2290,18 @@ a.change_plan_btn {
 
   #main {
     margin-left: 0;
-    padding-bottom: 100px;
+    padding-bottom: 0;
+    padding-top: 0 !important; 
   }
+
+  .searchbar-footer {
+    position: fixed;
+    bottom: 45px;
+    left: 0;
+    width: 100%;
+    padding: 0px 15px;
+}
+
   .nav-menu ul li a {
     width: unset;
     height: unset;
@@ -2544,6 +2558,16 @@ input {
     padding-top: unset;
   }
 
+  .chat_content {
+    width: 100%;
+    padding: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 86%;
+    padding-top: 45%;
+    /* z-index: 99999999 !important; */
+}
+
   .chat-menu {
     background: #1A1A1A;
     padding: 20px;
@@ -2552,18 +2576,18 @@ input {
     top: 0;
   }
 
-  .start_chat_part .content {
-    height: 100vh;
-    flex-grow: 9;
-    padding: 0;
-    transform: translate3d(0, 0, 0);
-    transition: transform 0.3s;
-    position: sticky;
-    top: 0;
+.chat-profile-bar {
+    display: flex;
+    align-items: center;
     width: 100%;
-    padding-top: unset;
-  }
-
+    justify-content: space-between;
+    background: #131313;
+    border-bottom: 1px solid #3F3F46;
+    padding: 18px 20px;
+    position: absolute;
+    margin-top: 68px;
+    z-index: 1;
+}
 
 .start_chat_part .sidebar {
   max-width: unset;

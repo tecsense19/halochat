@@ -48,6 +48,9 @@ use App\Http\Controllers\PaymentController;
     Route::get('profiles/destroy/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('profiles/store', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('/profiles/globleprompts', [ProfileController::class, 'addGlobleprompts'])->name('profile.globleprompt');
+    Route::get('/profiles/globlepromptrealist', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
+    Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
     Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
 });
 

@@ -86,7 +86,8 @@ i.mdi.mdi-delete-forever {
                                             <td>{{ $profileList1->hobbies }}</td>
                                             <td>{{ $profileList1->relationship_status }}</td>
                                             <td>{{ $profileList1->body_description }}</td>
-                                            <td><audio id="audio-preview" name="audio_preview" controls>
+                                            <td>
+                                                <audio id="audio-preview" name="audio_preview" controls>
                                                     <source src="{{ $profileList1->voice_preview_url }}"
                                                         type="audio/mpeg">
                                                     Your browser does not support the audio element.
@@ -99,10 +100,10 @@ i.mdi.mdi-delete-forever {
                                                             id="get_id" value="" type="submit"> <i
                                                                 class="mdi mdi-tooltip-edit"></i> </button></a>
 
-                                                        <button class="btn btn-danger btn-rounded btn-icon"
+                                                        <!-- <button class="btn btn-danger btn-rounded btn-icon"
                                                             onclick="deleteProfile('{{$profileList1->profile_id}}')"
                                                             id="get_id" value="" type="submit"> <i
-                                                                class="mdi mdi-delete-forever"></i> </button>
+                                                                class="mdi mdi-delete-forever"></i> </button> -->
 
                                             </td>
                                         </tr>

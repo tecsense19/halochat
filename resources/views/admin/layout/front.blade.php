@@ -82,6 +82,7 @@
               <span class="menu-title">Users</span>
             </a>
           </li>
+
           <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-icon">
@@ -97,10 +98,26 @@
               </ul>
             </div>
           </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic-1" aria-expanded="false" aria-controls="ui-basic-1" >
+              <span class="menu-icon">
+                <i class="mdi mdi-table-large"></i>
+              </span>
+              <span class="menu-title">Globle Prompts</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic-1">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{{ route('admin.profile.globleprompt') }}">Add Anime Prompts</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ route('admin.profile.globlepromptrealist') }}">Add Realistic Prompts</a></li>
+              </ul>
+            </div>
+          </li>
           <li class="nav-item menu-items">
             <a class="nav-link" href="{{ route('admin.sale_report.sale') }}">
               <span class="menu-icon">
-                <i class="mdi mdi-account-multiple"></i>
+                <i class="mdi mdi-chart-bar"></i>
               </span>
               <span class="menu-title">Sale Credit</span>
             </a>

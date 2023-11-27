@@ -13,9 +13,7 @@ class GoogleLoginController extends Controller
 {
     public function redirectToGoogle()
     {
-    
         return Socialite::driver('google')->redirect();
-  
     }
 
     public function handleGoogleCallback(Request $request)
@@ -34,7 +32,7 @@ class GoogleLoginController extends Controller
                             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                             CURLOPT_CUSTOMREQUEST => 'POST',
                             CURLOPT_POSTFIELDS =>'{
-                                "user_name": "'.$user->email.'"
+                                "user_name": "'.$user->name.'"
                             }',
                             CURLOPT_HTTPHEADER => array(
                                 'Content-Type: application/json',

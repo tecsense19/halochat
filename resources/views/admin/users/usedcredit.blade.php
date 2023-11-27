@@ -91,8 +91,8 @@ i.mdi.mdi-rocket {
                         @endif
                         <tr>
                             <td colspan="2">Total:</td>
-                            <td>{{ $totalCredit }}</td>
-                            <td>{{ $totalDebit }}</td>
+                            <td>{{ isset($totalCredit) ? $totalCredit : '' }}</td>
+                            <td>{{ isset($totalDebit) ? $totalCredit : '' }}</td>
                         </tr>
                         </tbody>
                       </table>

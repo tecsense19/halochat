@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Messages;
 use App\Models\Profile;
 use App\Models\Managecredit;
+use App\Models\Globle_prompts;
 use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -53,12 +54,15 @@ class MessageController extends Controller
                                             ->get();
             }
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
+            
             if($creditAddManage->currentcredit == 0){
                 return redirect()->route('subscription.subscription');
                 
             }else{
                 if (str_contains($message_show, 'show')) {
-                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt);
+                    $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
+                    
+                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps);
                     } 
                 $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId, $message_url);
             }
@@ -221,9 +225,6 @@ class MessageController extends Controller
                                             ->whereNotNull('profiles.profile_id')
                                             ->groupBy('messages.profile_id')
                                             ->get();
-                                        // echo "<pre>";
-                                        //     print_r($getAllReciverUser);
-                                        //     die;
             
                                            
             }else{
@@ -362,7 +363,7 @@ class MessageController extends Controller
         return redirect()->back();
     }
 
-    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps) {
 
         $curl = curl_init();
 
@@ -388,7 +389,30 @@ class MessageController extends Controller
             } else {
                 return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
             }
-                $curl = curl_init();
+            $data = '{
+                "input": {
+                    "api_name": "txt2img",
+                    "prompt": "'.$prompt.'",
+                    "restore_faces": '.$restore_faces.',
+                    "negative_prompt": "'. $show .', '. $negative_prompt.', '.$globle_realistic_prompts.', '.$globle_realistic_terms.'",
+                    "seed": '.$seed.',
+                    "override_settings": {
+                        "sd_model_checkpoint": ""
+                    },
+                    "cfg_scale": 13,
+                    "denoising_strength": '.$denoising_strength.',
+                    "enable_hr": '.$enable_hr.',
+                    "hr_scale":'.$hr_scale.',
+                    "hr_upscaler": "'.$hr_upscaler.'",
+                    "sampler_index": "'.$sampler_index.'",
+                    "steps": '.$steps.',
+                    "email": "'.$email.'"
+                }
+            }';
+                // echo "<pre>";
+                // print_r($data);
+                // die;
+                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
                 CURLOPT_RETURNTRANSFER => true,
@@ -398,26 +422,7 @@ class MessageController extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>'{
-                    "input": {
-                        "api_name": "txt2img",
-                        "prompt": "'.$prompt.'",
-                        "restore_faces": true,
-                        "negative_prompt": "'.$negative_prompt.'",
-                        "seed": 3302206224,
-                        "override_settings": {
-                            "sd_model_checkpoint": ""
-                        },
-                        "cfg_scale": 13,
-                        "denoising_strength": 0.7,
-                        "enable_hr": true,
-                        "hr_scale": 1,
-                        "hr_upscaler": "Latent",
-                        "sampler_index": "DDIM",
-                        "num_inference_steps": 20,
-                        "email": "test@example.com"
-                    }
-                }',
+                CURLOPT_POSTFIELDS =>$data,
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer '.env('AI_IMAGE_KEY'),
