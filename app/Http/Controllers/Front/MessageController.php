@@ -406,7 +406,7 @@ class MessageController extends Controller
             $data = '{
                 "input": {
                     "api_name": "txt2img",
-                    "prompt": "'.$prompt.'",
+                    "prompt": "'.str_replace(["\n", "\r"], ' ', $prompt).'",
                     "restore_faces": '.$restore_faces.',
                     "negative_prompt": "'. $show .', '. str_replace(["\n", "\r"], ' ', $negative_prompt).', '.str_replace(["\n", "\r"], ' ', $globle_realistic_prompts).', '.str_replace(["\n", "\r"], ' ', $show).'",
                     "seed": '.$seed.',
@@ -423,8 +423,6 @@ class MessageController extends Controller
                     "email": "'.$email.'"
                 }
             }';
-
-
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
