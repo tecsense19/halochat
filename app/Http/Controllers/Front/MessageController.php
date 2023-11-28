@@ -12,8 +12,6 @@ use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
-
 
 
 class MessageController extends Controller
@@ -401,8 +399,6 @@ class MessageController extends Controller
             } else {
                 return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
             }
-          
-        
             $data = '{
                 "input": {
                     "api_name": "txt2img",
@@ -433,7 +429,7 @@ class MessageController extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_POSTFIELDS =>$data,
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer '.env('AI_IMAGE_KEY'),
@@ -481,17 +477,23 @@ class MessageController extends Controller
 
                 if(isset($response_image)){
                     $base64Image = $response_image;
+
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
+                
                     // Generate a unique filename for the image
                     $imageName = uniqid() . '.png';
-                    $image = Image::make(imagecreatefromstring($imageData));
-                    $modifiedImagePath = storage_path($imageName);
-                    // Remove all EXIF data from the image
-                    $image->save($modifiedImagePath);
-                    $image->exif([]);
-                    $image->response('png');
-                    return url('storage/'.$imageName);
+                
+                    // Specify the storage disk you want to use (e.g., 'public' or 's3')
+                    $disk = 'public';
+                
+                    // Save the image to the specified disk
+                    Storage::disk($disk)->put($imageName, $imageData);
+                
+                    // Generate the URL for the saved image
+                    $imageUrl = Storage::disk($disk)->url('/app/public/'.$imageName);
+                    // return response()->json(['image_url' => $imageUrl]);
+                    return $imageUrl;
                 }
 
                return '';
