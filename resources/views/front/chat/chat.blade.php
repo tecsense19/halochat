@@ -254,7 +254,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
                                     {!! csrf_field() !!}
                                     <input type="text" name="message" id="type_message"
-                                        placeholder="Type action message" required>
+                                        placeholder="Type action message" autocomplete="off" required>
                                     <input type="hidden" name="receiver_id"
                                         value="{{ request()->segment(count(request()->segments())) }}">
                                     <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
@@ -673,14 +673,20 @@ $("#type_message").keypress(function(e) {
                 setTimeout(function() {
                     updateLoading('50%', 'Almost There...');
                 }, 9000);
+                setTimeout(function() {
+                    updateLoading('60%', 'Almost There...');
+                }, 12000);
+                setTimeout(function() {
+                    updateLoading('70%', 'Almost There...');
+                }, 16000);
 
                 setTimeout(function() {
                     updateLoading('80%', 'Complete');
-                }, 13000);
+                }, 19000);
 
                 setTimeout(function() {
                     updateLoading('100%', 'Complete');
-                }, 17000);
+                }, 22000);
                 // You can add your condition or code here
             }
 

@@ -17,15 +17,30 @@ $formattedDate = date('Y-m-d', $timestamp);
 $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcredit : '';
 
 ?>
+ <style>
+  label {
+    color: red;
+  }
+ </style>
 
 <main id="main">
     <section class="profile_setting">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12 col-sm-8 col-md-6">
-            <div class="profile_content_box">
+            <div class="profile_content_box mt-3 pt-3">
               <div class="profile_title">
                 <h2>Profile Settings</h2>
+                @if ($message = Session::get('error'))
+                  <div class="alert alert-danger" role="alert">
+                      {{ $message }}
+                  </div>
+                  @endif
+                  @if ($message = Session::get('success'))
+                  <div class="alert alert-success" role="alert">
+                      {{ $message }}
+                  </div>
+                  @endif
               </div>
               <div class="admin_profile_box">
                 <div class="admin_details">
@@ -56,10 +71,11 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                       <div class="admin_name">
                         <div class="nickname">
                           <h5>Gender</h5>
-                          <a href="#"><img src="{{ URL::asset('public/front/img/edit.svg') }}"></a>
+                          <a href="#" data-bs-toggle="modal" data-bs-target="#edit"><img src="{{ URL::asset('public/front/img/edit.svg') }}"></a>
                         </div>
                         <h6>{{ $userGender }}</h6>
                       </div>
+                      @if(!empty($userPassword))
                       <div class="admin_name mb-0">
                         <div class="nickname">
                           <h5>Password </h5>
@@ -67,6 +83,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                         </div>
                         <h6>********</h6>
                       </div>
+                      @endif
                     </div>
                   </div>
                 </div>
@@ -109,7 +126,6 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
   <!-- End #main -->
 
 
-  
   <!-- Modal -->
 <div class="edit_popup">
   <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -121,27 +137,29 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
         </div>
         <div class="modal-body">
           <div class="edit_details">
-          <form action="{{ route('profile.update') }}" method="post">
+          <form action="{{ route('profile.update') }}" id="profileform" method="post">
                 {!! csrf_field() !!}
               <div class="edit_txt">
                 <input type="text" name="name" value="{{ $userName }}" placeholder="Your Name">
                 <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/user.svg') }}" width="20"></p>
               </div>
               <div class="edit_txt">
-                <input type="text" name="email" value="{{ $userEmail }}" placeholder="Your E-mail">
+                <input type="text" name="email" value="{{ $userEmail }}" readonly placeholder="Your E-mail">
                 <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/filled-email.svg') }}" width="20"></p>
               </div>
+              @if(!empty($userPassword))
               <div class="edit_txt">
-                <input type="text" name="" value="********" placeholder="Old Password">
-                <input type="hidden" name="password" value="{{ $userPassword }}" placeholder="Old Password">
+                <input type="password" name="password" id="password" value="" autocomplete="off" placeholder="Old Password">
+                <!-- <input type="hidden" name="password" value="{{ $userPassword }}" placeholder="Old Password"> -->
                 <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/lock.svg') }}" width="20"></p>
-                <p class="edit_icon_right"><img src="{{ URL::asset('public/front/img/eye.svg') }}" width="20"></p>
+                <p class="edit_icon_right"><img src="{{ URL::asset('public/front/img/eye.svg') }}" width="20" id="showPassword1"></p>
               </div>
               <div class="edit_txt">
-                <input type="password" name="Newpassword" id="passwordField" value="" placeholder="New Password">
+                <input type="password" name="Newpassword" id="Newpassword" value="" autocomplete="off" placeholder="New Password">
                 <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/lock.svg') }}" width="20"></p>
                 <p class="edit_icon_right" ><img src="{{ URL::asset('public/front/img/eye.svg') }}" width="20" id="showPassword"></p>
               </div>
+              @endif
               <div class="edit_txt">
                 <select name="gender" id="genderDropdown">
                   <option value="">Gender</option>
@@ -151,7 +169,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                 </select>
               </div>
               <div class="edit_txt">
-                <button type="submit">Save Changes</button>
+                <button type="submit" id="btnsave">Save Changes</button>
               </div>
             </form>
           </div>
@@ -165,9 +183,19 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
 @include('front.layout.footer')
 
 <script>
-  const passwordField = document.getElementById('passwordField');
-    const showPassword = document.getElementById('showPassword');
+  const passwordField1 = document.getElementById('password');
+    const showPassword1 = document.getElementById('showPassword1');
 
+    showPassword1.addEventListener('mouseover', function () {
+        passwordField1.type = 'text';
+    });
+
+    showPassword1.addEventListener('mouseout', function () {
+        passwordField1.type = 'password';
+      });
+
+      const passwordField = document.getElementById('Newpassword');
+    const showPassword = document.getElementById('showPassword');
     showPassword.addEventListener('mouseover', function () {
         passwordField.type = 'text';
     });
@@ -220,3 +248,53 @@ $(document).ready(function() {
         }
     });
 </script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function() {
+            $('#profileform').validate({
+                rules: {
+                  password: {
+                        required: true,
+                        minlength: 8, // Minimum length of 8 characters
+                    },
+                    Newpassword: {
+                        required: true,
+                        minlength: 8, // Minimum length of 8 characters
+                    },
+                  
+                },
+                messages: {
+                  password: {
+                    required: "This field is required",
+                minlength: "Password must be at least 8 characters",
+                    },
+                    Newpassword: {
+                      required: "This field is required",
+                minlength: "Password must be at least 8 characters",
+                    },
+                }, 
+            });
+        });
+
+        $('#btnsave').click(function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+        if($('#profileform').valid())
+          {
+            var form = document.getElementById("profileform");
+            form.action = "{{ route('profile.update') }}";
+            form.submit();
+          }
+      });
+    </script>
+
+<script>
+            window.setTimeout(function() {
+                $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                    $(this).remove();
+                });
+            }, 3000);
+        </script>

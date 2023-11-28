@@ -12,6 +12,8 @@ use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
+
 
 
 class MessageController extends Controller
@@ -111,17 +113,18 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
                 }
         
-                $messageAi = array(
-                    'profile_id'=> $profile_id,
-                    'user_id'=> session('user_id'),
-                    'sender_id'=> session('user_id'),
-                    'receiver_id'=>  $profile_id,
-                    'status'=> 'Active',
-                    'message_text'=> $ai_message,
-                    'media_url' => $message_url,
-                    'updated_at' => now(),
-                );
-                if($message_url){
+        
+                if(filter_var($message_url, FILTER_VALIDATE_URL) !== false){
+                    $messageAi = array(
+                        'profile_id'=> $profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=>  $profile_id,
+                        'status'=> 'Active',
+                        'message_text'=> $ai_message,
+                        'media_url' => $message_url,
+                        'updated_at' => now(),
+                    );
                     Messages::create($messageAi);
                     $creditAdd = Managecredit::updateOrInsert(
                         ['user_id' => $userId->id],
@@ -143,6 +146,15 @@ class MessageController extends Controller
                         ]
                     );
                 }else{
+                    $messageAi = array(
+                        'profile_id'=> $profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=>  $profile_id,
+                        'status'=> 'Active',
+                        'message_text'=> $ai_message,
+                        'updated_at' => now(),
+                    );
                     Messages::create($messageAi);
                     $creditAdd = Managecredit::updateOrInsert(
                         ['user_id' => $userId->id],
@@ -167,7 +179,7 @@ class MessageController extends Controller
             }
         }
     }
-    public function index($id)
+    public function index(Request $request, $id)
     {
         Messages::whereNull('user_id')
         ->whereNull('sender_id')
@@ -389,12 +401,14 @@ class MessageController extends Controller
             } else {
                 return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
             }
+          
+        
             $data = '{
                 "input": {
                     "api_name": "txt2img",
                     "prompt": "'.$prompt.'",
                     "restore_faces": '.$restore_faces.',
-                    "negative_prompt": "'. $show .', '. $negative_prompt.', '.$globle_realistic_prompts.', '.$globle_realistic_terms.'",
+                    "negative_prompt": "'. $show .', '. str_replace(["\n", "\r"], ' ', $negative_prompt).', '.str_replace(["\n", "\r"], ' ', $globle_realistic_prompts).', '.str_replace(["\n", "\r"], ' ', $show).'",
                     "seed": '.$seed.',
                     "override_settings": {
                         "sd_model_checkpoint": ""
@@ -409,9 +423,8 @@ class MessageController extends Controller
                     "email": "'.$email.'"
                 }
             }';
-                // echo "<pre>";
-                // print_r($data);
-                // die;
+
+
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
@@ -422,7 +435,7 @@ class MessageController extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>$data,
+                CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer '.env('AI_IMAGE_KEY'),
@@ -460,37 +473,30 @@ class MessageController extends Controller
                 $response_Base64 = curl_exec($curl);
                 curl_close($curl);
 
-           
-
                 $response_Base64 = json_decode($response_Base64, true);
                 if (isset($response_Base64['output']['images'][0])) {
                     $response_image = $response_Base64['output']['images'][0];
                 } else {
                     return back()->withErrors(['ai_message' => 'Message and image not found in the response'])->withInput();
+                    exit;
                 }   
-                // echo "<pre>";
-                // print_r($response_Base64);
-                // die;
-                $base64Image = $response_image;
 
-                // Decode the Base64 image data
-                $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
-            
-                // Generate a unique filename for the image
-                $imageName = uniqid() . '.png';
-            
-                // Specify the storage disk you want to use (e.g., 'public' or 's3')
-                $disk = 'public';
-            
-                // Save the image to the specified disk
-                Storage::disk($disk)->put($imageName, $imageData);
-            
-                // Generate the URL for the saved image
-                $imageUrl = Storage::disk($disk)->url('/app/public/'.$imageName);
-                // return response()->json(['image_url' => $imageUrl]);
+                if(isset($response_image)){
+                    $base64Image = $response_image;
+                    // Decode the Base64 image data
+                    $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
+                    // Generate a unique filename for the image
+                    $imageName = uniqid() . '.png';
+                    $image = Image::make(imagecreatefromstring($imageData));
+                    $modifiedImagePath = storage_path($imageName);
+                    // Remove all EXIF data from the image
+                    $image->save($modifiedImagePath);
+                    $image->exif([]);
+                    $image->response('png');
+                    return url('storage/'.$imageName);
+                }
 
-            return $imageUrl;
-       
+               return '';
     }
 
 

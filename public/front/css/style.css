@@ -384,6 +384,20 @@ h6 {
   }
 }
 
+.current_plan_box {
+  /* background: linear-gradient(90deg,#2a1522,#1d1d1d); */
+  /* background: linear-gradient(90deg, #B473E0 0%, #B473E0 100%); */
+  background: linear-gradient(91deg, #B473E0 -130%, #1d1d1d 81%);
+  border: 1px solid rgb(64 64 64);
+  border-radius: 10px;
+  margin: 70px 0px !important;
+  margin-top: 25px !important;
+}
+
+div#pay_txt p {
+  margin: 5px;
+}
+
 section.own_ai_section {
   margin-top: 24px;
   position: relative;
@@ -2271,6 +2285,12 @@ a.change_plan_btn {
 /*---------------------------------
 #Profile Setting Page End
 ----------------------------------*/
+@media (min-width: 414px) and (max-width: 736px) {
+  .edit_popup .modal-dialog {
+    max-width: 395px;
+  }
+}
+
 
 @media (max-width: 1199px) {
   #header {
@@ -2736,4 +2756,3 @@ input {
   font-weight: 700;
   font-size: 35px;
 }
-

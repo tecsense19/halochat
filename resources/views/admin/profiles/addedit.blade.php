@@ -95,8 +95,7 @@ $get_voice = json_decode($get_voice, true);
 
                             <div class="form-group">
                                 <label for="systempromt">System prompt</label>
-                                <input type="text" class="form-control" id="system_prompt" name="system_prompt"
-                                    value="{{ $system_prompt }}" placeholder="System prompt">
+                                <textarea class="form-control custom-min-height" name="system_prompt" id="system_prompt" cols="30" rows="10" placeholder="System prompt">{{ $system_prompt }}</textarea>
                             </div>
                             @error('system_prompt')
                             <span class="text-danger">{{ $message }}</span>
@@ -104,8 +103,8 @@ $get_voice = json_decode($get_voice, true);
 
                             <div class="form-group">
                                 <label for="systempromt">System instruction</label>
-                                <input type="text" class="form-control" id="system_instruction" name="system_instruction"
-                                    value="{{ $system_instruction }}" placeholder="instruction">
+                                <textarea class="form-control custom-min-height" name="system_instruction" id="system_instruction" cols="30" rows="10" placeholder="System instruction">{{ $system_instruction }}</textarea>
+                                
                             </div>
                             @error('system_instruction')
                             <span class="text-danger">{{ $message }}</span>
@@ -115,8 +114,9 @@ $get_voice = json_decode($get_voice, true);
                             
                             <div class="form-group">
                                 <label for="promt">Image Prompt</label>
-                                <input type="text" class="form-control" id="prompt" name="prompt"
-                                    value="{{ $prompt }}" placeholder="Image prompt">
+
+                                <textarea class="form-control custom-min-height" name="prompt" id="prompt" cols="30" rows="10" placeholder="prompt">{{ $prompt }}</textarea>
+                                
                             </div>
                             @error('prompt')
                             <span class="text-danger">{{ $message }}</span>
@@ -125,8 +125,7 @@ $get_voice = json_decode($get_voice, true);
                             
                             <div class="form-group">
                                 <label for="negative_prompt">Negative prompt</label>
-                                <input type="text" class="form-control" id="negative_prompt" name="negative_prompt"
-                                    value="{{ $negative_prompt }}" placeholder="Negative prompt">
+                                <textarea class="form-control custom-min-height" name="negative_prompt" id="negative_prompt" cols="30" rows="10" placeholder="Negative prompt">{{ $negative_prompt }}</textarea>
                             </div>
                             @error('negative_prompt')
                             <span class="text-danger">{{ $message }}</span>

@@ -47,8 +47,8 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
                             {!! csrf_field() !!}
                             <div class="form-group">
                                 <label for="Name">Globle Realistic Prompts</label>
-                                <input type="text" class="form-control" id="globle_realistic_prompts" id="globle_realistic_prompts"
-                                    value="{{ $globle_realistic_prompts }}" name="globle_realistic_prompts" placeholder="Globle Realistic Prompts">
+
+                                <textarea class="form-control custom-min-height" name="globle_realistic_prompts" id="globle_realistic_prompts" cols="30" rows="10" placeholder="Globle Realistic Prompts">{{ $globle_realistic_prompts }}</textarea>
                                     <input type="hidden" value="realistic" name="type"> 
                                     @error('globle_realistic_prompts')
                             <span class="text-danger">{{ $message }}</span>
@@ -58,8 +58,8 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
                          
                             <div class="form-group">
                                 <label for="Name">Globle Realistic Terms</label>
-                                <input type="text" class="form-control" id="globle_realistic_terms" id="globle_realistic_terms"
-                                    value="{{ $globle_realistic_terms }}" name="globle_realistic_terms" placeholder="Globle Realistic Terms">
+                                <textarea class="form-control custom-min-height" name="globle_realistic_terms" id="globle_realistic_terms" cols="30" rows="10" placeholder="Globle Realistic Terms">{{ $globle_realistic_terms }}</textarea>
+                                
                                     @error('globle_realistic_terms')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror

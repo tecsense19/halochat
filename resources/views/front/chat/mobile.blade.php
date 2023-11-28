@@ -231,7 +231,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                   
                                     <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
-                                        <input type="text" name="message" id="type_message" placeholder="Type action message">
+                                        <input type="text" name="message" id="type_message" autocomplete="off" placeholder="Type action message">
                                         <div class="dropdown">
                                             <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
@@ -584,16 +584,22 @@ $(document).ready(function() {
             }, 5000);
 
             setTimeout(function() {
-                updateLoading('50%', 'Almost There...');
-            }, 9000);
+                    updateLoading('50%', 'Almost There...');
+                }, 9000);
+                setTimeout(function() {
+                    updateLoading('60%', 'Almost There...');
+                }, 12000);
+                setTimeout(function() {
+                    updateLoading('70%', 'Almost There...');
+                }, 16000);
 
-            setTimeout(function() {
-                updateLoading('80%', 'Complete');
-            }, 13000);
+                setTimeout(function() {
+                    updateLoading('80%', 'Complete');
+                }, 19000);
 
-            setTimeout(function() {
-                updateLoading('100%', 'Complete');
-            }, 17000);
+                setTimeout(function() {
+                    updateLoading('100%', 'Complete');
+                }, 22000);
             // You can add your condition or code here
         } 
 

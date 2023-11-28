@@ -20863,3 +20863,8 @@ button.file-upload-browse.btn.btn-primary {
 .form-control {
   color: white !important;
 }
+
+
+.custom-min-height {
+  min-height: 10.875rem !important; /* Adjust this value as needed */
+}

@@ -50,8 +50,8 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
                             
                             <div class="form-group">
                                 <label for="Name">Globle Anime Prompts</label>
-                                <input type="text" class="form-control" id="globle_anime_prompts" id="globle_anime_prompts"
-                                    value="{{ $globle_anime_prompts }}" name="globle_anime_prompts" placeholder="Globle Anime Prompts">
+                                <textarea class="form-control custom-min-height" name="globle_anime_prompts" id="globle_anime_prompts" cols="30" rows="10" placeholder="Globle Anime Prompts">{{ $globle_anime_prompts }}</textarea>
+                               
                                     <input type="hidden" value="anime" name="type"> 
                             </div>
                             @error('globle_anime_prompts')
@@ -61,8 +61,7 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
 
                             <div class="form-group">
                                 <label for="Name">Globle Anime Terms</label>
-                                <input type="text" class="form-control" id="globle_anime_terms" id="globle_anime_terms"
-                                    value="{{ $globle_anime_terms }}" name="globle_anime_terms" placeholder="Globle Anime Terms">
+                                <textarea class="form-control custom-min-height" name="globle_anime_terms" id="globle_anime_terms" cols="30" rows="10" placeholder="Globle Anime Terms">{{ $globle_anime_terms }}</textarea>
                                     @error('globle_anime_terms')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror

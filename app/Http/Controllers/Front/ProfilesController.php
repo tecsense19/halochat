@@ -37,13 +37,30 @@ class ProfilesController extends Controller
 
             $user->name = $input['name']; 
             $user->email = $input['email']; 
-            if($input['Newpassword']){
-                $user->password = $input['Newpassword']; 
-            }
             $user->gender = $input['gender']; 
             $user->save();
+            // if($input['Newpassword']){
+            //     $user->password = $input['Newpassword']; 
+            // }
+            if(isset($input['Newpassword']))
+            {
+                $request->validate([
+                    'password' => 'required|min:8',
+                    'Newpassword' => 'required|min:8'
+                 ]);
 
-            return redirect()->route('profile.index');
+                if ($user) {
+                    if(Hash::check($input['password'], $user->password)){
+                        $user->password = Hash::make($input['Newpassword']);
+                        $user->save();
+                    }else{
+                        return redirect()->route("profile.index")->withError('Old password does not match');
+                    }
+                    // Update the password field with the new hashed password
+                
+                }
+            }
+            return redirect()->route('profile.index')->withSuccess('Profile updated successfully');
         }
         public function delete(request $request)
         {

@@ -34,10 +34,11 @@ class UserController extends Controller
     {
     return view("front.register");
     }
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         if (session()->has('authenticated_user')) {
             $profileList = Profile::with('profileImages')->get();
+            $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
             return view("front.dashboard", compact('profileList'));
         } else {
             $profileList = Profile::with('profileImages')->get();

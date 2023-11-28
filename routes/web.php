@@ -67,7 +67,7 @@ use App\Http\Controllers\PaymentController;
     
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
-    Route::post('/profile', [ProfilesController::class, 'update'])->name('profile.update');
+    Route::post('/profile/update', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
     Route::post('/profile/delete', [ProfilesController::class, 'delete'])->name('profile.delete');
     Route::get('/terms', [UserController::class, 'terms'])->name('terms.terms');
