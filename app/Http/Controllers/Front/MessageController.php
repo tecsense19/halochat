@@ -117,6 +117,7 @@ class MessageController extends Controller
                             ]
                         );
                         }else{
+                            sleep(30);
                                 $curl = curl_init();
                                 curl_setopt_array($curl, array(
                                 CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
@@ -420,9 +421,6 @@ class MessageController extends Controller
                 }
             }';
 
-            // echo "<pre>";
-            // print_r($data);
-            // die;
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
@@ -450,7 +448,7 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
-                sleep(10);
+                sleep(60);
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/'.'status/'.$response_image,
