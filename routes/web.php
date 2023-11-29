@@ -37,19 +37,20 @@ use App\Http\Controllers\PaymentController;
     Route::post('users/store', [UsersController::class, 'store'])->name('users.store');
     Route::get('users/suspend/{id}', [UsersController::class, 'suspend'])->name('users.suspend');
     Route::get('users/active/{id}', [UsersController::class, 'active'])->name('users.active');
-    
     Route::get('/users/credit_debit/{id}', [UsersController::class, 'used_credit_debit'])->name('used_credit_debit');
-    Route::get('/users/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
+    Route::get('/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
+    Route::get('/landerpage', [UsersController::class, 'landerpage'])->name('landerpage');
+    Route::post('/save', [UsersController::class, 'addLanderpagedata'])->name('addLanderpagedata');
     
     
    // ::Profiles
-    Route::get('/profiles', [ProfileController::class, 'addProfiles'])->name('profile');
-    Route::get('profiles/list', [ProfileController::class, 'profiles'])->name('profile.list');
+    Route::get('/add', [ProfileController::class, 'addProfiles'])->name('profile');
+    Route::get('/list', [ProfileController::class, 'profiles'])->name('profile.list');
     Route::get('profiles/destroy/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('profiles/store', [ProfileController::class, 'store'])->name('profile.store');
-    Route::get('/profiles/globleprompts', [ProfileController::class, 'addGlobleprompts'])->name('profile.globleprompt');
-    Route::get('/profiles/globlepromptrealist', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
+    Route::get('/globlepromptanime', [ProfileController::class, 'addGlobleprompts'])->name('profile.globleprompt');
+    Route::get('/globlepromptreal', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
     Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
     Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
 });
@@ -60,7 +61,7 @@ use App\Http\Controllers\PaymentController;
     Route::get('/explore', [UserController::class, 'dashboard'])->name('dashboard');
     Route::post('store', [UserController::class, 'store'])->name('store');
     Route::get('/login', [UserController::class, 'login'])->name('login');
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/logout', [UserController::class, 'logout'])->name('front.logout');
     Route::get('/register', [UserController::class, 'register'])->name('register');
     Route::get('/chat', [UserController::class, 'chat'])->name('chat.chat');
   

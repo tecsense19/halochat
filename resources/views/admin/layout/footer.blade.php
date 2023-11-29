@@ -28,6 +28,7 @@
     <script src="{{ URL::asset('public/js/misc.js') }}"></script>
     <script src="{{ URL::asset('public/js/settings.js') }}"></script>
     <script src="{{ URL::asset('public/js/todolist.js') }}"></script>
+  
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{{ URL::asset('public/js/dashboard.js') }}"></script>

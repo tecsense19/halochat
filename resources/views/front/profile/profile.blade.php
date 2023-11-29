@@ -247,7 +247,7 @@ $(document).ready(function() {
                 .then(function (response) {
                     // Handle the response from the server, e.g., show a success message
                     alert('Account deleted successfully.');
-                    window.location.href = "{{ route('logout') }}";
+                    window.location.href = "{{ route('front.logout') }}";
                 })
                 .catch(function (error) {
                     // Handle errors, e.g., show an error message

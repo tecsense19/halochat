@@ -74,7 +74,7 @@
             </a>
           </li> -->
           
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" >
             <a class="nav-link" href="{{ route('admin.users') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-account-multiple"></i>
@@ -122,6 +122,16 @@
               <span class="menu-title">Sale Credit</span>
             </a>
           </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ route('admin.landerpage') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-playlist-play"></i>
+              </span>
+              <span class="menu-title">Lander page</span>
+            </a>
+          </li>
+
           <!-- <li class="nav-item menu-items">
             <a class="nav-link" href="pages/forms/basic_elements.html">
               <span class="menu-icon">

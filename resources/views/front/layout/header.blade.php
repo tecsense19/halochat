@@ -28,7 +28,7 @@
         <a href="{{ route('dashboard') }}"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}"></a>
     </div>
     <ul>
-        @if(auth()->check() || session()->has('authenticated_user'))
+        @if(session()->has('authenticated_user'))
             <!-- User is logged in or session variable is set, display something else -->
             <!-- Add your authenticated user content here -->
             
@@ -53,7 +53,7 @@
                         <li><a href="{{ route('gallery.gallery') }}"><img src="{{ URL::asset('public/front/img/gallery.svg') }}"> Gallery</a></li>
                         <li><a href="{{ route('subscription.subscription') }}"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Subscription</a></li>
                         <li><a href="#"><img src="{{ URL::asset('public/front/img/affiliate.svg') }}"> Affiliate</a></li>
-                        <li><a href="{{ route('logout') }}"><img src="{{ URL::asset('public/front/img/logout.svg') }}"> Log Out</a></li>
+                        <li><a href="{{ route('front.logout') }}"><img src="{{ URL::asset('public/front/img/logout.svg') }}"> Log Out</a></li>
                       </ul>
                     </div>
                 </div>

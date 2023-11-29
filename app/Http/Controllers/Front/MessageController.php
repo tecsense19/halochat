@@ -420,7 +420,9 @@ class MessageController extends Controller
                     "email": "'.$email.'"
                 }
             }';
-
+            // echo "<pre>";
+            // print_r($data);
+            // die;
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',

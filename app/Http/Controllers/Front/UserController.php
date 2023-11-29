@@ -25,8 +25,11 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-    Auth::logout();
-    $request->session()->invalidate();
+    // Auth::logout();
+    $request->session()->forget('authenticated_user');
+    $request->session()->forget('user_id');
+    $request->session()->forget('sessionprofile_id');
+    // $request->session()->invalidate();
     // $request->session()->regenerateToken();
     $profileList = Profile::with('profileImages')->get();
     return view("front.dashboard", compact('profileList'));

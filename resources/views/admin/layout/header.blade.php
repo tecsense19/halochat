@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ URL::asset('public/vendors/owl-carousel-2/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('public/vendors/owl-carousel-2/owl.theme.default.min.css') }}">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

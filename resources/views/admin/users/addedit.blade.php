@@ -13,8 +13,7 @@ $contact_us = isset($userList->contact_us) ? $userList->contact_us : '';
 $created_at = isset($userList->created_at) ? $userList->created_at : '';
 $updated_at = isset($userList->updated_at) ? $userList->updated_at : '';
 $deleted_at = isset($userList->deleted_at) ? $userList->deleted_at : '';
-
-
+$totalcredit = isset($userList->credit[0]->totalcredit) ? $userList->credit[0]->totalcredit : '';
 ?>
 @include('admin.layout.header')
 
@@ -88,6 +87,16 @@ $deleted_at = isset($userList->deleted_at) ? $userList->deleted_at : '';
                                 
                             </div>
                             @error('chatuser_id')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+
+                            <div class="form-group">
+                                <label for="email">Total credit</label>
+                                <input type="text" class="form-control" id="totalcredit" 
+                                    value="{{ $totalcredit  }}" name="totalcredit" placeholder="total credit">
+                                </div>
+                            @error('totalcredit')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 

@@ -1,5 +1,4 @@
 <style>
-  <style>
   i.mdi.mdi-block-helper::before {
     margin-top: 3px;
 }

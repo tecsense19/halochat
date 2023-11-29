@@ -210,8 +210,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                             @else
                                             <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#false_thumb"
-                                                data-bs-messageid="{{ $chat_user->message_id }}"><img
+                                            <a href="#" class="message-link" data-bs-toggle="modal" data-bs-target="#false_thumb"
+                                                data-bs-messageid="{{$chat_user->message_id}}"><img
                                                     src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
                                             @endif
                                             @endif
@@ -437,6 +437,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         <p>Write your message here.</p>
                         <textarea id="messageTextarea" placeholder="What is the issue, how could it be improved?"
                             rows="4" cols="34" style="background: black;color: white;width: 100%;border-radius: 5px;padding: 5px 10px;"></textarea>
+                            <input type="hidden" name="chat_like_message_id" id="chat_like_message_id" />
                         <div class="pasination">
 
                             <a href="#" id="sendLink"  style="width: 100%;text-align: center;" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">Send</a>
@@ -580,7 +581,9 @@ $(document).ready(function() {
         $('.sidebar ul.nav').toggleClass('isClosed');
     });
 
-
+    $('body').on('click', '.message-link', function(e){
+        $('#chat_like_message_id').val($(this).data('bs-messageid'))
+    })
 
 
     $('body').on('click', '#new_message', function() {
@@ -878,7 +881,7 @@ function likedMessage(id) {
 document.getElementById('sendLink').addEventListener('click', function(e) {
     e.preventDefault();
     var messageTextarea = document.getElementById('messageTextarea');
-    var messageId = document.querySelector('[data-bs-messageid]').getAttribute('data-bs-messageid');
+    var messageId = $('#chat_like_message_id').val();
     unlikedMessage(messageTextarea.value, messageId);
 });
 
