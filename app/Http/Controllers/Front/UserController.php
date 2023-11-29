@@ -23,9 +23,11 @@ class UserController extends Controller
     return view("front.login");
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-    Session::flush();
+    Auth::logout();
+    $request->session()->invalidate();
+    // $request->session()->regenerateToken();
     $profileList = Profile::with('profileImages')->get();
     return view("front.dashboard", compact('profileList'));
     }
@@ -272,7 +274,9 @@ class UserController extends Controller
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
-        $request->session()->regenerate();
+        $request->session()->put('authenticated_user', true);
+        $request->session()->put('user_id', auth()->user()->id);
+        // $request->session()->regenerate();   
         return redirect()->route('dashboard')->withSuccess('You have successfully registered & logged in!');
     }
 
@@ -282,7 +286,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
+     
         $userId = User::where('email', $request->email)->first();
         if(!empty($userId->deleted_at))
         {
@@ -297,7 +301,7 @@ class UserController extends Controller
                 }
                 $request->session()->put('authenticated_user', true);
                 $request->session()->put('user_id', auth()->user()->id);
-                $request->session()->regenerate();
+                // $request->session()->regenerate();
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
             else{

@@ -20868,3 +20868,8 @@ button.file-upload-browse.btn.btn-primary {
 .custom-min-height {
   min-height: 10.875rem !important; /* Adjust this value as needed */
 }
+
+
+textarea.form-control {
+  line-height: inherit;
+}

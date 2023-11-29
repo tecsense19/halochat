@@ -12,6 +12,8 @@ use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
+
 
 
 class MessageController extends Controller
@@ -62,9 +64,11 @@ class MessageController extends Controller
                 if (str_contains($message_show, 'show')) {
                     $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
                     
-                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$user->negative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps);
-                    } 
-                $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId, $message_url);
+                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
+                    }
+                        $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId, $message_url);
+                    
+                
             }
             return redirect()->back();
         }else{
@@ -82,98 +86,94 @@ class MessageController extends Controller
             if($creditAddManage->currentcredit == 0){
                 return "<script>alert('Your trail credit is over');</script>";
             }else{
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>'{
-                    "user_message": "'.$message.'"
-                }',
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json',
-                    'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
-                ),
-                ));
+                    if(filter_var($message_url, FILTER_VALIDATE_URL) !== false){
+                        $messageAi = array(
+                            'profile_id'=> $profile_id,
+                            'user_id'=> session('user_id'),
+                            'sender_id'=> session('user_id'),
+                            'receiver_id'=>  $profile_id,
+                            'status'=> 'Active',
+                            'media_url' => $message_url,
+                            'updated_at' => now(),
+                        );
+                        Messages::create($messageAi);
+                        $creditAdd = Managecredit::updateOrInsert(
+                            ['user_id' => $userId->id],
+                            [
+                                'currentcredit' => $creditAddManage->currentcredit - 5,
+                                'usedcredit' => $creditAddManage->usedcredit + 1,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]
+                        );
 
-                $response = curl_exec($curl);
-
-                curl_close($curl);
-                $responseArray = json_decode($response, true);
-                if (isset($responseArray['data']['ai_message'])) {
-                    $ai_message = $responseArray['data']['ai_message'];
-                } else {
-                    return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
+                        Usedcredites::Insert(
+                            [
+                                'user_id' => $userId->id,
+                                'debit' => 5,
+                                'credit_debit_date' => now(),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]
+                        );
+                        }else{
+                                $curl = curl_init();
+                                curl_setopt_array($curl, array(
+                                CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
+                                CURLOPT_RETURNTRANSFER => true,
+                                CURLOPT_ENCODING => '',
+                                CURLOPT_MAXREDIRS => 10,
+                                CURLOPT_TIMEOUT => 0,
+                                CURLOPT_FOLLOWLOCATION => true,
+                                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                                CURLOPT_CUSTOMREQUEST => 'POST',
+                                CURLOPT_POSTFIELDS =>'{
+                                    "user_message": "'.$message.'"
+                                }',
+                                CURLOPT_HTTPHEADER => array(
+                                    'Content-Type: application/json',
+                                    'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+                                ),
+                                ));
+                
+                                $response = curl_exec($curl);
+                
+                                curl_close($curl);
+                                $responseArray = json_decode($response, true);
+                                if (isset($responseArray['data']['ai_message'])) {
+                                    $ai_message = $responseArray['data']['ai_message'];
+                                } else {
+                                    return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
+                                }
+                                $messageAi = array(
+                                    'profile_id'=> $profile_id,
+                                    'user_id'=> session('user_id'),
+                                    'sender_id'=> session('user_id'),
+                                    'receiver_id'=>  $profile_id,
+                                    'status'=> 'Active',
+                                    'message_text'=> $ai_message,
+                                    'updated_at' => now(),
+                                );
+                                Messages::create($messageAi);
+                                $creditAdd = Managecredit::updateOrInsert(
+                                    ['user_id' => $userId->id],
+                                    [
+                                        'currentcredit' => $creditAddManage->currentcredit - 1,
+                                        'usedcredit' => $creditAddManage->usedcredit + 1,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]
+                                );
+                                Usedcredites::Insert(
+                                    [
+                                        'user_id' => $userId->id,
+                                        'debit' => 1,
+                                        'credit_debit_date' => now(),
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]
+                                );
                 }
-        
-        
-                if(filter_var($message_url, FILTER_VALIDATE_URL) !== false){
-                    $messageAi = array(
-                        'profile_id'=> $profile_id,
-                        'user_id'=> session('user_id'),
-                        'sender_id'=> session('user_id'),
-                        'receiver_id'=>  $profile_id,
-                        'status'=> 'Active',
-                        'message_text'=> $ai_message,
-                        'media_url' => $message_url,
-                        'updated_at' => now(),
-                    );
-                    Messages::create($messageAi);
-                    $creditAdd = Managecredit::updateOrInsert(
-                        ['user_id' => $userId->id],
-                        [
-                            'currentcredit' => $creditAddManage->currentcredit - 5,
-                            'usedcredit' => $creditAddManage->usedcredit + 1,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
-
-                    Usedcredites::Insert(
-                        [
-                            'user_id' => $userId->id,
-                            'debit' => 5,
-                            'credit_debit_date' => now(),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
-                }else{
-                    $messageAi = array(
-                        'profile_id'=> $profile_id,
-                        'user_id'=> session('user_id'),
-                        'sender_id'=> session('user_id'),
-                        'receiver_id'=>  $profile_id,
-                        'status'=> 'Active',
-                        'message_text'=> $ai_message,
-                        'updated_at' => now(),
-                    );
-                    Messages::create($messageAi);
-                    $creditAdd = Managecredit::updateOrInsert(
-                        ['user_id' => $userId->id],
-                        [
-                            'currentcredit' => $creditAddManage->currentcredit - 1,
-                            'usedcredit' => $creditAddManage->usedcredit + 1,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
-                    Usedcredites::Insert(
-                        [
-                            'user_id' => $userId->id,
-                            'debit' => 1,
-                            'credit_debit_date' => now(),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
-                }
-              
             }
         }
     }
@@ -373,7 +373,7 @@ class MessageController extends Controller
         return redirect()->back();
     }
 
-    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale) {
 
         $curl = curl_init();
 
@@ -402,14 +402,14 @@ class MessageController extends Controller
             $data = '{
                 "input": {
                     "api_name": "txt2img",
-                    "prompt": "'.str_replace(["\n", "\r"], ' ', $prompt).'",
+                    "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $globle_realistic_prompts).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_terms).'",
                     "restore_faces": '.$restore_faces.',
-                    "negative_prompt": "'. $show .', '. str_replace(["\n", "\r"], ' ', $negative_prompt).', '.str_replace(["\n", "\r"], ' ', $globle_realistic_prompts).', '.str_replace(["\n", "\r"], ' ', $show).'",
+                    "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_prompt).'",
                     "seed": '.$seed.',
                     "override_settings": {
                         "sd_model_checkpoint": ""
                     },
-                    "cfg_scale": 13,
+                    "cfg_scale": '.$cfg_scale.',
                     "denoising_strength": '.$denoising_strength.',
                     "enable_hr": '.$enable_hr.',
                     "hr_scale":'.$hr_scale.',
@@ -419,6 +419,10 @@ class MessageController extends Controller
                     "email": "'.$email.'"
                 }
             }';
+
+            // echo "<pre>";
+            // print_r($data);
+            // die;
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
@@ -476,24 +480,36 @@ class MessageController extends Controller
                 }   
 
                 if(isset($response_image)){
-                    $base64Image = $response_image;
+                    // $base64Image = $response_image;
 
+                    // // Decode the Base64 image data
+                    // $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
+                
+                    // // Generate a unique filename for the image
+                    // $imageName = uniqid() . '.png';
+                
+                    // // Specify the storage disk you want to use (e.g., 'public' or 's3')
+                    // $disk = 'public';
+                
+                    // // Save the image to the specified disk
+                    // Storage::disk($disk)->put($imageName, $imageData);
+                
+                    // // Generate the URL for the saved image
+                    // $imageUrl = Storage::disk($disk)->url('/app/public/'.$imageName);
+                    // // return response()->json(['image_url' => $imageUrl]);
+                    // return $imageUrl;
+                    $base64Image = $response_image;
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
-                
                     // Generate a unique filename for the image
                     $imageName = uniqid() . '.png';
-                
-                    // Specify the storage disk you want to use (e.g., 'public' or 's3')
-                    $disk = 'public';
-                
-                    // Save the image to the specified disk
-                    Storage::disk($disk)->put($imageName, $imageData);
-                
-                    // Generate the URL for the saved image
-                    $imageUrl = Storage::disk($disk)->url('/app/public/'.$imageName);
-                    // return response()->json(['image_url' => $imageUrl]);
-                    return $imageUrl;
+                    $image = Image::make(imagecreatefromstring($imageData));
+                    $modifiedImagePath = storage_path($imageName);
+                    // Remove all EXIF data from the image
+                    $image->save($modifiedImagePath);
+                    $image->exif([]);
+                    $image->response('png');
+                    return url('storage/'.$imageName);
                 }
 
                return '';

@@ -35,13 +35,13 @@ class LoginRegisterController extends Controller
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
-        $request->session()->regenerate();
+        // $request->session()->regenerate();
         return redirect()->route('dashboard')->withSuccess('You have successfully registered & logged in!');
     }
 
     public function dashboard()
     {
-        if(Auth::check() && session()->has('authenticated_user'))
+        if(Auth::check() && session()->has('authenticated_admin'))
         {
             return view('admin.dashboard');
         }
@@ -59,8 +59,8 @@ class LoginRegisterController extends Controller
 
         if(Auth::attempt($credentials) && auth()->user()->role === "Admin")
         {
-            $request->session()->regenerate();
-            $request->session()->put('authenticated_user', true);
+            // $request->session()->regenerate();
+            $request->session()->put('authenticated_admin', true);
             return redirect()->route('admin.dashboard')->withSuccess('You have successfully logged in!');
         }
 
@@ -71,7 +71,7 @@ class LoginRegisterController extends Controller
     {
         Auth::logout();
         $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
         return redirect()->route('admin.login')->withSuccess('You have logged out successfully!');;
     } 
 }

@@ -112,7 +112,7 @@ $get_voice = json_decode($get_voice, true);
 
 
                             
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="promt">Image Prompt</label>
 
                                 <textarea class="form-control custom-min-height" name="prompt" id="prompt" cols="30" rows="10" placeholder="prompt">{{ $prompt }}</textarea>
@@ -129,7 +129,7 @@ $get_voice = json_decode($get_voice, true);
                             </div>
                             @error('negative_prompt')
                             <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            @enderror -->
 
                             <div class="form-group">
                                 <label for="ethnicity">Ethnicity</label>

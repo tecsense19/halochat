@@ -35,13 +35,12 @@ class ProfilesController extends Controller
        $userId = session('user_id');
        $user = User::where('id', $userId)->first();
 
-            $user->name = $input['name']; 
-            $user->email = $input['email']; 
-            $user->gender = $input['gender']; 
+        if(isset($input['name'])){
+            $user->name = $input['name'];
             $user->save();
-            // if($input['Newpassword']){
-            //     $user->password = $input['Newpassword']; 
-            // }
+            return redirect()->route('profile.index')->withSuccess('Profile updated successfully');
+            exit;
+        }
             if(isset($input['Newpassword']))
             {
                 $request->validate([

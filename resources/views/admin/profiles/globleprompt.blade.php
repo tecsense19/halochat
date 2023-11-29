@@ -17,6 +17,9 @@ $sampler_index = isset($profilegloble->sampler_index) ? $profilegloble->sampler_
 $email = isset($profilegloble->email) ? $profilegloble->email : '';
 $steps = isset($profilegloble->steps) ? $profilegloble->steps : '';
 $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '';
+$globle_anime_nagative_prompt = isset($profilegloble->globle_anime_nagative_prompt) ? $profilegloble->globle_anime_nagative_prompt : '';
+$cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
+
 
 ?>
 @if ($errors->has('ai_persona'))
@@ -68,13 +71,21 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
                             </div>
 
                             <div class="form-group">
+                                <label for="Name">Globle Anime nagative prompt</label>
+                                <textarea class="form-control custom-min-height" name="globle_anime_nagative_prompt" id="globle_anime_nagative_prompt" cols="30" rows="10" placeholder="Globle Anime Nagative prompt">{{ $globle_anime_nagative_prompt }}</textarea>
+                                    @error('globle_anime_nagative_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            </div>
+
+                            <!-- <div class="form-group">
                                 <label for="Name">Globle Anime Url</label>
                                 <input type="text" class="form-control" id="prompt_Url" id="prompt_Url"
                                     value="{{ $prompt_Url }}" name="prompt_Url" placeholder="Globle Anime Url">
                             </div>
                             @error('prompt_Url')
                             <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            @enderror -->
 
                             <div class="form-group">
                                 <label for="Name">Restore faces</label>
@@ -90,6 +101,15 @@ $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '
                                 <input type="text" class="form-control" id="seed" id="seed"
                                     value="{{ $seed }}" name="seed" placeholder="Seed">
                                     @error('seed')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Name">Cfg scale</label>
+                                <input type="text" class="form-control" id="cfg_scale" id="cfg_scale"
+                                    value="{{ $cfg_scale }}" name="cfg_scale" placeholder="cfg_scale">
+                                    @error('cfg_scale')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                             </div>

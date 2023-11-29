@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     public function addProfiles(Request $request)
     {
-    if(!session()->has('authenticated_user')){
+    if(!session()->has('authenticated_admin')){
         return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
     }
        $get_voice = $this->get_voice();
@@ -22,7 +22,7 @@ class ProfileController extends Controller
 
     public function profiles()
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         try{
@@ -35,7 +35,7 @@ class ProfileController extends Controller
 
     public function destroy($id)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         // Find the resource you want to delete
@@ -54,7 +54,7 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         $profileList = Profile::where('profile_id', $id)->first();
@@ -64,7 +64,7 @@ class ProfileController extends Controller
 
     public function get_voice()
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         $curl = curl_init();
@@ -91,18 +91,24 @@ class ProfileController extends Controller
     }
     public function addGlobleprompts(Request $request) 
     {
+        if(!session()->has('authenticated_admin')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         $profilegloble = Globle_prompts::where('type', 'anime')->first();
         return view('admin.profiles.globleprompt', compact('profilegloble'));
     }
     public function addGloblepromptrealist(Request $request) 
     {
+        if(!session()->has('authenticated_admin')){
+            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+        }
         $profilegloble = Globle_prompts::where('type', 'realistic')->first();
         return view('admin.profiles.globlepromptrealist', compact('profilegloble'));
     }
 
     public function store_globleprompts(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         try {
@@ -140,6 +146,9 @@ class ProfileController extends Controller
                     'email' => isset($input['email']) ? $input['email'] : '',
                     'steps' => isset($input['steps']) ? $input['steps'] : '',
                     'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
+                    'globle_anime_nagative_prompt' => isset($input['globle_anime_nagative_prompt']) ? $input['globle_anime_nagative_prompt'] : '',
+                    'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
+                    'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
                     'type' => $input['type'],
                 ]
             );
@@ -167,6 +176,9 @@ class ProfileController extends Controller
                     'email' => isset($input['email']) ? $input['email'] : '',
                     'steps' => isset($input['steps']) ? $input['steps'] : '',
                     'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
+                    'globle_anime_nagative_prompt' => isset($input['globle_anime_nagative_prompt']) ? $input['globle_anime_nagative_prompt'] : '',
+                    'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
+                    'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
                     'type' => $input['type'],
                 ]
             );
@@ -187,7 +199,7 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         try {
@@ -206,8 +218,8 @@ class ProfileController extends Controller
             'description' => 'required|string',
             'system_prompt' => 'required|string',
             'system_instruction' => 'required|string',
-            'prompt' => 'required|string',
-            'negative_prompt' => 'required|string',
+            // 'prompt' => 'required|string',
+            // 'negative_prompt' => 'required|string',
             'profile_personatype' => 'required',
         ]);
         
@@ -272,8 +284,8 @@ class ProfileController extends Controller
                     'first_message' => $input['first_message'],
                     'system_prompt' => $input['system_prompt'],
                     'system_instruction' => $input['system_instruction'],
-                    'prompt' => $input['prompt'],
-                    'negative_prompt' => $input['negative_prompt'],
+                    // 'prompt' => $input['prompt'],
+                    // 'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
                 ]);
                 $profileId = $input['profile_id'];
@@ -321,9 +333,6 @@ class ProfileController extends Controller
                 ));
 
                 $response = curl_exec($curl);
-                // echo "<pre>";
-                // print_r($response);
-                // die;
                 $responseArray = json_decode($response, true);
 
                 if (isset($responseArray['data']['persona_id'])) {
@@ -378,7 +387,7 @@ class ProfileController extends Controller
 
     public function deleteImage(Request $request)
         {
-            if(!session()->has('authenticated_user')){
+            if(!session()->has('authenticated_admin')){
                 return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
             }
             // Delete the old profile image file from the server

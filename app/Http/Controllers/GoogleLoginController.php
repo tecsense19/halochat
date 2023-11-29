@@ -90,7 +90,7 @@ class GoogleLoginController extends Controller
                         if($userId && $userId->deleted_at == null){
                             $request->session()->put('authenticated_user', true);
                             $request->session()->put('user_id', $userId->id);
-                            $request->session()->regenerate();
+                            // $request->session()->regenerate();
                             return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
                         }else{
                             return redirect()->route('login')->withErrors(['deleted' => 'Your account has been deleted please contact admin!'])->onlyInput('deleted');

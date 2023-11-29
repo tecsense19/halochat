@@ -31,7 +31,7 @@ use App\Http\Controllers\PaymentController;
     Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
     Route::get('/', [LoginRegisterController::class, 'login'])->name('login');
     Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
-    Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
+    Route::get('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
     Route::get('/users', [UsersController::class, 'users'])->name('users');
     Route::get('users/edit/{id}', [UsersController::class, 'edit'])->name('users.edit');
     Route::post('users/store', [UsersController::class, 'store'])->name('users.store');

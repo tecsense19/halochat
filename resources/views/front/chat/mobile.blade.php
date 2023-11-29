@@ -150,6 +150,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 @if(!empty($getAllReciverUser))
                                     @foreach ($getAllReciverUser as $chat_user)  
                                         @if($chat_user->sender_id == $chat_user->user_id)
+                                        @if(!empty($chat_user->message_text))
                                     <div class="col-12 mb-2">
                                         <div class="have_we_met">
                                             <div class="chat_content_box">
@@ -191,6 +192,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         </div>
                                     </div>
                                 </div>
+                                @endif  
                                     @if($chat_user->media_url)
                                     <div class="col-12 mt-4">
                                         <div class="chat_content_img">

@@ -54,7 +54,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                       <div class="admin_name">
                         <div class="nickname">
                           <h5>Nickname</h5>
-                          <a href="#" data-bs-toggle="modal" data-bs-target="#edit" ><img src="{{ URL::asset('public/front/img/edit.svg') }}"></a>
+                          <a href="#" data-bs-toggle="modal" data-bs-target="#editname" ><img src="{{ URL::asset('public/front/img/edit.svg') }}"></a>
                         </div>
                         <h6>{{ $userName }}</h6>
                       </div>
@@ -68,13 +68,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                       </div>
                     </div>
                     <div class="col-lg-4 col-6">
-                      <div class="admin_name">
-                        <div class="nickname">
-                          <h5>Gender</h5>
-                          <a href="#" data-bs-toggle="modal" data-bs-target="#edit"><img src="{{ URL::asset('public/front/img/edit.svg') }}"></a>
-                        </div>
-                        <h6>{{ $userGender }}</h6>
-                      </div>
+                      
                       @if(!empty($userPassword))
                       <div class="admin_name mb-0">
                         <div class="nickname">
@@ -132,17 +126,13 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5>Edit Nickname and Gender</h5>
+          <h5>Manage Password</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="edit_details">
           <form action="{{ route('profile.update') }}" id="profileform" method="post">
                 {!! csrf_field() !!}
-              <div class="edit_txt">
-                <input type="text" name="name" value="{{ $userName }}" placeholder="Your Name">
-                <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/user.svg') }}" width="20"></p>
-              </div>
               <div class="edit_txt">
                 <input type="text" name="email" value="{{ $userEmail }}" readonly placeholder="Your E-mail">
                 <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/filled-email.svg') }}" width="20"></p>
@@ -160,14 +150,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
                 <p class="edit_icon_right" ><img src="{{ URL::asset('public/front/img/eye.svg') }}" width="20" id="showPassword"></p>
               </div>
               @endif
-              <div class="edit_txt">
-                <select name="gender" id="genderDropdown">
-                  <option value="">Gender</option>
-                  <option selected="selected" value="{{ $userGender }}">{{ $userGender }}</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
+             
               <div class="edit_txt">
                 <button type="submit" id="btnsave">Save Changes</button>
               </div>
@@ -178,7 +161,36 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
     </div>
   </div>
 </div>
+<!-- NewModel -->
 
+<div class="edit_popup">
+  <div class="modal fade" id="editname" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Edit Nickname</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="edit_details">
+          <form action="{{ route('profile.update') }}" id="profileform" method="post">
+                {!! csrf_field() !!}
+              <div class="edit_txt">
+                <input type="text" name="name" value="{{ $userName }}" placeholder="Your Name">
+                <p class="edit_icon_left"><img src="{{ URL::asset('public/front/img/user.svg') }}" width="20"></p>
+              </div>
+            
+             
+              <div class="edit_txt">
+                <button type="submit" id="btnsave">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 @include('front.layout.footer')
 

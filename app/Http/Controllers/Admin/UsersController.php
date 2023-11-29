@@ -12,7 +12,7 @@ class UsersController extends Controller
 {
     public function users()
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         try{
@@ -26,7 +26,7 @@ class UsersController extends Controller
 
     public function used_credit_debit(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         $url = $request->url();
@@ -43,7 +43,7 @@ class UsersController extends Controller
 
     public function sell_report(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
 
@@ -57,7 +57,7 @@ class UsersController extends Controller
 
     public function addUsers(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
     //$get_voice = $this->get_voice();
@@ -66,7 +66,7 @@ class UsersController extends Controller
     
     public function edit($id)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         $userList = User::where('id', $id)->first();
@@ -75,7 +75,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        if(!session()->has('authenticated_user')){
+        if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
 
@@ -128,7 +128,7 @@ class UsersController extends Controller
 
         public function suspend($id)
         {
-            if(!session()->has('authenticated_user')){
+            if(!session()->has('authenticated_admin')){
                 return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
             }
             // Find the resource you want to delete
@@ -145,7 +145,7 @@ class UsersController extends Controller
 
         public function active($id)
         {
-            if(!session()->has('authenticated_user')){
+            if(!session()->has('authenticated_admin')){
                 return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
             }
             // Find the resource you want to delete
