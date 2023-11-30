@@ -1,12 +1,9 @@
 <?php 
-
 $id = isset($profilegloble->id) ? $profilegloble->id : '';
 $globle_realistic_prompts = isset($profilegloble->globle_realistic_prompts) ? $profilegloble->globle_realistic_prompts : '';
 $globle_anime_prompts = isset($profilegloble->globle_anime_prompts) ? $profilegloble->globle_anime_prompts : '';
 $globle_anime_terms = isset($profilegloble->globle_anime_terms) ? $profilegloble->globle_anime_terms : '';
 $globle_realistic_terms = isset($profilegloble->globle_realistic_terms) ? $profilegloble->globle_realistic_terms : '';
-
-
 $restore_faces = isset($profilegloble->restore_faces) ? $profilegloble->restore_faces : '';
 $seed = isset($profilegloble->seed) ? $profilegloble->seed : '';
 $denoising_strength = isset($profilegloble->denoising_strength) ? $profilegloble->denoising_strength : '';
@@ -18,6 +15,7 @@ $email = isset($profilegloble->email) ? $profilegloble->email : '';
 $steps = isset($profilegloble->steps) ? $profilegloble->steps : '';
 $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '';
 $globle_realistic_nagative_prompt = isset($profilegloble->globle_realistic_nagative_prompt) ? $profilegloble->globle_realistic_nagative_prompt : '';
+$wordsphrases = isset($profilegloble->wordsphrases) ? $profilegloble->wordsphrases : '';
 $cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
 
 ?>
@@ -75,6 +73,14 @@ $cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
                             @enderror
                             </div>
 
+                            <div class="form-group">
+                                <label for="Name">List of words and phrases</label>
+                                <textarea class="form-control custom-min-height" name="wordsphrases" id="wordsphrases" cols="30" rows="10" placeholder="Words and phrases">{{ $wordsphrases }}</textarea>
+                                    @error('wordsphrases')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            </div>
+                            
                             <!-- <div class="form-group">
                                 <label for="Name">Globle Realistic Url</label>
                                 <input type="text" class="form-control" id="prompt_Url" id="prompt_Url"

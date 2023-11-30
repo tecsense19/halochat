@@ -604,7 +604,11 @@ $(document).ready(function() {
                 }, 22000);
             // You can add your condition or code here
         } 
-
+        setTimeout(function() {
+                    $("#type_message").val('');
+                }, 100); // 3000 milliseconds (3 seconds)
+            // Make the input element readonly
+            $("#type_message").prop("readonly", true);
         const chatContentScrollnewchat = document.querySelector('.chat_content');
         chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
         

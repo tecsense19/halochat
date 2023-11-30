@@ -18,12 +18,25 @@ use Intervention\Image\Facades\Image;
 
 class MessageController extends Controller
 {
-    public function userMessage(Request $request){
-        
+    public function userMessage(Request $request)
+    {
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         $message_show = $_POST['message']; // Assuming you're getting the message from a form input
         $message_url = "";
-      
+        $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
+        // Explode the words and phrases and trim each element
+        $words = array_map('trim', explode(',', $globleprompts->wordsphrases));
+
+        foreach ($words as $word) {
+            // Use a regular expression with word boundaries to match whole words
+            $pattern = "/\b" . preg_quote($word, '/') . "\b/";
+
+            // Check if the pattern is present in the message
+            while (preg_match($pattern, $message_show)) {
+                // Remove the matched word from $message_show
+                $message_show = preg_replace($pattern, '', $message_show, 1);
+            }
+        }
 
             if(empty($user->profile_id)){
                 return back()->withErrors(['chat_persona' => 'Please select persona'])->withInput();  
@@ -38,7 +51,7 @@ class MessageController extends Controller
                 'sender_id'=> $user->profile_id,
                 'receiver_id'=>  session('user_id'),
                 'status'=> 'Active',
-                'message_text'=> $_POST['message'],
+                'message_text'=> $message_show,
                 'updated_at' => now(),
             );
             Messages::create($message);
@@ -60,17 +73,18 @@ class MessageController extends Controller
             if($creditAddManage->currentcredit == 0){
                 return redirect()->route('subscription.subscription');
                 
-            }else{
+            }else{  
+                // Now $message_show contains the original string with all matched words removed
+
                 if (str_contains($message_show, 'show')) {
-                    $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
-                    
-                    $message_url = $this->checkStringForWord($_POST['message'],$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
+                    $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
                     }
-                        $this->callAPI($userId->chatuser_id, $_POST['message'], $user->profile_id, $userId, $message_url);
+                        $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url);
                     
                 
             }
-            return redirect()->back();
+            // return redirect()->back();
+            return true;
         }else{
             
             return redirect()->route('login');
@@ -371,6 +385,24 @@ class MessageController extends Controller
     public function delete($id)
     {
         Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
+        $user = User::where('id', session('user_id'))->first();
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => env('AI_CHATUSER_URL').'/users'.'/'.$user->chatuser_id.'/chat',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+        ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        echo $response;
         return redirect()->back();
     }
 
@@ -420,9 +452,6 @@ class MessageController extends Controller
                     "email": "'.$email.'"
                 }
             }';
-            // echo "<pre>";
-            // print_r($data);
-            // die;
                  $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',

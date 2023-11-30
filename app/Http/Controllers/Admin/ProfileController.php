@@ -148,6 +148,7 @@ class ProfileController extends Controller
                     'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
                     'globle_anime_nagative_prompt' => isset($input['globle_anime_nagative_prompt']) ? $input['globle_anime_nagative_prompt'] : '',
                     'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
+                    'wordsphrases' => isset($input['wordsphrases']) ? $input['wordsphrases'] : '',
                     'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
                     'type' => $input['type'],
                 ]
@@ -178,6 +179,7 @@ class ProfileController extends Controller
                     'prompt_Url' => isset($input['prompt_Url']) ? $input['prompt_Url'] : '',
                     'globle_anime_nagative_prompt' => isset($input['globle_anime_nagative_prompt']) ? $input['globle_anime_nagative_prompt'] : '',
                     'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
+                    'wordsphrases' => isset($input['wordsphrases']) ? $input['wordsphrases'] : '',
                     'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
                     'type' => $input['type'],
                 ]

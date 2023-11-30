@@ -118,7 +118,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             ?>
                             <p>{{ $time }}</p>
                             <p>
-                                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
+                                <!-- <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g id="Group">
                                         <path id="Vector"
@@ -128,8 +128,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                             d="M14.4957 7.99965C14.0255 8.00473 13.6307 8.35538 13.5702 8.82175C13.1176 11.8974 10.2575 14.0238 7.18182 13.5712C6.13248 13.4168 5.14812 12.9691 4.34213 12.2796L5.06769 11.554C5.31087 11.3108 5.31082 10.9164 5.06754 10.6732C4.9508 10.5565 4.79245 10.4909 4.62736 10.4909H1.77123C1.42727 10.4909 1.14844 10.7697 1.14844 11.1137V13.9699C1.14853 14.3138 1.42741 14.5926 1.77138 14.5925C1.93647 14.5925 2.09482 14.5269 2.21156 14.4102L3.0212 13.6006C6.10801 16.3531 10.8418 16.0822 13.5943 12.9953C14.5699 11.9013 15.203 10.545 15.415 9.09457C15.4989 8.58061 15.1504 8.0959 14.6364 8.01194C14.5899 8.00432 14.5429 8.0002 14.4957 7.99965Z"
                                             fill="currentColor"></path>
                                     </g>
-                                </svg>
-                                <a href="{{ route('chat.delete', ['id' => $chat->profile_id]) }}">
+                                </svg> -->
+                                <a href="" data-bs-chatid="{{ $chat->profile_id }}" class="remove-chat">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -253,7 +253,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 @endif
                             </ul>
                             <div class="type_message">
-                                <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
+                                <!-- <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST"> -->
+                                <form id="message_form" method="post">
                                     {!! csrf_field() !!}
                                     <input type="text" name="message" id="type_message"
                                         placeholder="Type action message" autocomplete="off" required>
@@ -277,11 +278,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         </ul>
                                     </div>
                                     @if(session('user_id'))
-                                    <button type="button" id="new_message">
+                                    <button type="submit" id="new_message">
                                         <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
                                     </button>
                                     @else
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#please_register">
+                                    <button type="submit" data-bs-toggle="modal" data-bs-target="#please_register">
                                         <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
                                     </button>
                                     @endif
@@ -586,144 +587,193 @@ $(document).ready(function() {
     })
 
 
-    $('body').on('click', '#new_message', function() {
+    // $('body').on('click', '#new_message', function() {
         
-        if ($('#type_message').val()) {
-            $('.new_message').append(
-                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-                $('#type_message').val() + '</span></div></div>');
+    //     sendMessage()
 
-            $('.new_message').append(
-                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-            );
-           
-            var inputValue = $('#type_message').val();
-
-            // Check if the input contains the word "show"
-            if (inputValue.includes('show')) {
-                // The word "show" is present in the input
-                $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-                setTimeout(function() {
-                    updateLoading('0%', 'Please Wait');
-                }, 1000);
-
-                setTimeout(function() {
-                    updateLoading('20%', 'Processing...');
-                }, 5000);
-
-                setTimeout(function() {
-                    updateLoading('50%', 'Almost There...');
-                }, 9000);
-
-                setTimeout(function() {
-                    updateLoading('80%', 'Complete');
-                }, 13000);
-
-                setTimeout(function() {
-                    updateLoading('100%', 'Complete');
-                }, 17000);
-                // You can add your condition or code here
-            }
-
-            const chatContentScrollnewchat = document.querySelector('.chat_content');
-            chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
-            
-            document.addEventListener("DOMContentLoaded", function() {
-                // Select the message and dot elements
-                var messageElement = document.getElementById("chat_content_box");
-
-                // Display the three dots animation
-                messageElement.style.display = "block";
-
-
-                // Hide the three dots animation and show the message after 3 seconds
-                setTimeout(function() {
-                    messageElement.style.display = "none";
-                }, 3000); // 3000 milliseconds (3 seconds)
-            });
-
-            $('#message_form').submit();
-        }
-
-    })
+    // })
 });
 
+$("#message_form").submit(function (event) {
+    event.preventDefault()
+    sendMessage()
+});
 
-$("#type_message").keypress(function(e) {
-    
-    if (e.which == 13) {
-        if ($('#type_message').val()) {
-            $('.new_message').append(
-                '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-                $('#type_message').val() + '</span></div></div>');
+function sendMessage()
+{
+    if ($('#type_message').val()) {
+        $('.new_message').append(
+            '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+            $('#type_message').val() + '</span></div></div>');
 
-            $('.new_message').append(
-                '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-            );
-           
-            var inputValuekey = $('#type_message').val();
+        $('.new_message').append(
+            '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+        );
 
-            // Check if the input contains the word "show"
-            if (inputValuekey.includes('show')) {
-                // The word "show" is present in the input
-                $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-                setTimeout(function() {
-                    updateLoading('0%', 'Please Wait');
-                }, 1000);
+        var inputValue = $('#type_message').val();
 
-                setTimeout(function() {
-                    updateLoading('20%', 'Processing...');
-                }, 5000);
+                        // Check if the input contains the word "show"
+                        if (inputValue.includes('show')) {
+                            // The word "show" is present in the input
+                            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+                            setTimeout(function() {
+                                updateLoading('0%', 'Please Wait');
+                            }, 1000);
 
-                setTimeout(function() {
-                    updateLoading('50%', 'Almost There...');
-                }, 9000);
-                setTimeout(function() {
-                    updateLoading('60%', 'Almost There...');
-                }, 12000);
-                setTimeout(function() {
-                    updateLoading('70%', 'Almost There...');
-                }, 16000);
+                            setTimeout(function() {
+                                updateLoading('20%', 'Processing...');
+                            }, 5000);
 
-                setTimeout(function() {
-                    updateLoading('80%', 'Complete');
-                }, 19000);
+                            setTimeout(function() {
+                                updateLoading('50%', 'Almost There...');
+                            }, 25000);
 
-                setTimeout(function() {
-                    updateLoading('100%', 'Complete');
-                }, 22000);
-                // You can add your condition or code here
-            }
+                            setTimeout(function() {
+                                updateLoading('80%', 'Complete');
+                            }, 30000);
 
-            const chatContentScrollnewchatkey = document.querySelector('.chat_content');
-            chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
+                            setTimeout(function() {
+                                updateLoading('100%', 'Complete');
+                            }, 55000);
+                            // You can add your condition or code here
+                        }
+
+                        setTimeout(function() {
+                                $("#type_message").val('');
+                            }, 100); // 3000 milliseconds (3 seconds)
+                        // Make the input element readonly
+                        $("#type_message").prop("readonly", true);
+                        
+                        const chatContentScrollnewchat = document.querySelector('.chat_content');
+                        chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
+                        
+                        document.addEventListener("DOMContentLoaded", function() {
+                            // Select the message and dot elements
+                            var messageElement = document.getElementById("chat_content_box");
+
+                            // Display the three dots animation
+                            messageElement.style.display = "block";
+
+
+                            // Hide the three dots animation and show the message after 3 seconds
+                            setTimeout(function() {
+                                messageElement.style.display = "none";
+                            }, 3000); // 3000 milliseconds (3 seconds)
+                        });
             
-            // Get the "new_message" button element
-                // Clear the input field's value
-                setTimeout(function() {
-                    $("#type_message").css('color', 'transparent');
-                }, 1000); // 3000 milliseconds (3 seconds)
+                        var formData = $('#message_form').serialize();
 
-            
-            document.addEventListener("DOMContentLoaded", function() {
-                // Select the message and dot elements
-                var messageElementkey = document.getElementById("chat_content_box");
+                        $.ajax({
+                        url: "{{ route('chat.userMessage') }}",
+                        method: 'POST',
+                        dataType: 'json',
+                        data: formData, // Serialized form data
+                        success: function(data) {
+                            // console.log(data);
+                                location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error: ' + status);
+                        }
+                        });
 
-                // Display the three dots animation
-                messageElementkey.style.display = "block";
-
-
-                // Hide the three dots animation and show the message after 3 seconds
-                setTimeout(function() {
-                    messageElementkey.style.display = "none";
-                }, 3000); // 3000 milliseconds (3 seconds)
-            });
-
-            $('#message_form').submit();
-        }
-
+        // $('#message_form').submit();
     }
-});
+}
+
+
+// $(document).keypress(function(e) {
+    
+//     if (e.which == 13) {
+//         sendMessage()
+        // if ($('#type_message').val()) {
+        //     $('.new_message').append(
+        //         '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+        //         $('#type_message').val() + '</span></div></div>');
+
+        //     $('.new_message').append(
+        //         '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+        //     );
+           
+        //     var inputValuekey = $('#type_message').val();
+
+        //     // Check if the input contains the word "show"
+        //     if (inputValuekey.includes('show')) {
+        //         // The word "show" is present in the input
+        //         $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+        //         setTimeout(function() {
+        //             updateLoading('0%', 'Please Wait');
+        //         }, 1000);
+
+        //         setTimeout(function() {
+        //             updateLoading('20%', 'Processing...');
+        //         }, 5000);
+
+        //         setTimeout(function() {
+        //             updateLoading('50%', 'Almost There...');
+        //         }, 9000);
+        //         setTimeout(function() {
+        //             updateLoading('60%', 'Almost There...');
+        //         }, 12000);
+        //         setTimeout(function() {
+        //             updateLoading('70%', 'Almost There...');
+        //         }, 16000);
+
+        //         setTimeout(function() {
+        //             updateLoading('80%', 'Complete');
+        //         }, 19000);
+
+        //         setTimeout(function() {
+        //             updateLoading('100%', 'Complete');
+        //         }, 22000);
+        //         // You can add your condition or code here
+        //     }
+
+        //     const chatContentScrollnewchatkey = document.querySelector('.chat_content');
+        //     chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
+            
+        //     // Get the "new_message" button element
+        //         // Clear the input field's value
+        //         setTimeout(function() {
+        //             $("#type_message").val('');
+        //         }, 100); // 3000 milliseconds (3 seconds)
+        //     // Make the input element readonly
+        //     $("#type_message").prop("readonly", true);
+
+        //     document.addEventListener("DOMContentLoaded", function() {
+        //         // Select the message and dot elements
+        //         var messageElementkey = document.getElementById("chat_content_box");
+
+        //         // Display the three dots animation
+        //         messageElementkey.style.display = "block";
+
+
+        //         // Hide the three dots animation and show the message after 3 seconds
+        //         setTimeout(function() {
+        //             messageElementkey.style.display = "none";
+        //         }, 3000); // 3000 milliseconds (3 seconds)
+        //     });
+
+        //     var formData = $('#message_form').serialize();
+
+        //         $.ajax({
+        //         url: "{{ route('chat.userMessage') }}",
+        //         method: 'POST',
+        //         dataType: 'json',
+        //         data: formData, // Serialized form data
+        //         success: function(data) {
+        //             // console.log(data);
+        //                 location.reload();
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error('Error: ' + status);
+        //         }
+        //         });
+        //     // $('#message_form').submit();
+        // }
+
+//     }
+// });
 
 function updateLoading(progress, text) {
     $('#loading-progress').text(progress);
@@ -908,4 +958,45 @@ function unlikedMessage(message, messageId) {
         }
     });
 }
+</script>
+
+<script>
+//      
+$('.remove-chat').click(function(e) {
+    var chatid = $(this).data('bs-chatid');
+    var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
+    url = url.replace(':chatid', chatid);
+
+      e.preventDefault();
+            swal({
+            title: "Are you sure?",
+            text: "Wants to delete chat?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: url,
+                            type: 'GET',
+                            data: {
+                                _token: '{{ csrf_token() }}', // Include the CSRF token
+                                chatid: chatid
+                            },
+                        success: function(result) {
+                            swal("Poof! Your chat has been deleted!", {
+                                icon: "success",
+                            }).then((willDelete) => {
+                                if (willDelete) {
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    swal("Your chat is safe!");
+                }
+            });
+            });
 </script>

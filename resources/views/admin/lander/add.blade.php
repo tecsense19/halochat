@@ -290,6 +290,16 @@
                             <span class="text-danger">{{ $message }}</span>
                      @enderror
                      
+
+                     <!-- <div class="form-group">
+                        <label for="exampleInputEmail3">Testimonial Name</label>
+                        <input type="text" class="form-control" id="testimonial_name" name="testimonial_name" value="{{ isset($landerdata[0]->testimonial_name) ? $landerdata[0]->testimonial_name : '' }}" placeholder="testimonial_name">
+                        <label for="exampleInputEmail3">Testimonial content</label>
+                        <input type="text" class="form-control" id="testimonial_content" name="testimonial_content" value="{{ isset($landerdata[0]->testimonial_content) ? $landerdata[0]->testimonial_content : '' }}" placeholder="testimonial_content">
+                        <label for="exampleInputEmail3">Testimonial Image</label>
+                        <input type="text" class="form-control" id="testimonial_image" name="testimonial_image" value="{{ isset($landerdata[0]->testimonial_image) ? $landerdata[0]->testimonial_image : '' }}" placeholder="testimonial_image">
+                      </div> -->
+
                       <button type="submit" class="btn btn-primary me-2">Submit</button>
                       <button class="btn btn-dark">Cancel</button>
                     </form>

@@ -28,6 +28,7 @@ class Globle_prompts extends Authenticatable
         'globle_anime_terms',
         'globle_anime_nagative_prompt',
         'globle_realistic_nagative_prompt',
+        'wordsphrases',
         'cfg_scale',
         'restore_faces',
         'seed',

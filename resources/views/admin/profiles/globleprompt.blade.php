@@ -18,7 +18,9 @@ $email = isset($profilegloble->email) ? $profilegloble->email : '';
 $steps = isset($profilegloble->steps) ? $profilegloble->steps : '';
 $prompt_Url = isset($profilegloble->prompt_Url) ? $profilegloble->prompt_Url : '';
 $globle_anime_nagative_prompt = isset($profilegloble->globle_anime_nagative_prompt) ? $profilegloble->globle_anime_nagative_prompt : '';
+$wordsphrases = isset($profilegloble->wordsphrases) ? $profilegloble->wordsphrases : '';
 $cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
+
 
 
 ?>
@@ -74,6 +76,14 @@ $cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
                                 <label for="Name">Globle Anime nagative prompt</label>
                                 <textarea class="form-control custom-min-height" name="globle_anime_nagative_prompt" id="globle_anime_nagative_prompt" cols="30" rows="10" placeholder="Globle Anime Nagative prompt">{{ $globle_anime_nagative_prompt }}</textarea>
                                     @error('globle_anime_nagative_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Name">List of words and phrases</label>
+                                <textarea class="form-control custom-min-height" name="wordsphrases" id="wordsphrases" cols="30" rows="10" placeholder="Words and phrases">{{ $wordsphrases }}</textarea>
+                                    @error('wordsphrases')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                             </div>
