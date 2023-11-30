@@ -664,7 +664,7 @@ function sendMessage()
                         var formData = $('#message_form').serialize();
 
                         $.ajax({
-                        url: "{{ route('chat.userMessage') }}",
+                        url: "{{ route('chat.userMessage', [], true) }}",
                         method: 'POST',
                         dataType: 'json',
                         data: formData, // Serialized form data
@@ -964,7 +964,7 @@ function unlikedMessage(message, messageId) {
 //      
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
-    var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
+    var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
     url = url.replace(':chatid', chatid);
 
       e.preventDefault();

@@ -91,7 +91,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             ?>
                             <p>{{ $time }}</p>
                                 <p>
-                                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
+                                <!-- <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <g id="Group">
                                             <path id="Vector"
@@ -101,8 +101,9 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                 d="M14.4957 7.99965C14.0255 8.00473 13.6307 8.35538 13.5702 8.82175C13.1176 11.8974 10.2575 14.0238 7.18182 13.5712C6.13248 13.4168 5.14812 12.9691 4.34213 12.2796L5.06769 11.554C5.31087 11.3108 5.31082 10.9164 5.06754 10.6732C4.9508 10.5565 4.79245 10.4909 4.62736 10.4909H1.77123C1.42727 10.4909 1.14844 10.7697 1.14844 11.1137V13.9699C1.14853 14.3138 1.42741 14.5926 1.77138 14.5925C1.93647 14.5925 2.09482 14.5269 2.21156 14.4102L3.0212 13.6006C6.10801 16.3531 10.8418 16.0822 13.5943 12.9953C14.5699 11.9013 15.203 10.545 15.415 9.09457C15.4989 8.58061 15.1504 8.0959 14.6364 8.01194C14.5899 8.00432 14.5429 8.0002 14.4957 7.99965Z"
                                                 fill="currentColor"></path>
                                         </g>
-                                    </svg>
-                                    <a href="{{ route('chat.delete', ['id' => $chat->profile_id]) }}">
+                                    </svg> -->
+                                    
+                                    <a href="" data-bs-chatid="{{ $chat->profile_id }}" class="remove-chat">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -607,7 +608,7 @@ $(document).ready(function() {
         setTimeout(function() {
                     $("#type_message").val('');
                 }, 100); // 3000 milliseconds (3 seconds)
-            // Make the input element readonly
+          
             $("#type_message").prop("readonly", true);
         const chatContentScrollnewchat = document.querySelector('.chat_content');
         chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
@@ -626,7 +627,23 @@ $(document).ready(function() {
             }, 3000); // 3000 milliseconds (3 seconds)
         });
 
-        $('#message_form').submit();
+          // Make the input element readonly
+          var formData = $('#message_form').serialize();
+
+            $.ajax({
+            url: "{{ route('chat.userMessage', [], true) }}",
+            method: 'POST',
+            dataType: 'json',
+            data: formData, // Serialized form data
+            success: function(data) {
+                // console.log(data);
+                    location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + status);
+            }
+            });
+        // $('#message_form').submit();
     }
     })
 
@@ -841,4 +858,46 @@ function unlikedMessage(message, messageId) {
         }
     });
 }
+</script>
+
+
+<script>
+//      
+$('.remove-chat').click(function(e) {
+    var chatid = $(this).data('bs-chatid');
+    var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    url = url.replace(':chatid', chatid);
+
+      e.preventDefault();
+            swal({
+            title: "Are you sure?",
+            text: "Wants to delete chat?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: url,
+                            type: 'GET',
+                            data: {
+                                _token: '{{ csrf_token() }}', // Include the CSRF token
+                                chatid: chatid
+                            },
+                        success: function(result) {
+                            swal("Poof! Your chat has been deleted!", {
+                                icon: "success",
+                            }).then((willDelete) => {
+                                if (willDelete) {
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    swal("Your chat is safe!");
+                }
+            });
+            });
 </script>
