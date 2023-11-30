@@ -179,53 +179,67 @@ class UsersController extends Controller
             }
 
             $input = $request->all();
-            // dd($input);
-            // die;
+         
     
             try {
             
                 $validator = Validator::make($input, [
-                    // 'halochat_logo' => 'required|string',
-                    // 'sign_up_now_text' => 'required|string',
-                    // 'sign_up_now_link' => 'required|string|url', // Example validation for a URL
-                    // 'Introducing_text' => 'required|string',
-                    // 'pioneering_text' => 'required|string',
-                    'discover_more' => 'required|string',
-                    // 'discover_more_link' => 'required|string|url',
-                    // 'lets_talk_img' => 'required|string', // Adjust as needed for image validation
-                    // 'welcome_heading' => 'required|string',
-                    // 'welcome_sub_text' => 'required|string',
-                    // 'welcome_lady_img' => 'required|string',
+                    // 'halochat_logo' => 'required',
+                    // 'sign_up_now_text' => 'required',
+                    // 'sign_up_now_link' => 'required', // Example validation for a URL
+                    // 'Introducing_text' => 'required',
+                    // 'pioneering_text' => 'required',
+                    // 'discover_more' => 'required',
+                    // 'discover_more_link' => 'required',
+                    // 'lets_talk_img' => 'required', // Adjust as needed for image validation
+                    // 'welcome_heading' => 'required',
+                    // 'welcome_sub_text' => 'required',
+                    // 'welcome_lady_img' => 'required',
                 ]);
-                
+          
                 if ($validator->fails()) {
-        
                     return redirect()->back()->withErrors($validator);
                     //return redirect()->route('admin.profile.addProfiles')->withErrors($validator)->withInput();
                 }
                 else {
-        
-                    $user_update = Landerpage::where('id',$input['id'])->first();
-                    if($user_update)
+                
+                    $landerpage_update = Landerpage::where('id',$input['id'])->first();
+
+                    if($landerpage_update)
                     {
-                        $user_update = User::where('id', $input['id'])->update([
-                            'halochat_logo' => $input['halochat_logo'],
-                            'sign_up_now_text' => $input['sign_up_now_text'],
-                            'sign_up_now_link' => $input['sign_up_now_link'],
-                            'Introducing_text' => $input['Introducing_text'],
-                            'pioneering_text' => $input['pioneering_text'],
-                            'discover_more' => $input['discover_more'],
-                            'discover_more_link' => $input['discover_more_link'],
-                            'lets_talk_img' => $input['lets_talk_img'],
-                            'welcome_heading' => $input['welcome_heading'],
+                        $landerpage_update = Landerpage::where('id', $input['id'])->update([
+                            
+                            'halochat_logo' => isset($input['halochat_logo']) ? $input['halochat_logo'] : '',
+                            'sign_up_now_text' => isset($input['sign_up_now_text']) ? $input['sign_up_now_text'] : '',
+                            'sign_up_now_link' => isset($input['sign_up_now_link']) ? $input['sign_up_now_link'] : '',
+                            'Introducing_text' => isset($input['Introducing_text']) ? $input['Introducing_text'] : '',
+                            'pioneering_text' => isset($input['pioneering_text']) ? $input['pioneering_text'] : '',
+                            'discover_more' => isset($input['discover_more']) ? $input['discover_more'] : '',
+                            'discover_more_link' => isset($input['discover_more_link']) ? $input['discover_more_link'] : '',
+                            'lets_talk_img' => isset($input['lets_talk_img']) ? $input['lets_talk_img'] : '',
+                            'welcome_heading' => isset($input['welcome_heading']) ? $input['welcome_heading'] : '',
+                            'welcome_sub_text' => isset($input['welcome_sub_text']) ? $input['welcome_sub_text'] : '',
+                            'welcome_lady_img' => isset($input['welcome_lady_img']) ? $input['welcome_lady_img'] : '',
+                            'features_heading' => isset($input['features_heading']) ? $input['features_heading'] : '',
+                            'features_sub_text' => isset($input['features_sub_text']) ? $input['features_sub_text'] : '',
+                            'explore_btn_text' => isset($input['explore_btn_text']) ? $input['explore_btn_text'] : '',
+                            'explore_btn_link' => isset($input['explore_btn_link']) ? $input['explore_btn_link'] : '',
+                            'meet_your_heading' => isset($input['meet_your_heading']) ? $input['meet_your_heading'] : '',
+                            'meet_your_sub_text' => isset($input['meet_your_sub_text']) ? $input['meet_your_sub_text'] : '',
+                            'meet_your_img' => isset($input['meet_your_img']) ? $input['meet_your_img'] : '',
+                            'enhanced_features_heading' => isset($input['enhanced_features_heading']) ? $input['enhanced_features_heading'] : '',
+                            'enhanced_features_sub_text' => isset($input['enhanced_features_sub_text']) ? $input['enhanced_features_sub_text'] : '',
+                            'cta_title_text' => isset($input['cta_title_text']) ? $input['cta_title_text'] : '',
+                            'cta_sub_text' => isset($input['cta_sub_text']) ? $input['cta_sub_text'] : '',
+                            'cta_lady_img' => isset($input['cta_lady_img']) ? $input['cta_lady_img'] : '',
+                            'customer_feedback' => isset($input['customer_feedback']) ? $input['customer_feedback'] : '',
+                            'privacy_policy_text' => isset($input['privacy_policy_text']) ? $input['privacy_policy_text'] : '',
+                            'terms_conditions_text' => isset($input['terms_conditions_text']) ? $input['terms_conditions_text'] : '',
+                            'terms_conditions_link' => isset($input['terms_conditions_link']) ? $input['terms_conditions_link'] : '',
+                            'revolution_text' => isset($input['revolution_text']) ? $input['revolution_text'] : '',
                         ]);
-    
-                        $user_update = Managecredit::where('user_id', $input['id'])->update([
-                            'totalcredit' => $input['totalcredit'],
-                            'updated_at' => now(),
-                        ]);
-                     
                     }
+                    return redirect()->back();
                 }     
             }
             catch (\Exception $e) {

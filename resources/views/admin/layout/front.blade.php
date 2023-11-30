@@ -2,15 +2,15 @@
   .sidebar .sidebar-brand-wrapper .sidebar-brand img {
     width: calc(241px - 38px) !important;
     max-width: 100%;
-    height: 31px !important;
+    height: 45px !important;
     margin: auto;
     vertical-align: middle;
 }
 </style>
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="{{ route('admin.dashboard') }}"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}" alt="logo" /></a>
-          <a class="sidebar-brand brand-logo-mini" href="{{ route('admin.dashboard') }}"><img src="{{ URL::asset('public/front/img/halochat.ai.png') }}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo" href="{{ route('admin.dashboard') }}"><img src="{{ URL::asset('public/front/img/viceapp.png') }}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo-mini" href="{{ route('admin.dashboard') }}"><img src="{{ URL::asset('public/front/img/viceapp.png') }}" alt="logo" /></a>
         </div>
         <ul class="nav">
           <li class="nav-item profile">

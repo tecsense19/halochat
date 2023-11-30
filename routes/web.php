@@ -40,7 +40,7 @@ use App\Http\Controllers\PaymentController;
     Route::get('/users/credit_debit/{id}', [UsersController::class, 'used_credit_debit'])->name('used_credit_debit');
     Route::get('/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
     Route::get('/landerpage', [UsersController::class, 'landerpage'])->name('landerpage');
-    Route::post('/save', [UsersController::class, 'addLanderpagedata'])->name('addLanderpagedata');
+    Route::post('/addLanderpagedata/save', [UsersController::class, 'addLanderpagedata'])->name('addLanderpagedata');
     
     
    // ::Profiles
