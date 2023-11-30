@@ -17,7 +17,7 @@ class Landerpage extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'Landerpage';
+    protected $table = 'landerpage';
 
     protected $fillable = [
         
