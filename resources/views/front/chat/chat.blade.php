@@ -185,73 +185,11 @@ alert("{{ $errors->first('chat_persona') }}");
                             </div>
 
                         </div>
-                        <div class="chat_content" id="chatContent">
-                            <div class="row new_message">
-
-                                @if(!empty($getAllReciverUser))
-                                @foreach ($getAllReciverUser as $chat_user)
-                                @if($chat_user->sender_id == $chat_user->user_id)
-                                <!-- style="display: none;" style="display: none;" -->
-                                @if(!empty($chat_user->message_text))
-                                <div class="col-12 scrolltop mb-2">
-                                    <div class="have_we_met">
-                                        <div class="chat_content_box">
-                                            <p id="message">{{ $chat_user->message_text }}</p>
-                                            <div class="volume">
-                                                <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z">
-                                                        </path>
-                                                    </svg></span>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="message_feedback">
-                                            @if($chat_user->message_liked == 'Liked')
-                                            <a href="#"><img
-                                                    src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
-                                            @else
-
-                                            @if($chat_user->message_liked == 'Unliked')
-                                            <a href="#"><img
-                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                            <a href="#"><img
-                                                    src="{{ URL::asset('public/front/img/active-thumb.svg') }}"></a>
-                                            @else
-                                            <a href="#" onclick="likedMessage('{{$chat_user->message_id}}')"><img
-                                                    src="{{ URL::asset('public/front/img/thumbs-up.svg') }}"></a>
-                                            <a href="#" class="message-link" data-bs-toggle="modal" data-bs-target="#false_thumb"
-                                                data-bs-messageid="{{$chat_user->message_id}}"><img
-                                                    src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
-                                            @endif
-                                            @endif
-                                        </div> -->
-                                    </div>
-                                </div>
-                                @endif
-                                @if($chat_user->media_url)
-
-                                <div class="col-12 mt-4">
-                                    <div class="chat_content_img">
-                                        <img src="{{ $chat_user->media_url }}">
-                                    </div>
-                                </div>
-                                @endif
-                                @else
-                                <div class="col-12">
-                                    <div class="send_message">
-                                        <span id="chat-message">{{ $chat_user->message_text }}</span>
-                                    </div>
-                                </div>
-
-                                @endif
-                                @endforeach
-                                @endif
-
-                            </div>
+                        <!-- here chat bind -->
+                        <div id="bindhtml">
+                            
                         </div>
-
+                         <!-- here chat bind -->
                         <div class="searchbar-footer">
                             @if(isset($getAllReciverUser[1]->message_text))
                             <ul class="suggestion" style="display: none;">
@@ -602,7 +540,31 @@ alert("{{ $errors->first('chat_persona') }}");
 
 @include('front.layout.footer')
 <script>
+
+function loadchats(){
+    var currentUrl = window.location.href;
+    var appUrl = @json(config('app.url'));
+    var lastId = currentUrl.split('/').filter(Boolean).pop();
+    var url = appUrl + "/loadchat/" + lastId;
+
+    $.ajax({
+        url: url,
+        method: 'GET',
+        data: {'id' : lastId},
+        success: function(data) {
+            $('#bindhtml').html(data);
+            
+            var chatContainer = $('#chatContent');
+            chatContainer.scrollTop(chatContainer.prop('scrollHeight'));
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error: ' + status);
+        }
+    });
+}
 $(document).ready(function() {
+    loadchats();
+    // AJAX request configuration
     $('.toggle-button-right').on('click', function() {
         $('.sidebar').toggleClass('isClosed');
         $('.sidebar ul.nav').toggleClass('isClosed');
@@ -612,12 +574,6 @@ $(document).ready(function() {
         $('#chat_like_message_id').val($(this).data('bs-messageid'))
     })
 
-
-    // $('body').on('click', '#new_message', function() {
-
-    //     sendMessage()
-
-    // })
 });
 
 $("#message_form").submit(function(event) {
@@ -640,6 +596,7 @@ function sendMessage() {
         // Check if the input contains the word "show"
         if (inputValue.includes('show')) {
             // The word "show" is present in the input
+            $('.chat_content_box').hide();
             $('.new_message').append(
                 '<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
                 );
@@ -672,7 +629,6 @@ function sendMessage() {
         },
          100); // 3000 milliseconds (3 seconds)
         // Make the input element readonly
-        $("#type_message").prop("readonly", true);
 
         const chatContentScrollnewchat = document.querySelector('.chat_content');
         chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
@@ -698,114 +654,17 @@ function sendMessage() {
         $.ajax({
             url: url,
             method: 'POST',
-            dataType: 'json',
             data: formData, // Serialized form data
             success: function(data) {
-                // console.log(data);
-                location.reload();
+                loadchats();
             },
             error: function(xhr, status, error) {
                 console.error('Error: ' + status);
             }
         });
-
-        // $('#message_form').submit();
     }
 }
 
-
-// $(document).keypress(function(e) {
-
-//     if (e.which == 13) {
-//         sendMessage()
-// if ($('#type_message').val()) {
-//     $('.new_message').append(
-//         '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-//         $('#type_message').val() + '</span></div></div>');
-
-//     $('.new_message').append(
-//         '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-//     );
-
-//     var inputValuekey = $('#type_message').val();
-
-//     // Check if the input contains the word "show"
-//     if (inputValuekey.includes('show')) {
-//         // The word "show" is present in the input
-//         $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-//         setTimeout(function() {
-//             updateLoading('0%', 'Please Wait');
-//         }, 1000);
-
-//         setTimeout(function() {
-//             updateLoading('20%', 'Processing...');
-//         }, 5000);
-
-//         setTimeout(function() {
-//             updateLoading('50%', 'Almost There...');
-//         }, 9000);
-//         setTimeout(function() {
-//             updateLoading('60%', 'Almost There...');
-//         }, 12000);
-//         setTimeout(function() {
-//             updateLoading('70%', 'Almost There...');
-//         }, 16000);
-
-//         setTimeout(function() {
-//             updateLoading('80%', 'Complete');
-//         }, 19000);
-
-//         setTimeout(function() {
-//             updateLoading('100%', 'Complete');
-//         }, 22000);
-//         // You can add your condition or code here
-//     }
-
-//     const chatContentScrollnewchatkey = document.querySelector('.chat_content');
-//     chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
-
-//     // Get the "new_message" button element
-//         // Clear the input field's value
-//         setTimeout(function() {
-//             $("#type_message").val('');
-//         }, 100); // 3000 milliseconds (3 seconds)
-//     // Make the input element readonly
-//     $("#type_message").prop("readonly", true);
-
-//     document.addEventListener("DOMContentLoaded", function() {
-//         // Select the message and dot elements
-//         var messageElementkey = document.getElementById("chat_content_box");
-
-//         // Display the three dots animation
-//         messageElementkey.style.display = "block";
-
-
-//         // Hide the three dots animation and show the message after 3 seconds
-//         setTimeout(function() {
-//             messageElementkey.style.display = "none";
-//         }, 3000); // 3000 milliseconds (3 seconds)
-//     });
-
-//     var formData = $('#message_form').serialize();
-
-//         $.ajax({
-//         url: "{{ route('chat.userMessage') }}",
-//         method: 'POST',
-//         dataType: 'json',
-//         data: formData, // Serialized form data
-//         success: function(data) {
-//             // console.log(data);
-//                 location.reload();
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Error: ' + status);
-//         }
-//         });
-//     // $('#message_form').submit();
-// }
-
-//     }
-// });
 
 function updateLoading(progress, text) {
     $('#loading-progress').text(progress);
@@ -860,21 +719,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<script>
-// Replace this with the actual ID value
-var id = "<?php echo $id; ?>";
 
-// Make an AJAX POST request to the chat.store route with the "id" parameter
-axios.post("{{ route('chat.store', ['id' => ':id']) }}".replace(':id', id))
-    .then(function(response) {
-        // Handle the response from the server
-        // console.log(response.data);
-    })
-    .catch(function(error) {
-        // Handle errors, e.g., show an error message
-        console.error(error);
-    });
-</script>
 
 <script>
 // Get the suggestion link element
@@ -992,8 +837,7 @@ function unlikedMessage(message, messageId) {
 }
 </script>
 
-<script>
-//      
+<script>  
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
     var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
@@ -1021,7 +865,16 @@ $('.remove-chat').click(function(e) {
                             icon: "success",
                         }).then((willDelete) => {
                             if (willDelete) {
-                                location.reload(true);
+                                if(result.data == ''){
+                                    var appUrl = @json(config('app.url'));
+                                    var newUrl = appUrl + "/explore"; // Replace with your desired URL
+                                    window.location.href = newUrl;  
+                                    }else{
+                                    var appUrl = @json(config('app.url'));
+                                    var newUrl = appUrl + "/chat/message/" + result.data; // Replace with your desired URL
+                                    window.location.href = newUrl; 
+                                    }
+                                // location.reload(true);
                             }
                         });
                     }

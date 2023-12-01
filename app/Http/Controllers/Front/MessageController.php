@@ -18,31 +18,43 @@ use Intervention\Image\Facades\Image;
 
 class MessageController extends Controller
 {
+    public function loadchats(Request $request)
+    {
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->get();
+        return view("front.chat.bind", compact('getAllReciverUser'));
+
+    } 
+
+    public function mobile_loadchats(Request $request)
+    {
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->get();
+        return view("front.chat.mobile_bind", compact('getAllReciverUser'));
+
+    } 
+
     public function userMessage(Request $request)
     {
         $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
         $message_show = $_POST['message']; // Assuming you're getting the message from a form input
         $message_url = "";
+        $getAllReciverUser = [];
         $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
         // Explode the words and phrases and trim each element
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_POST['receiver_id'])->where('isDeleted', 0)->get();
 
         if(!empty($globleprompts->wordsphrases)){
-
             $words = array_map('trim', explode(',', $globleprompts->wordsphrases));
-
             foreach ($words as $word) {
                 // Use a regular expression with word boundaries to match whole words
                 $pattern = "/\b" . preg_quote($word, '/') . "\b/";
-    
                 // Check if the pattern is present in the message
                 while (preg_match($pattern, $message_show)) {
                         // Remove the matched word from $message_show
                         $message_show = preg_replace($pattern, '', $message_show, 1);
                     }
                 }
-        }
+           }
        
-
             if(empty($user->profile_id)){
                 return back()->withErrors(['chat_persona' => 'Please select persona'])->withInput();  
             }
@@ -61,11 +73,12 @@ class MessageController extends Controller
             );
             Messages::create($message);
 
-            $getAllReciverUser = [];
+            
             $user = '';
             $getAllProfile =[];
             if(session('user_id')){
-                $getAllReciverUser = Messages::where('profile_id',$_POST['receiver_id'])->get();
+                // $getAllReciverUser = Messages::where('profile_id',$_POST['receiver_id'])->get();
+                
                 $user = Profile::with('profileImages')->where('profile_id',$_POST['receiver_id'])->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
@@ -77,10 +90,8 @@ class MessageController extends Controller
             
             if($creditAddManage->currentcredit == 0){
                 return redirect()->route('subscription.subscription');
-                
             }else{  
                 // Now $message_show contains the original string with all matched words removed
-
                 if (str_contains($message_show, 'show')) {
                     $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
                     }
@@ -88,8 +99,8 @@ class MessageController extends Controller
                     
                 
             }
-            // return redirect()->back();
-            return true;
+            return view("front.chat.bind", compact('getAllReciverUser'));
+            // return true;
         }else{
             
             return redirect()->route('login');
@@ -389,7 +400,9 @@ class MessageController extends Controller
 
     public function delete($id)
     {
+
         Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
+
         $user = User::where('id', session('user_id'))->first();
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -405,10 +418,20 @@ class MessageController extends Controller
             'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
         ),
         ));
+
+        $fetchfirst = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->get();
+
+        $profile = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->first();
+
+        $profile_id = isset($profile->profile_id) ? $profile->profile_id : '';
+        // Get the count of records
+          $count = $fetchfirst->count();
+          if($count < 0){
+            return 1;
+          }
         $response = curl_exec($curl);
         curl_close($curl);
-        echo $response;
-        return redirect()->back();
+        return response()->json(['data' => $profile_id]);
     }
 
     public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale) {

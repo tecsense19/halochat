@@ -2473,7 +2473,7 @@ a.change_plan_btn {
 
 @media (max-width: 575px) {
   .breadcrumbs_top {
-    padding: 18px 0px;
+    padding: 10px 0px;
   }
   .breadcrumbs_top .logo a img {
     width: 160px;

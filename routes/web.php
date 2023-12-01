@@ -64,6 +64,9 @@ use App\Http\Controllers\PaymentController;
     Route::get('/logout', [UserController::class, 'logout'])->name('front.logout');
     Route::get('/register', [UserController::class, 'register'])->name('register');
     Route::get('/chat', [UserController::class, 'chat'])->name('chat.chat');
+
+    Route::get('/loadchat/{id}', [MessageController::class, 'loadchats'])->name('loadchats');
+    Route::get('/mobile_loadchats/{id}', [MessageController::class, 'mobile_loadchats'])->name('mobile_loadchats');
   
     
     Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
@@ -83,7 +86,7 @@ use App\Http\Controllers\PaymentController;
 
     Route::get('/chat/message/{id}', [MessageController::class, 'index'])->name('chat.message');
     Route::get('/chat/mobile/message/{id}', [MessageController::class, 'mobile'])->name('chat.messagemobile');
-    Route::post('/chat/message/store/{id}', [MessageController::class, 'store'])->name('chat.store');
+    // Route::post('/chat/message/store/{id}', [MessageController::class, 'store'])->name('chat.store');
     Route::post('/chat/message/userMessage', [MessageController::class, 'userMessage'])->name('chat.userMessage');
     Route::get('/chat/delete/{id}', [MessageController::class, 'delete'])->name('chat.delete');
     Route::get('/chat/liked/{id}', [MessageController::class, 'liked'])->name('chat.liked');
