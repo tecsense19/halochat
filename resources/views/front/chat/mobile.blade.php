@@ -626,7 +626,28 @@ $(document).ready(function() {
             }, 3000); // 3000 milliseconds (3 seconds)
         });
 
+<<<<<<< Updated upstream
         $('#message_form').submit();
+=======
+        var formData = $('#message_form').serialize();
+        var appUrl = @json(config('app.url'));
+        var url = appUrl + "/chat/message/userMessage";
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            dataType: 'json',
+            data: formData, // Serialized form data
+            success: function(data) {
+                // console.log(data);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + status);
+            }
+        });
+        // $('#message_form').submit();
+>>>>>>> Stashed changes
     }
     })
 

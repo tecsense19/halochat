@@ -168,6 +168,9 @@ class UsersController extends Controller
 
         public function landerpage(Request $request)
         {
+            if(!session()->has('authenticated_admin')){
+                return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+            }
             $landerdata = Landerpage::get();
             return view('admin.lander.add')->with('landerdata' , $landerdata);;
         }
