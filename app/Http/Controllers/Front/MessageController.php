@@ -131,7 +131,7 @@ class MessageController extends Controller
                             ]
                         );
                         }else{
-                            sleep(30);
+                            // sleep(30);
                                 $curl = curl_init();
                                 curl_setopt_array($curl, array(
                                 CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
@@ -479,7 +479,7 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
-                sleep(60);
+                sleep(11);
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/'.'status/'.$response_image,
