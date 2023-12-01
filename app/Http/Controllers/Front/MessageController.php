@@ -25,18 +25,23 @@ class MessageController extends Controller
         $message_url = "";
         $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
         // Explode the words and phrases and trim each element
-        $words = array_map('trim', explode(',', $globleprompts->wordsphrases));
+        
+        if(!empty($globleprompts->wordsphrases)){
 
-        foreach ($words as $word) {
-            // Use a regular expression with word boundaries to match whole words
-            $pattern = "/\b" . preg_quote($word, '/') . "\b/";
+            $words = array_map('trim', explode(',', $globleprompts->wordsphrases));
 
-            // Check if the pattern is present in the message
-            while (preg_match($pattern, $message_show)) {
-                // Remove the matched word from $message_show
-                $message_show = preg_replace($pattern, '', $message_show, 1);
-            }
+            foreach ($words as $word) {
+                // Use a regular expression with word boundaries to match whole words
+                $pattern = "/\b" . preg_quote($word, '/') . "\b/";
+    
+                // Check if the pattern is present in the message
+                while (preg_match($pattern, $message_show)) {
+                        // Remove the matched word from $message_show
+                        $message_show = preg_replace($pattern, '', $message_show, 1);
+                    }
+                }
         }
+       
 
             if(empty($user->profile_id)){
                 return back()->withErrors(['chat_persona' => 'Please select persona'])->withInput();  
