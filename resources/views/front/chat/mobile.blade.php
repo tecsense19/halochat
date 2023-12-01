@@ -626,9 +626,6 @@ $(document).ready(function() {
             }, 3000); // 3000 milliseconds (3 seconds)
         });
 
-<<<<<<< Updated upstream
-        $('#message_form').submit();
-=======
         var formData = $('#message_form').serialize();
         var appUrl = @json(config('app.url'));
         var url = appUrl + "/chat/message/userMessage";
@@ -647,7 +644,6 @@ $(document).ready(function() {
             }
         });
         // $('#message_form').submit();
->>>>>>> Stashed changes
     }
     })
 
