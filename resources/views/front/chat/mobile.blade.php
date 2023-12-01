@@ -31,7 +31,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 #loading-text {
   text-align: center;
-  color: #3498db; /* Set the color of the loader text */
+  color: #B473E0; /* Set the color of the loader text */
 }
 </style>
 @include('front.layout.front')
@@ -220,11 +220,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="searchbar-footer">
                             @if(isset($getAllReciverUser[1]->message_text))
                             <ul class="suggestion" style="display: none;">
-                            <li>Suggestion: </li>
+                             <li class="suggestion-text">Suggestion: </li>
                                 <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @else
                                 <ul class="suggestion">
-                                <li>Suggestion: </li>
+                                 <li class="suggestion-text">Suggestion: </li>
                                 <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @endif
                             </ul>
@@ -587,26 +587,22 @@ $(document).ready(function() {
             }, 5000);
 
             setTimeout(function() {
-                    updateLoading('50%', 'Almost There...');
-                }, 9000);
-                setTimeout(function() {
-                    updateLoading('60%', 'Almost There...');
-                }, 12000);
-                setTimeout(function() {
-                    updateLoading('70%', 'Almost There...');
-                }, 16000);
+                updateLoading('50%', 'Almost There...');
+            }, 25000);
 
-                setTimeout(function() {
-                    updateLoading('80%', 'Complete');
-                }, 19000);
+            setTimeout(function() {
+                updateLoading('80%', 'Complete');
+            }, 30000);
 
-                setTimeout(function() {
-                    updateLoading('100%', 'Complete');
-                }, 22000);
+            setTimeout(function() {
+                updateLoading('100%', 'Complete');
+            }, 55000);
             // You can add your condition or code here
         } 
         setTimeout(function() {
                     $("#type_message").val('');
+                    $('.suggestion-text').hide();
+                    $('.suggestion-link').hide();
                 }, 100); // 3000 milliseconds (3 seconds)
             // Make the input element readonly
             // $("#type_message").prop("readonly", true);
@@ -654,12 +650,10 @@ $(document).ready(function() {
             }, 'slow');
         }, 500);
     // $('#new_message').append()
-
-
 });
 function updateLoading(progress, text) {
                $('#loading-progress').text(progress);
-               $('#loading-text').text(progress);
+            //    $('#loading-text').text(progress);
                 loadingtext.val(text);
             }
 

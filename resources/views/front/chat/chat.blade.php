@@ -53,7 +53,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 #loading-text {
     text-align: center;
-    color: #3498db;
+    color: #B473E0;
     /* Set the color of the loader text */
 }
 </style>
@@ -255,11 +255,11 @@ alert("{{ $errors->first('chat_persona') }}");
                         <div class="searchbar-footer">
                             @if(isset($getAllReciverUser[1]->message_text))
                             <ul class="suggestion" style="display: none;">
-                                <li>Suggestion: </li>
+                                <li class="suggestion-text">Suggestion: </li>
                                 <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @else
                                 <ul class="suggestion">
-                                    <li>Suggestion: </li>
+                                    <li class="suggestion-text">Suggestion: </li>
                                     <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                     @endif
                                 </ul>
@@ -667,7 +667,10 @@ function sendMessage() {
 
         setTimeout(function() {
             $("#type_message").val('');
-        }, 100); // 3000 milliseconds (3 seconds)
+            $('.suggestion-text').hide();
+            $('.suggestion-link').hide();
+        },
+         100); // 3000 milliseconds (3 seconds)
         // Make the input element readonly
         $("#type_message").prop("readonly", true);
 
@@ -806,7 +809,7 @@ function sendMessage() {
 
 function updateLoading(progress, text) {
     $('#loading-progress').text(progress);
-    $('#loading-text').text(progress);
+    // $('#loading-text').text(progress);
     loadingtext.val(text);
 }
 </script>
