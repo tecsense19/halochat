@@ -207,7 +207,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                                     </svg></span>
                                             </div>
                                         </div>
-                                        <!-- <div class="message_feedback">
+                                        <div class="message_feedback">
                                             @if($chat_user->message_liked == 'Liked')
                                             <a href="#"><img
                                                     src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
@@ -226,7 +226,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                                     src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
                                             @endif
                                             @endif
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                                 @endif
@@ -264,8 +264,8 @@ alert("{{ $errors->first('chat_persona') }}");
                                     @endif
                                 </ul>
                                 <div class="type_message">
-                                    <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
-                                    <!-- <form id="message_form" method="post"> -->
+                                    <!-- <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST"> -->
+                                    <form id="message_form" method="post">
                                         {!! csrf_field() !!}
                                         <input type="text" name="message" id="type_message"
                                             placeholder="Type action message" autocomplete="off" required>
@@ -620,13 +620,12 @@ $(document).ready(function() {
     // })
 });
 
-// $("#message_form").submit(function(event) {
-//     event.preventDefault()
-//     sendMessage()
-// });
+$("#message_form").submit(function(event) {
+    event.preventDefault()
+    sendMessage()
+});
 
-// function sendMessage() {
-    $('body').on('click', '#new_message', function() {
+function sendMessage() {
     if ($('#type_message').val()) {
         $('.new_message').append(
             '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
@@ -654,15 +653,15 @@ $(document).ready(function() {
 
             setTimeout(function() {
                 updateLoading('50%', 'Almost There...');
-            }, 6000);
+            }, 25000);
 
             setTimeout(function() {
                 updateLoading('80%', 'Complete');
-            }, 7000);
+            }, 30000);
 
             setTimeout(function() {
                 updateLoading('100%', 'Complete');
-            }, 10000);
+            }, 55000);
             // You can add your condition or code here
         }
 
@@ -670,7 +669,7 @@ $(document).ready(function() {
             $("#type_message").val('');
         }, 100); // 3000 milliseconds (3 seconds)
         // Make the input element readonly
-        // $("#type_message").prop("readonly", true);
+        $("#type_message").prop("readonly", true);
 
         const chatContentScrollnewchat = document.querySelector('.chat_content');
         chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
@@ -689,122 +688,121 @@ $(document).ready(function() {
             }, 3000); // 3000 milliseconds (3 seconds)
         });
 
-        // var formData = $('#message_form').serialize();
-        // var appUrl = @json(config('app.url'));
-        // var url = appUrl + "/chat/message/userMessage";
+        var formData = $('#message_form').serialize();
+        var appUrl = @json(config('app.url'));
+        var url = appUrl + "/chat/message/userMessage";
 
-        // $.ajax({
-        //     url: url,
-        //     method: 'POST',
-        //     dataType: 'json',
-        //     data: formData, // Serialized form data
-        //     success: function(data) {
-        //         // console.log(data);
-        //         location.reload();
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error('Error: ' + status);
-        //     }
-        // });
+        $.ajax({
+            url: url,
+            method: 'POST',
+            dataType: 'json',
+            data: formData, // Serialized form data
+            success: function(data) {
+                // console.log(data);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + status);
+            }
+        });
 
-        $('#message_form').submit();
+        // $('#message_form').submit();
     }
-});
-// }
-
-
-$(document).keypress(function(e) {
-
-    if (e.which == 13) {
-        sendMessage()
-if ($('#type_message').val()) {
-    $('.new_message').append(
-        '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-        $('#type_message').val() + '</span></div></div>');
-
-    $('.new_message').append(
-        '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-    );
-
-    var inputValuekey = $('#type_message').val();
-
-    // Check if the input contains the word "show"
-    if (inputValuekey.includes('show')) {
-        // The word "show" is present in the input
-        $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-        setTimeout(function() {
-            updateLoading('0%', 'Please Wait');
-        }, 1000);
-
-        setTimeout(function() {
-            updateLoading('20%', 'Processing...');
-        }, 3000);
-
-        setTimeout(function() {
-            updateLoading('50%', 'Almost There...');
-        }, 5000);
-        setTimeout(function() {
-            updateLoading('60%', 'Almost There...');
-        }, 9000);
-        setTimeout(function() {
-            updateLoading('70%', 'Almost There...');
-        }, 10000);
-
-        setTimeout(function() {
-            updateLoading('80%', 'Complete');
-        }, 11000);
-
-        setTimeout(function() {
-            updateLoading('100%', 'Complete');
-        }, 11500);
-        // You can add your condition or code here
-    }
-
-    const chatContentScrollnewchatkey = document.querySelector('.chat_content');
-    chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
-
-    // Get the "new_message" button element
-        // Clear the input field's value
-        setTimeout(function() {
-            $("#type_message").val('');
-        }, 100); // 3000 milliseconds (3 seconds)
-    // Make the input element readonly
-    $("#type_message").prop("readonly", true);
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Select the message and dot elements
-        var messageElementkey = document.getElementById("chat_content_box");
-
-        // Display the three dots animation
-        messageElementkey.style.display = "block";
-
-
-        // Hide the three dots animation and show the message after 3 seconds
-        setTimeout(function() {
-            messageElementkey.style.display = "none";
-        }, 3000); // 3000 milliseconds (3 seconds)
-    });
-
-    // var formData = $('#message_form').serialize();
-
-    //     $.ajax({
-    //     url: "{{ route('chat.userMessage') }}",
-    //     method: 'POST',
-    //     dataType: 'json',
-    //     data: formData, // Serialized form data
-    //     success: function(data) {
-    //         // console.log(data);
-    //             location.reload();
-    //     },
-    //     error: function(xhr, status, error) {
-    //         console.error('Error: ' + status);
-    //     }
-    //     });
-    $('#message_form').submit();
 }
 
-    }
-});
+
+// $(document).keypress(function(e) {
+
+//     if (e.which == 13) {
+//         sendMessage()
+// if ($('#type_message').val()) {
+//     $('.new_message').append(
+//         '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+//         $('#type_message').val() + '</span></div></div>');
+
+//     $('.new_message').append(
+//         '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+//     );
+
+//     var inputValuekey = $('#type_message').val();
+
+//     // Check if the input contains the word "show"
+//     if (inputValuekey.includes('show')) {
+//         // The word "show" is present in the input
+//         $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+//         setTimeout(function() {
+//             updateLoading('0%', 'Please Wait');
+//         }, 1000);
+
+//         setTimeout(function() {
+//             updateLoading('20%', 'Processing...');
+//         }, 5000);
+
+//         setTimeout(function() {
+//             updateLoading('50%', 'Almost There...');
+//         }, 9000);
+//         setTimeout(function() {
+//             updateLoading('60%', 'Almost There...');
+//         }, 12000);
+//         setTimeout(function() {
+//             updateLoading('70%', 'Almost There...');
+//         }, 16000);
+
+//         setTimeout(function() {
+//             updateLoading('80%', 'Complete');
+//         }, 19000);
+
+//         setTimeout(function() {
+//             updateLoading('100%', 'Complete');
+//         }, 22000);
+//         // You can add your condition or code here
+//     }
+
+//     const chatContentScrollnewchatkey = document.querySelector('.chat_content');
+//     chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
+
+//     // Get the "new_message" button element
+//         // Clear the input field's value
+//         setTimeout(function() {
+//             $("#type_message").val('');
+//         }, 100); // 3000 milliseconds (3 seconds)
+//     // Make the input element readonly
+//     $("#type_message").prop("readonly", true);
+
+//     document.addEventListener("DOMContentLoaded", function() {
+//         // Select the message and dot elements
+//         var messageElementkey = document.getElementById("chat_content_box");
+
+//         // Display the three dots animation
+//         messageElementkey.style.display = "block";
+
+
+//         // Hide the three dots animation and show the message after 3 seconds
+//         setTimeout(function() {
+//             messageElementkey.style.display = "none";
+//         }, 3000); // 3000 milliseconds (3 seconds)
+//     });
+
+//     var formData = $('#message_form').serialize();
+
+//         $.ajax({
+//         url: "{{ route('chat.userMessage') }}",
+//         method: 'POST',
+//         dataType: 'json',
+//         data: formData, // Serialized form data
+//         success: function(data) {
+//             // console.log(data);
+//                 location.reload();
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error: ' + status);
+//         }
+//         });
+//     // $('#message_form').submit();
+// }
+
+//     }
+// });
 
 function updateLoading(progress, text) {
     $('#loading-progress').text(progress);
@@ -995,7 +993,7 @@ function unlikedMessage(message, messageId) {
 //      
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
-    var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
     url = url.replace(':chatid', chatid);
 
     e.preventDefault();

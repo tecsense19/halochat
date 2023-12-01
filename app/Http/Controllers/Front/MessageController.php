@@ -25,7 +25,7 @@ class MessageController extends Controller
         $message_url = "";
         $globleprompts = Globle_prompts::where('type' , $user->personatype)->first();
         // Explode the words and phrases and trim each element
-        
+
         if(!empty($globleprompts->wordsphrases)){
 
             $words = array_map('trim', explode(',', $globleprompts->wordsphrases));
@@ -88,8 +88,8 @@ class MessageController extends Controller
                     
                 
             }
-            return redirect()->back();
-            // return true;
+            // return redirect()->back();
+            return true;
         }else{
             
             return redirect()->route('login');
