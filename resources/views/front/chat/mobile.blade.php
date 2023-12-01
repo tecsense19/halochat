@@ -230,7 +230,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <div class="type_message">
                                 <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST">
                                     {!! csrf_field() !!}
-                                  
                                     <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
                                         <input type="text" name="message" id="type_message" autocomplete="off" placeholder="Type action message">
@@ -608,7 +607,7 @@ $(document).ready(function() {
                     $("#type_message").val('');
                 }, 100); // 3000 milliseconds (3 seconds)
             // Make the input element readonly
-            $("#type_message").prop("readonly", true);
+            // $("#type_message").prop("readonly", true);
         const chatContentScrollnewchat = document.querySelector('.chat_content');
         chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
         
@@ -626,24 +625,24 @@ $(document).ready(function() {
             }, 3000); // 3000 milliseconds (3 seconds)
         });
 
-        var formData = $('#message_form').serialize();
-        var appUrl = @json(config('app.url'));
-        var url = appUrl + "/chat/message/userMessage";
+        // var formData = $('#message_form').serialize();
+        // var appUrl = @json(config('app.url'));
+        // var url = appUrl + "/chat/message/userMessage";
 
-        $.ajax({
-            url: url,
-            method: 'POST',
-            dataType: 'json',
-            data: formData, // Serialized form data
-            success: function(data) {
-                // console.log(data);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error: ' + status);
-            }
-        });
-        // $('#message_form').submit();
+        // $.ajax({
+        //     url: url,
+        //     method: 'POST',
+        //     dataType: 'json',
+        //     data: formData, // Serialized form data
+        //     success: function(data) {
+        //         // console.log(data);
+        //         location.reload();
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error('Error: ' + status);
+        //     }
+        // });
+        $('#message_form').submit();
     }
     })
 

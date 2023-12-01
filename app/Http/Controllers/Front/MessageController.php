@@ -83,8 +83,8 @@ class MessageController extends Controller
                     
                 
             }
-            // return redirect()->back();
-            return true;
+            return redirect()->back();
+            // return true;
         }else{
             
             return redirect()->route('login');
