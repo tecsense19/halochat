@@ -24,41 +24,52 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     border-radius: 8px;
     color: #fff;
 }
+
 .picture_circle {
-  width: 50px; /* Set the width of the loader circle */
-  height: 50px; /* Set the height of the loader circle */
-  border-radius: 50%; /* Create a circular shape */
-  border: 5px solid #3498db; /* Set the border color and thickness */
-  border-top: 5px solid #ffffff; /* Set the color of the loader */
-  animation: spin 1s linear infinite; /* Apply the rotation animation */
-  border-top: 5px solid #1a1a1a !important;
+    width: 50px;
+    /* Set the width of the loader circle */
+    height: 50px;
+    /* Set the height of the loader circle */
+    border-radius: 50%;
+    /* Create a circular shape */
+    border: 5px solid #3498db;
+    /* Set the border color and thickness */
+    border-top: 5px solid #ffffff;
+    /* Set the color of the loader */
+    animation: spin 1s linear infinite;
+    /* Apply the rotation animation */
+    border-top: 5px solid #1a1a1a !important;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 #loading-text {
-  text-align: center;
-  color: #3498db; /* Set the color of the loader text */
+    text-align: center;
+    color: #3498db;
+    /* Set the color of the loader text */
 }
-
-
 </style>
 
 @if ($errors->has('ai_message'))
-    <script>
-        // Display an alert message using JavaScript
-        alert("{{ $errors->first('ai_message') }}");
-    </script>
+<script>
+// Display an alert message using JavaScript
+alert("{{ $errors->first('ai_message') }}");
+</script>
 @endif
 
 @if ($errors->has('chat_persona'))
-    <script>
-        // Display an alert message using JavaScript
-        alert("{{ $errors->first('chat_persona') }}");
-    </script>
+<script>
+// Display an alert message using JavaScript
+alert("{{ $errors->first('chat_persona') }}");
+</script>
 @endif
 
 
@@ -166,13 +177,13 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 <div class="asuna-image">
                                     <img src="{{ $imgUrl1 }}">
                                 </div>
-                                
+
                                 <div class="asuna-name">
 
                                     <h6>{{ $name }}</h6>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="chat_content" id="chatContent">
                             <div class="row new_message">
@@ -233,7 +244,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         <span id="chat-message">{{ $chat_user->message_text }}</span>
                                     </div>
                                 </div>
-                              
+
                                 @endif
                                 @endforeach
                                 @endif
@@ -242,52 +253,55 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                         </div>
 
                         <div class="searchbar-footer">
-                        @if(isset($getAllReciverUser[1]->message_text))
+                            @if(isset($getAllReciverUser[1]->message_text))
                             <ul class="suggestion" style="display: none;">
-                            <li>Suggestion: </li>
+                                <li>Suggestion: </li>
                                 <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                 @else
                                 <ul class="suggestion">
-                                <li>Suggestion: </li>
-                                <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
-                                @endif
-                            </ul>
-                            <div class="type_message">
-                                <!-- <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST"> -->
-                                <form id="message_form" method="post">
-                                    {!! csrf_field() !!}
-                                    <input type="text" name="message" id="type_message"
-                                        placeholder="Type action message" autocomplete="off" required>
-                                    <input type="hidden" name="receiver_id"
-                                        value="{{ request()->segment(count(request()->segments())) }}">
-                                    <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
-                                    <div class="dropdown">
-                                        <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            <img height="24" width="24" src="{{ URL::asset('public/front/img/add-photo.png') }}"> Ask <i
-                                                class="bi bi-chevron-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a class="dropdown-item" href="#">Show me...</a></li>
-                                            <li><a class="dropdown-item" href="#">Send me...</a></li>
-                                            <li><a class="dropdown-item" href="#">Send</a></li>
-                                            <li><a class="dropdown-item" href="#">Can i see...</a></li>
-                                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
-                                                        src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
-                                                    to use</a></li>
-                                        </ul>
-                                    </div>
-                                    @if(session('user_id'))
-                                    <button type="submit" id="new_message">
-                                        <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
-                                    </button>
-                                    @else
-                                    <button type="submit" data-bs-toggle="modal" data-bs-target="#please_register">
-                                        <img height="24" width="24" src="{{ URL::asset('public/front/img/message.png') }}">
-                                    </button>
+                                    <li>Suggestion: </li>
+                                    <li><a href="#" class="suggestion-link">Hey! How's your day been?</a></li>
                                     @endif
-                                </form>
-                            </div>
+                                </ul>
+                                <div class="type_message">
+                                    <!-- <form id="message_form" action="{{ route('chat.userMessage') }}" method="POST"> -->
+                                    <form id="message_form" method="post">
+                                        {!! csrf_field() !!}
+                                        <input type="text" name="message" id="type_message"
+                                            placeholder="Type action message" autocomplete="off" required>
+                                        <input type="hidden" name="receiver_id"
+                                            value="{{ request()->segment(count(request()->segments())) }}">
+                                        <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
+                                        <div class="dropdown">
+                                            <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <img height="24" width="24"
+                                                    src="{{ URL::asset('public/front/img/add-photo.png') }}"> Ask <i
+                                                    class="bi bi-chevron-down"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li><a class="dropdown-item" href="#">Show me...</a></li>
+                                                <li><a class="dropdown-item" href="#">Send me...</a></li>
+                                                <li><a class="dropdown-item" href="#">Send</a></li>
+                                                <li><a class="dropdown-item" href="#">Can i see...</a></li>
+                                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#How_to_use"><img
+                                                            src="{{ URL::asset('public/front/img/ask-info.svg') }}"> How
+                                                        to use</a></li>
+                                            </ul>
+                                        </div>
+                                        @if(session('user_id'))
+                                        <button type="submit" id="new_message">
+                                            <img height="24" width="24"
+                                                src="{{ URL::asset('public/front/img/message.png') }}">
+                                        </button>
+                                        @else
+                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#please_register">
+                                            <img height="24" width="24"
+                                                src="{{ URL::asset('public/front/img/message.png') }}">
+                                        </button>
+                                        @endif
+                                    </form>
+                                </div>
                         </div>
 
                     </div>
@@ -344,7 +358,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/Personality.png') }}">
+                                        <img height="20" width="20"
+                                            src="{{ URL::asset('public/front/img/Personality.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>PERSONALITY</span>
@@ -353,7 +368,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/Occupation.png') }}">
+                                        <img height="20" width="20"
+                                            src="{{ URL::asset('public/front/img/Occupation.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>Occupation</span>
@@ -362,7 +378,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/hobbies.png') }}">
+                                        <img height="20" width="20"
+                                            src="{{ URL::asset('public/front/img/hobbies.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>HOBBIES</span>
@@ -371,7 +388,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/relationship.png') }}">
+                                        <img height="20" width="20"
+                                            src="{{ URL::asset('public/front/img/relationship.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>RELATIONSHIP</span>
@@ -403,7 +421,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 </div>
                                 <div class="attributes_item">
                                     <div class="attributes_icon">
-                                        <img height="20" width="20" src="{{ URL::asset('public/front/img/ethnicity.png') }}">
+                                        <img height="20" width="20"
+                                            src="{{ URL::asset('public/front/img/ethnicity.png') }}">
                                     </div>
                                     <div class="attributes_txt">
                                         <span>ETHNICITY</span>
@@ -426,7 +445,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
 <div class="how_to_use_popup">
     <!-- Modal -->
-    <div class="modal fade" id="false_thumb" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="How_to_useModalLabel" aria-hidden="true">
+    <div class="modal fade" id="false_thumb" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="How_to_useModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -437,11 +457,13 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <div class="prompt_for_image">
                         <p>Write your message here.</p>
                         <textarea id="messageTextarea" placeholder="What is the issue, how could it be improved?"
-                            rows="4" cols="34" style="background: black;color: white;width: 100%;border-radius: 5px;padding: 5px 10px;"></textarea>
-                            <input type="hidden" name="chat_like_message_id" id="chat_like_message_id" />
+                            rows="4" cols="34"
+                            style="background: black;color: white;width: 100%;border-radius: 5px;padding: 5px 10px;"></textarea>
+                        <input type="hidden" name="chat_like_message_id" id="chat_like_message_id" />
                         <div class="pasination">
 
-                            <a href="#" id="sendLink"  style="width: 100%;text-align: center;" data-bs-toggle="modal" data-bs-target="#false_thumbstep2">Send</a>
+                            <a href="#" id="sendLink" style="width: 100%;text-align: center;" data-bs-toggle="modal"
+                                data-bs-target="#false_thumbstep2">Send</a>
                         </div>
                     </div>
                 </div>
@@ -559,11 +581,15 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
 
                     <div class="row mt-4">
                         <div class="col-6">
-                            <a href="{{ route('register') }}" class="register_btn"><img src="{{ URL::asset('public/front/img/edit.png') }}" width="15" height="15">&nbsp;Register</a>
+                            <a href="{{ route('register') }}" class="register_btn"><img
+                                    src="{{ URL::asset('public/front/img/edit.png') }}" width="15"
+                                    height="15">&nbsp;Register</a>
                             <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
                         </div>
                         <div class="col-6">
-                            <a href="{{ route('login') }}" class="login_btn"><img src="{{ URL::asset('public/front/img/enter.png') }}" width="15" height="15">&nbsp;&nbsp;Login</a>
+                            <a href="{{ route('login') }}" class="login_btn"><img
+                                    src="{{ URL::asset('public/front/img/enter.png') }}" width="15"
+                                    height="15">&nbsp;&nbsp;Login</a>
                             <!-- <span>By signing up, you agree to <a href="#">Terms of Service</a></span> -->
                         </div>
                     </div>
@@ -582,25 +608,24 @@ $(document).ready(function() {
         $('.sidebar ul.nav').toggleClass('isClosed');
     });
 
-    $('body').on('click', '.message-link', function(e){
+    $('body').on('click', '.message-link', function(e) {
         $('#chat_like_message_id').val($(this).data('bs-messageid'))
     })
 
 
     // $('body').on('click', '#new_message', function() {
-        
+
     //     sendMessage()
 
     // })
 });
 
-$("#message_form").submit(function (event) {
+$("#message_form").submit(function(event) {
     event.preventDefault()
     sendMessage()
 });
 
-function sendMessage()
-{
+function sendMessage() {
     if ($('#type_message').val()) {
         $('.new_message').append(
             '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
@@ -612,70 +637,74 @@ function sendMessage()
 
         var inputValue = $('#type_message').val();
 
-                        // Check if the input contains the word "show"
-                        if (inputValue.includes('show')) {
-                            // The word "show" is present in the input
-                            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-                            setTimeout(function() {
-                                updateLoading('0%', 'Please Wait');
-                            }, 1000);
+        // Check if the input contains the word "show"
+        if (inputValue.includes('show')) {
+            // The word "show" is present in the input
+            $('.new_message').append(
+                '<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>'
+                );
+            setTimeout(function() {
+                updateLoading('0%', 'Please Wait');
+            }, 1000);
 
-                            setTimeout(function() {
-                                updateLoading('20%', 'Processing...');
-                            }, 5000);
+            setTimeout(function() {
+                updateLoading('20%', 'Processing...');
+            }, 5000);
 
-                            setTimeout(function() {
-                                updateLoading('50%', 'Almost There...');
-                            }, 25000);
+            setTimeout(function() {
+                updateLoading('50%', 'Almost There...');
+            }, 25000);
 
-                            setTimeout(function() {
-                                updateLoading('80%', 'Complete');
-                            }, 30000);
+            setTimeout(function() {
+                updateLoading('80%', 'Complete');
+            }, 30000);
 
-                            setTimeout(function() {
-                                updateLoading('100%', 'Complete');
-                            }, 55000);
-                            // You can add your condition or code here
-                        }
+            setTimeout(function() {
+                updateLoading('100%', 'Complete');
+            }, 55000);
+            // You can add your condition or code here
+        }
 
-                        setTimeout(function() {
-                                $("#type_message").val('');
-                            }, 100); // 3000 milliseconds (3 seconds)
-                        // Make the input element readonly
-                        $("#type_message").prop("readonly", true);
-                        
-                        const chatContentScrollnewchat = document.querySelector('.chat_content');
-                        chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
-                        
-                        document.addEventListener("DOMContentLoaded", function() {
-                            // Select the message and dot elements
-                            var messageElement = document.getElementById("chat_content_box");
+        setTimeout(function() {
+            $("#type_message").val('');
+        }, 100); // 3000 milliseconds (3 seconds)
+        // Make the input element readonly
+        $("#type_message").prop("readonly", true);
 
-                            // Display the three dots animation
-                            messageElement.style.display = "block";
+        const chatContentScrollnewchat = document.querySelector('.chat_content');
+        chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Select the message and dot elements
+            var messageElement = document.getElementById("chat_content_box");
+
+            // Display the three dots animation
+            messageElement.style.display = "block";
 
 
-                            // Hide the three dots animation and show the message after 3 seconds
-                            setTimeout(function() {
-                                messageElement.style.display = "none";
-                            }, 3000); // 3000 milliseconds (3 seconds)
-                        });
-            
-                        var formData = $('#message_form').serialize();
+            // Hide the three dots animation and show the message after 3 seconds
+            setTimeout(function() {
+                messageElement.style.display = "none";
+            }, 3000); // 3000 milliseconds (3 seconds)
+        });
 
-                        $.ajax({
-                        url: "{{ route('chat.userMessage', [], true) }}",
-                        method: 'POST',
-                        dataType: 'json',
-                        data: formData, // Serialized form data
-                        success: function(data) {
-                            // console.log(data);
-                                location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error: ' + status);
-                        }
-                        });
+        var formData = $('#message_form').serialize();
+        var appUrl = @json(config('app.url'));
+        var url = appUrl + "/chat/message/userMessage";
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            dataType: 'json',
+            data: formData, // Serialized form data
+            success: function(data) {
+                // console.log(data);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + status);
+            }
+        });
 
         // $('#message_form').submit();
     }
@@ -683,94 +712,94 @@ function sendMessage()
 
 
 // $(document).keypress(function(e) {
-    
+
 //     if (e.which == 13) {
 //         sendMessage()
-        // if ($('#type_message').val()) {
-        //     $('.new_message').append(
-        //         '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
-        //         $('#type_message').val() + '</span></div></div>');
+// if ($('#type_message').val()) {
+//     $('.new_message').append(
+//         '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
+//         $('#type_message').val() + '</span></div></div>');
 
-        //     $('.new_message').append(
-        //         '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
-        //     );
-           
-        //     var inputValuekey = $('#type_message').val();
+//     $('.new_message').append(
+//         '<div class="chat_content_box" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+//     );
 
-        //     // Check if the input contains the word "show"
-        //     if (inputValuekey.includes('show')) {
-        //         // The word "show" is present in the input
-        //         $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
-        //         setTimeout(function() {
-        //             updateLoading('0%', 'Please Wait');
-        //         }, 1000);
+//     var inputValuekey = $('#type_message').val();
 
-        //         setTimeout(function() {
-        //             updateLoading('20%', 'Processing...');
-        //         }, 5000);
+//     // Check if the input contains the word "show"
+//     if (inputValuekey.includes('show')) {
+//         // The word "show" is present in the input
+//         $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+//         setTimeout(function() {
+//             updateLoading('0%', 'Please Wait');
+//         }, 1000);
 
-        //         setTimeout(function() {
-        //             updateLoading('50%', 'Almost There...');
-        //         }, 9000);
-        //         setTimeout(function() {
-        //             updateLoading('60%', 'Almost There...');
-        //         }, 12000);
-        //         setTimeout(function() {
-        //             updateLoading('70%', 'Almost There...');
-        //         }, 16000);
+//         setTimeout(function() {
+//             updateLoading('20%', 'Processing...');
+//         }, 5000);
 
-        //         setTimeout(function() {
-        //             updateLoading('80%', 'Complete');
-        //         }, 19000);
+//         setTimeout(function() {
+//             updateLoading('50%', 'Almost There...');
+//         }, 9000);
+//         setTimeout(function() {
+//             updateLoading('60%', 'Almost There...');
+//         }, 12000);
+//         setTimeout(function() {
+//             updateLoading('70%', 'Almost There...');
+//         }, 16000);
 
-        //         setTimeout(function() {
-        //             updateLoading('100%', 'Complete');
-        //         }, 22000);
-        //         // You can add your condition or code here
-        //     }
+//         setTimeout(function() {
+//             updateLoading('80%', 'Complete');
+//         }, 19000);
 
-        //     const chatContentScrollnewchatkey = document.querySelector('.chat_content');
-        //     chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
-            
-        //     // Get the "new_message" button element
-        //         // Clear the input field's value
-        //         setTimeout(function() {
-        //             $("#type_message").val('');
-        //         }, 100); // 3000 milliseconds (3 seconds)
-        //     // Make the input element readonly
-        //     $("#type_message").prop("readonly", true);
+//         setTimeout(function() {
+//             updateLoading('100%', 'Complete');
+//         }, 22000);
+//         // You can add your condition or code here
+//     }
 
-        //     document.addEventListener("DOMContentLoaded", function() {
-        //         // Select the message and dot elements
-        //         var messageElementkey = document.getElementById("chat_content_box");
+//     const chatContentScrollnewchatkey = document.querySelector('.chat_content');
+//     chatContentScrollnewchatkey.scrollTop = chatContentScrollnewchatkey.scrollHeight;
 
-        //         // Display the three dots animation
-        //         messageElementkey.style.display = "block";
+//     // Get the "new_message" button element
+//         // Clear the input field's value
+//         setTimeout(function() {
+//             $("#type_message").val('');
+//         }, 100); // 3000 milliseconds (3 seconds)
+//     // Make the input element readonly
+//     $("#type_message").prop("readonly", true);
+
+//     document.addEventListener("DOMContentLoaded", function() {
+//         // Select the message and dot elements
+//         var messageElementkey = document.getElementById("chat_content_box");
+
+//         // Display the three dots animation
+//         messageElementkey.style.display = "block";
 
 
-        //         // Hide the three dots animation and show the message after 3 seconds
-        //         setTimeout(function() {
-        //             messageElementkey.style.display = "none";
-        //         }, 3000); // 3000 milliseconds (3 seconds)
-        //     });
+//         // Hide the three dots animation and show the message after 3 seconds
+//         setTimeout(function() {
+//             messageElementkey.style.display = "none";
+//         }, 3000); // 3000 milliseconds (3 seconds)
+//     });
 
-        //     var formData = $('#message_form').serialize();
+//     var formData = $('#message_form').serialize();
 
-        //         $.ajax({
-        //         url: "{{ route('chat.userMessage') }}",
-        //         method: 'POST',
-        //         dataType: 'json',
-        //         data: formData, // Serialized form data
-        //         success: function(data) {
-        //             // console.log(data);
-        //                 location.reload();
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error('Error: ' + status);
-        //         }
-        //         });
-        //     // $('#message_form').submit();
-        // }
+//         $.ajax({
+//         url: "{{ route('chat.userMessage') }}",
+//         method: 'POST',
+//         dataType: 'json',
+//         data: formData, // Serialized form data
+//         success: function(data) {
+//             // console.log(data);
+//                 location.reload();
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error: ' + status);
+//         }
+//         });
+//     // $('#message_form').submit();
+// }
 
 //     }
 // });
@@ -967,36 +996,36 @@ $('.remove-chat').click(function(e) {
     var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
     url = url.replace(':chatid', chatid);
 
-      e.preventDefault();
-            swal({
+    e.preventDefault();
+    swal({
             title: "Are you sure?",
             text: "Wants to delete chat?",
             icon: "warning",
             buttons: true,
             dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: url,
-                            type: 'GET',
-                            data: {
-                                _token: '{{ csrf_token() }}', // Include the CSRF token
-                                chatid: chatid
-                            },
-                        success: function(result) {
-                            swal("Poof! Your chat has been deleted!", {
-                                icon: "success",
-                            }).then((willDelete) => {
-                                if (willDelete) {
-                                    location.reload(true);
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    swal("Your chat is safe!");
-                }
-            });
-            });
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        _token: '{{ csrf_token() }}', // Include the CSRF token
+                        chatid: chatid
+                    },
+                    success: function(result) {
+                        swal("Poof! Your chat has been deleted!", {
+                            icon: "success",
+                        }).then((willDelete) => {
+                            if (willDelete) {
+                                location.reload(true);
+                            }
+                        });
+                    }
+                });
+            } else {
+                swal("Your chat is safe!");
+            }
+        });
+});
 </script>

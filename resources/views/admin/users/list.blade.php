@@ -132,8 +132,8 @@ i.mdi.mdi-rocket {
 
 <script>
 function suspendUser(id) {
-
-    var str = "{{URL::to('admin/users/suspend')}}/" + id;
+  var appUrl = @json(config('app.url'));
+    var str = appUrl + "/admin/users/suspend/" + id;
     swal({
             title: "Are you sure?",
             text: "Once Suspended, you will not be able to open this account and services",
@@ -162,8 +162,8 @@ function suspendUser(id) {
 }
 
 function activeUser(id) {
-
-var str = "{{URL::to('admin/users/active')}}/" + id;
+  var appUrl = @json(config('app.url'));
+var str = appUrl + "/admin/users/active/" + id;
 swal({
         title: "Are you sure?",
         text: "Active this account",
