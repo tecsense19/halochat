@@ -173,7 +173,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                         </svg></span>
                                                 </div>
                                             </div>
-                                            <div class="message_feedback">
+                                            <!-- <div class="message_feedback">
                                         @if($chat_user->message_liked == 'Liked')
                                         <a href="#"><img src="{{ URL::asset('public/front/img/true_svg.svg') }}"></a>
                                         @else
@@ -190,7 +190,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                     src="{{ URL::asset('public/front/img/thumbs-down.svg') }}"></a>
                                                     @endif
                                         @endif
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 @endif  
