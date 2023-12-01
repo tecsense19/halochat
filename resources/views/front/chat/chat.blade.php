@@ -654,15 +654,15 @@ $(document).ready(function() {
 
             setTimeout(function() {
                 updateLoading('50%', 'Almost There...');
-            }, 25000);
+            }, 6000);
 
             setTimeout(function() {
                 updateLoading('80%', 'Complete');
-            }, 30000);
+            }, 7000);
 
             setTimeout(function() {
                 updateLoading('100%', 'Complete');
-            }, 55000);
+            }, 10000);
             // You can add your condition or code here
         }
 
@@ -738,25 +738,25 @@ if ($('#type_message').val()) {
 
         setTimeout(function() {
             updateLoading('20%', 'Processing...');
-        }, 5000);
+        }, 3000);
 
         setTimeout(function() {
             updateLoading('50%', 'Almost There...');
-        }, 9000);
+        }, 5000);
         setTimeout(function() {
             updateLoading('60%', 'Almost There...');
-        }, 12000);
+        }, 9000);
         setTimeout(function() {
             updateLoading('70%', 'Almost There...');
-        }, 16000);
+        }, 10000);
 
         setTimeout(function() {
             updateLoading('80%', 'Complete');
-        }, 19000);
+        }, 11000);
 
         setTimeout(function() {
             updateLoading('100%', 'Complete');
-        }, 22000);
+        }, 11500);
         // You can add your condition or code here
     }
 
