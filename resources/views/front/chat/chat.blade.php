@@ -770,19 +770,19 @@ suggestionLink.addEventListener('click', function(event) {
 
 });
 
-// Get the "new_message" button element
-const newMessageButton = document.getElementById('new_message');
-const chatContentScroll = document.querySelector('.chat_content');
-// Add a click event listener to the button
-newMessageButton.addEventListener('click', function() {
+// // Get the "new_message" button element
+// const newMessageButton = document.getElementById('new_message');
+// const chatContentScroll = document.querySelector('.chat_content');
+// // Add a click event listener to the button
+// newMessageButton.addEventListener('click', function() {
 
-    chatContentScroll.scrollTop = chatContentScroll.scrollHeight;
-    // Clear the input field's value
-    setTimeout(function() {
-        messageInput.value = '';
-    }, 500); // 3000 milliseconds (3 seconds)
+//     chatContentScroll.scrollTop = chatContentScroll.scrollHeight;
+//     // Clear the input field's value
+//     setTimeout(function() {
+//         messageInput.value = '';
+//     }, 500); // 3000 milliseconds (3 seconds)
 
-});
+// });
 </script>
 
 
@@ -807,14 +807,14 @@ dropdownItems.forEach(function(item) {
 });
 </script>
 <script>
-// Add this script at the end of your HTML body, just before the </body> tag.
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the chat_content element
-    const chatContent = document.querySelector('.chat_content');
+// // Add this script at the end of your HTML body, just before the </body> tag.
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Get the chat_content element
+//     const chatContent = document.querySelector('.chat_content');
 
-    // Scroll to the bottom of the chat_content element
-    chatContent.scrollTop = chatContent.scrollHeight;
-});
+//     // Scroll to the bottom of the chat_content element
+//     chatContent.scrollTop = chatContent.scrollHeight;
+// });
 </script>
 
 

@@ -569,8 +569,8 @@ $(document).ready(function() {
                 }, 100); // 3000 milliseconds (3 seconds)
             // Make the input element readonly
             // $("#type_message").prop("readonly", true);
-        const chatContentScrollnewchat = document.querySelector('.chat_content');
-        chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
+        // const chatContentScrollnewchat = document.querySelector('.chat_content');
+        // chatContentScrollnewchat.scrollTop = chatContentScrollnewchat.scrollHeight;
         
         document.addEventListener("DOMContentLoaded", function() {
             // Select the message and dot elements
@@ -754,14 +754,14 @@ newMessageButton.addEventListener('click', function() {
 
 
 <script>
-// Add this script at the end of your HTML body, just before the </body> tag.
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the chat_content element
-    const chatContent = document.querySelector('.chat_content');
+// // Add this script at the end of your HTML body, just before the </body> tag.
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Get the chat_content element
+//     const chatContent = document.querySelector('.chat_content');
 
-    // Scroll to the bottom of the chat_content element
-    chatContent.scrollTop = chatContent.scrollHeight;
-});
+//     // Scroll to the bottom of the chat_content element
+//     chatContent.scrollTop = chatContent.scrollHeight;
+// });
 </script>
 
 
