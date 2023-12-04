@@ -140,7 +140,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                             fill="currentColor"></path>
                                     </g>
                                 </svg> -->
-                                <a href="#" data-bs-chatid="{{ $chat->profile_id }}" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
+                                <a href="#" data-bs-chatid="{{ $chat->profile_id }}" style="display: none;" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -152,7 +152,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                         </g>
                                     </svg>
                                 </a>
-                                <a href="" data-bs-chatid="{{ $chat->profile_id }}" style="display: none;" class="remove-chat profile_{{ $chat->profile_id }}">
+                                <a href="" data-bs-chatid="{{ $chat->profile_id }}"  class="remove-chat profile_{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -663,21 +663,24 @@ function sendMessage() {
         var formData = $('#message_form').serialize();
         var appUrl = @json(config('app.url'));
         var url = appUrl + "/chat/message/userMessage";
-
+   
+        
         var currentUrl = window.location.href;
         var lastId = currentUrl.split('/').filter(Boolean).pop();
         $('.profile_'+lastId).css('pointer-events', 'none');
         $('[data-toggle="tooltip"]').tooltip();
+        $('.profile_'+lastId).hide();
+        $('.profile_info'+lastId).show();
+        
         // $('.profile_'+lastId).attr('data-tooltip', 'When completed response then after you can delete it');
         $.ajax({
             url: url,
             method: 'POST',
             data: formData, // Serialized form data
             success: function(data) {
+                $('.profile_'+lastId).show();
                 $('.profile_'+lastId).css('pointer-events', 'auto');
                 // Assuming your link has a class, replace '.your-link-class' with your actual class or ID
-                $('.profile_'+lastId).removeAttr('data-tooltip');
-                $('.profile_'+lastId).show();
                 $('.profile_info'+lastId).hide();
                 loadchats();
             },

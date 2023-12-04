@@ -594,16 +594,17 @@ $(document).ready(function() {
         var lastId = currentUrl.split('/').filter(Boolean).pop();
         $('.profile_'+lastId).css('pointer-events', 'none');
         $('[data-toggle="tooltip"]').tooltip();
+        $('.profile_'+lastId).hide();
+        $('.profile_info'+lastId).show();
         // $('.profile_'+lastId).attr('data-tooltip', 'When completed response then after you can delete it');
         $.ajax({
             url: url,
             method: 'POST',
             data: formData, // Serialized form data
             success: function(data) {
+                $('.profile_'+lastId).show();
                 $('.profile_'+lastId).css('pointer-events', 'auto');
                 // Assuming your link has a class, replace '.your-link-class' with your actual class or ID
-                $('.profile_'+lastId).removeAttr('data-tooltip');
-                $('.profile_'+lastId).show();
                 $('.profile_info'+lastId).hide();
                 loadchats();
             },
