@@ -81,7 +81,7 @@ $cfg_scale = isset($profilegloble->cfg_scale) ? $profilegloble->cfg_scale : '';
                             </div>
 
                             <div class="form-group">
-                                <label for="Name">List of words and phrases</label>
+                                <label for="Name">Words to remove from user image requests</label>
                                 <textarea class="form-control custom-min-height" name="wordsphrases" id="wordsphrases" cols="30" rows="10" placeholder="Words and phrases">{{ $wordsphrases }}</textarea>
                                     @error('wordsphrases')
                             <span class="text-danger">{{ $message }}</span>

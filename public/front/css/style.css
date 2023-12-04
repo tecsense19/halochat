@@ -939,7 +939,7 @@ form.search-form svg {
   transition: transform 0.3s;
   position: sticky;
   top: 0;
-  width: 100%;
+  width: 75%;
   padding-top: 73px;
 }
 
@@ -2574,7 +2574,7 @@ input {
     transition: transform 0.3s;
     position: sticky;
     top: 0;
-    width: 100%;
+    width: 75%;
     padding-top: unset;
   }
 
@@ -2615,7 +2615,7 @@ input {
   width: 100%;
   background: #1A1A1A;
   border-left: 1px solid;
-  padding-top: unset;
+  padding-top: 64px;
 }
 
 .chat_mobile {

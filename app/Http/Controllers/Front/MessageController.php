@@ -95,7 +95,7 @@ class MessageController extends Controller
                 if (str_contains($message_show, 'show')) {
                     $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
                     }
-                        $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url);
+                        $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id']);
                     
                 
             }
@@ -108,7 +108,7 @@ class MessageController extends Controller
            
     }
 
-    public function callAPI($id, $message, $profile_id, $userId, $message_url)
+    public function callAPI($id, $message, $profile_id, $userId, $message_url, $first_message, $receiver_id)
     {
         {   
             $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
@@ -117,6 +117,7 @@ class MessageController extends Controller
                 return "<script>alert('Your trail credit is over');</script>";
             }else{
                     if(filter_var($message_url, FILTER_VALIDATE_URL) !== false){
+                        
                         $messageAi = array(
                             'profile_id'=> $profile_id,
                             'user_id'=> session('user_id'),
@@ -402,7 +403,6 @@ class MessageController extends Controller
     {
 
         Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
-
         $user = User::where('id', session('user_id'))->first();
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -418,7 +418,6 @@ class MessageController extends Controller
             'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
         ),
         ));
-
         $fetchfirst = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->get();
 
         $profile = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->first();

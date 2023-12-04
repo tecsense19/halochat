@@ -3,13 +3,13 @@
     <div class="container_fluid">
       <div class="footer_content">
         <ul class="social_txt">
-          <li><a href="https://discord.com/" target="_blank">Discord</a></li>
+          <!-- <li><a href="https://discord.com/" target="_blank">Discord</a></li> -->
           @if(session('user_id'))
-          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contactmodel">Contact</a></li>
+          <!-- <li><a href="#" data-bs-toggle="modal" data-bs-target="#contactmodel">Contact</a></li> -->
           @else
-          <li><a href="{{ route('login') }}" >feedback</a></li>
+          <!-- <li><a href="{{ route('login') }}" >feedback</a></li> -->
           @endif
-          <li><a href="#">Affiliate</a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contactmodel">Affiliate</a></li>
         </ul>
         <ul class="links">
           <li><a href="{{ route('terms.terms') }}">Terms of Service</a></li>
