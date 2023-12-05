@@ -599,7 +599,7 @@ function sendMessage() {
             $('#type_message').val() + '</span></div></div>');
 
         $('.new_message').append(
-            '<div class="chat_content_box" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
+            '<div class="chat_content_box hidedots" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
         );
         <?php } ?>
 
@@ -608,7 +608,7 @@ function sendMessage() {
         // Check if the input contains the word "show"
         if (inputValue.includes('show')) {
             // The word "show" is present in the input
-            $('.chat_content_box').css('display', 'none');
+            $('.hidedots').css('display', 'none');
 
             var charname= "{{ $user->name }}";
             <?php if(session('user_id')) { ?>

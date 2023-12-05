@@ -532,13 +532,13 @@ $(document).ready(function() {
             <?php if(session('user_id')) { ?>
         $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
 
-        $('.new_message').append('<div class="chat_content_box" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
+        $('.new_message').append('<div class="chat_content_box hidedots" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
         <?php } ?>
         var inputValue = $('#type_message').val();
   
         // Check if the input contains the word "show"
         if (inputValue.includes('show')) {
-            $('.chat_content_box').css('display', 'none');
+            $('.hidedots').css('display', 'none');
             // The word "show" is present in the input
             <?php if(session('user_id')) { ?>
             $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
