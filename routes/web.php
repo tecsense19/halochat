@@ -11,6 +11,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Front\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,8 +69,6 @@ use App\Http\Controllers\PaymentController;
     Route::get('/loadchat/{id}', [MessageController::class, 'loadchats'])->name('loadchats');
     Route::get('/mobile_loadchats/{id}', [MessageController::class, 'mobile_loadchats'])->name('mobile_loadchats');
   
-    
-    Route::get('/subscription', [UserController::class, 'subscription'])->name('subscription.subscription');
     Route::get('/profile/setting', [UserController::class, 'profile'])->name('profile.profile');
     Route::post('/profile/update', [ProfilesController::class, 'update'])->name('profile.update');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile.index');
@@ -102,6 +101,9 @@ use App\Http\Controllers\PaymentController;
 
     Route::get('/payment', [PaymentController::class, 'showForm']);
     Route::post('/payment', [PaymentController::class, 'makePayment']);
+
+    //Plans Subscription
+    Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');
 
 
 

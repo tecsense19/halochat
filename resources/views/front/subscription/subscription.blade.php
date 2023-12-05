@@ -49,29 +49,39 @@
         <div class="col-xl-4">
           <div class="discount_box">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
+              @if(isset($response))
+              @foreach($response['data'] as $key => $plans)
+              @if($plans['sku'] == 'Basic subscription')
+              @if($plans['category']['name'] == 'plans')
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
                     <div class="pricing_box">
                       <div class="offer_box">50% off</div>
-                      <h6>Premium</h6>
-                      <h3>$9.99 <span> $19.99 </span><small> / month</small></h3>
+                      <h6>{{ $plans['sku'] }}</h6>
+                      <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
                       <p>Cancel anytime, privacy in bank statement</p>
                     </div>
                 </button>
               </li>
-              <li class="nav-item" role="presentation">
+              @endif
+              @elseif($plans['sku'] == 'VIP subscription')
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                     <div class="pricing_box">
                       <div class="offer_box">70% off</div>
                       <div class="pupular_plan">
-                        <h6>Premium</h6>
+                        <h6>{{ $plans['sku'] }}</h6>
                         <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
                       </div>
-                      <h3>$69.99 <span> $239.88 </span><small> / year</small></h3>
+                      <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
                       <p>Cancel anytime, privacy in bank statement</p>
                     </div>
                 </button>
               </li>
+              @endif
+              @endforeach
+              @endif
+         
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">

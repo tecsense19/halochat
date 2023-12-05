@@ -9,6 +9,7 @@ use App\Models\Messages;
 use App\Models\Managecredit;
 use App\Models\Usedcredites;
 use App\Models\Passwordresets;
+use App\Models\Feedback;
 use App\Mail\Resetpasslink;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
@@ -99,11 +100,6 @@ class UserController extends Controller
         $profileList = Profile::with('profileImages')->get();
         return view("front.dashboard", compact('profileList'));
         }
-    }
-    
-    public function subscription()
-    {
-    return view("front.subscription.subscription");
     }
 
     public function terms()
@@ -317,10 +313,12 @@ class UserController extends Controller
     public function contact(Request $request)
     {
         $input = $request->all();
-        User::updateOrInsert(
-            ['id' => $input['user_id']],
-            ['contact_us' => $input['message']]
-        );
+        Feedback::updateOrInsert(
+            ['user_id' => isset($input['user_id']) ? $input['user_id'] : '',
+            'name' => isset($input['name']) ? $input['name'] : '' , 
+            'email' => isset($input['email']) ? $input['email'] : '', 
+            'message' => isset($input['message']) ? $input['message'] : '']
+        );        
         return true;
     }
 }

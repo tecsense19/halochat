@@ -90,7 +90,7 @@ class MessageController extends Controller
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
             
             if($creditAddManage->currentcredit == 0){
-                return redirect()->route('subscription.subscription');
+                return redirect()->route('subscription.index');
             }else{  
                 // Now $message_show contains the original string with all matched words removed
                 if (str_contains($message_show, 'show')) {

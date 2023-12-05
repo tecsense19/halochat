@@ -51,7 +51,7 @@
                       <ul><!--MENU-->
                         <li><a href="{{ route('profile.index') }}"><img src="{{ URL::asset('public/front/img/settings.svg') }}"> Settings</a></li>
                         <li><a href="{{ route('gallery.gallery') }}"><img src="{{ URL::asset('public/front/img/gallery.svg') }}"> Gallery</a></li>
-                        <li><a href="{{ route('subscription.subscription') }}"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Subscription</a></li>
+                        <li><a href="{{ route('subscription.index') }}"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Subscription</a></li>
                         <li><a href="#"><img src="{{ URL::asset('public/front/img/affiliate.svg') }}"> Affiliate</a></li>
                         <li><a href="{{ route('front.logout') }}"><img src="{{ URL::asset('public/front/img/logout.svg') }}"> Log Out</a></li>
                       </ul>

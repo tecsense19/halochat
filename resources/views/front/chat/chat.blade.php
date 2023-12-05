@@ -622,19 +622,19 @@ function sendMessage() {
 
             setTimeout(function() {
                 updateLoading('20%', 'Processing...');
-            }, 3000);
-
-            setTimeout(function() {
-                updateLoading('50%', 'Almost There...');
             }, 5000);
 
             setTimeout(function() {
+                updateLoading('50%', 'Almost There...');
+            }, 25000);
+
+            setTimeout(function() {
                 updateLoading('80%', 'Complete');
-            }, 10000);
+            }, 30000);
 
             setTimeout(function() {
                 updateLoading('100%', 'Complete');
-            }, 15000);
+            }, 55000);
             // You can add your condition or code here
             <?php } ?>
         }
