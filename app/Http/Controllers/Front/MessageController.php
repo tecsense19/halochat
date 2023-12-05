@@ -116,6 +116,8 @@ class MessageController extends Controller
             if($creditAddManage->currentcredit == 0){
                 return "<script>alert('Your trail credit is over');</script>";
             }else{
+                print_r($message_url);
+                die;
                     if(!empty($message_url)){
                         $messageAi = array(
                             'profile_id'=> $profile_id,
@@ -563,7 +565,7 @@ class MessageController extends Controller
                     $image->save($modifiedImagePath);
                     $image->exif([]);
                     $image->response('png');
-                    return url('storage/'.$imageName);
+                    return env('APP_URL').('/storage'.'/'.$imageName);
                 }
 
                return '';
