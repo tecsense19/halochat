@@ -95,7 +95,7 @@ class MessageController extends Controller
                 if (str_contains($message_show, 'show')) {
                     $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
                     }
-                        $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id']);
+                $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id']);
                     
                 
             }
@@ -116,8 +116,7 @@ class MessageController extends Controller
             if($creditAddManage->currentcredit == 0){
                 return "<script>alert('Your trail credit is over');</script>";
             }else{
-                    if(filter_var($message_url, FILTER_VALIDATE_URL) !== false){
-                        
+                    if(!empty($message_url)){
                         $messageAi = array(
                             'profile_id'=> $profile_id,
                             'user_id'=> session('user_id'),
@@ -505,7 +504,7 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
-                sleep(15);
+                sleep(12);
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                 CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/'.'status/'.$response_image,
