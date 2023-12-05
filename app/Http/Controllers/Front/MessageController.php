@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use App\Models\Messages;
 use App\Models\Profile;
 use App\Models\Managecredit;
@@ -504,34 +505,27 @@ class MessageController extends Controller
                     return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
-                sleep(12);
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/'.'status/'.$response_image,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json',
-                    'Authorization: Bearer '.env('AI_IMAGE_KEY'),
-                    'Cookie: __cflb=0H28v2ycMsGacX9vfRBHNL4Xf6Pqy6UtsaGmFx2YDxQ'
-                ),
-                ));
 
-                $response_Base64 = curl_exec($curl);
-                curl_close($curl);
+                $response_Base64 = $this->performInitialCheck($response_image);
+                $response_Base64 = json_decode($response_Base64, true); // Ensure the second parameter is set to true
 
-                $response_Base64 = json_decode($response_Base64, true);
-                if (isset($response_Base64['output']['images'][0])) {
-                    $response_image = $response_Base64['output']['images'][0];
-                } else {
-                    return back()->withErrors(['ai_message' => 'Message and image not found in the response'])->withInput();
-                    exit;
-                }   
+                if($response_Base64)
+                {
+                    while ($response_Base64['status'] == "IN_PROGRESS" || $response_Base64['status'] == "IN_QUEUE") {
+                        // Perform the time-based check
+                        $response_Base64 = $this->performInitialCheck($response_image);
+                        $response_Base64 = json_decode($response_Base64, true);
+                        // Check if the status is now "COMPLETED"
+                        if ($response_Base64['status'] == "COMPLETED") {
+                            
+                            if (isset($response_Base64['output']['images'][0])) {
+                                $response_image = $response_Base64['output']['images'][0];
+                                break;
+                            } 
+                        }
+                
+                    }
+                }
 
                 if(isset($response_image)){
                     // $base64Image = $response_image;
@@ -583,5 +577,43 @@ class MessageController extends Controller
             'message_liked' => 'Unliked'
         ]);
         return true;
+    }
+    private function performInitialCheck($response_image)
+    {
+        // Logic for the initial check
+        // Return 'inprogress' if successful, otherwise return an appropriate value
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/'.'status/'.$response_image,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Bearer '.env('AI_IMAGE_KEY'),
+            'Cookie: __cflb=0H28v2ycMsGacX9vfRBHNL4Xf6Pqy6UtsaGmFx2YDxQ'
+        ),
+        ));
+
+        $response_Base64 = curl_exec($curl);
+        curl_close($curl);
+        return $response_Base64;
+    }
+
+    private function isWithinTimeRange()
+    {
+        // Define your time range
+        $startTime = Carbon::now()->subMinute(); // One minute ago
+        $endTime = Carbon::now();
+
+        // Get the current time
+        $currentTime = Carbon::now();
+
+        // Check if the current time is within the defined one-minute range
+        return $currentTime->between($startTime, $endTime);
     }
 }
