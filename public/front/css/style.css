@@ -319,6 +319,21 @@ h6 {
   .breadcrumbs_top ul li {
     display: inline-block;
   }
+  #loading-progress {
+    position: absolute;
+    margin: 0;
+    color: #B473E0;
+    left: 0;
+    right: 0;
+    height: 79%;
+    top: -16px !important;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 35px;
+  }
 }
 
 /*--------------------------------------------------------------
@@ -2499,6 +2514,7 @@ a.change_plan_btn {
   .form_sing_up {
     padding: 48px 25px;
   }
+
 }
 
 

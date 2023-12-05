@@ -528,29 +528,12 @@ class MessageController extends Controller
                 }
 
                 if(isset($response_image)){
-                    // $base64Image = $response_image;
-
-                    // // Decode the Base64 image data
-                    // $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
-                
-                    // // Generate a unique filename for the image
-                    // $imageName = uniqid() . '.png';
-                
-                    // // Specify the storage disk you want to use (e.g., 'public' or 's3')
-                    // $disk = 'public';
-                
-                    // // Save the image to the specified disk
-                    // Storage::disk($disk)->put($imageName, $imageData);
-                
-                    // // Generate the URL for the saved image
-                    // $imageUrl = Storage::disk($disk)->url('/app/public/'.$imageName);
-                    // // return response()->json(['image_url' => $imageUrl]);
-                    // return $imageUrl;
                     $base64Image = $response_image;
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
                     // Generate a unique filename for the image
                     $imageName = uniqid() . '.png';
+                    //remove metadata G::Meta
                     $image = Image::make(imagecreatefromstring($imageData));
                     $modifiedImagePath = storage_path($imageName);
                     // Remove all EXIF data from the image
@@ -602,18 +585,5 @@ class MessageController extends Controller
         $response_Base64 = curl_exec($curl);
         curl_close($curl);
         return $response_Base64;
-    }
-
-    private function isWithinTimeRange()
-    {
-        // Define your time range
-        $startTime = Carbon::now()->subMinute(); // One minute ago
-        $endTime = Carbon::now();
-
-        // Get the current time
-        $currentTime = Carbon::now();
-
-        // Check if the current time is within the defined one-minute range
-        return $currentTime->between($startTime, $endTime);
     }
 }

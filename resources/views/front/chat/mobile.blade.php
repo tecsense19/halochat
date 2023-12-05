@@ -540,27 +540,28 @@ $(document).ready(function() {
         if (inputValue.includes('show')) {
             $('.hidedots').css('display', 'none');
             // The word "show" is present in the input
+            var charname= "{{ $user->name }}";
             <?php if(session('user_id')) { ?>
-            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">Naome Charter is taking a picture</h6></div></div>');
+            $('.new_message').append('<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">'+ charname +' is taking a picture</h6></div></div>');
             setTimeout(function() {
                 updateLoading('0%', 'Please Wait');
             }, 1000);
 
             setTimeout(function() {
                 updateLoading('20%', 'Processing...');
-            }, 5000);
+            }, 3000);
 
             setTimeout(function() {
                 updateLoading('50%', 'Almost There...');
-            }, 25000);
+            }, 5000);
 
             setTimeout(function() {
                 updateLoading('80%', 'Complete');
-            }, 30000);
+            }, 10000);
 
             setTimeout(function() {
                 updateLoading('100%', 'Complete');
-            }, 55000);
+            }, 15000);
             // You can add your condition or code here
             <?php } ?>
         } 
