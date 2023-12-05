@@ -9,7 +9,7 @@
           @else
           <!-- <li><a href="{{ route('login') }}" >feedback</a></li> -->
           @endif
-          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contactmodel">Affiliate</a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#contactmodel">Contact</a></li>
         </ul>
         <ul class="links">
           <li><a href="{{ route('terms.terms') }}">Terms of Service</a></li>
