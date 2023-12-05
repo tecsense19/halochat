@@ -592,6 +592,8 @@ $("#message_form").submit(function(event) {
 
 function sendMessage() {
     if ($('#type_message').val()) {
+
+        <?php if(session('user_id')) { ?>
         $('.new_message').append(
             '<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">' +
             $('#type_message').val() + '</span></div></div>');
@@ -599,6 +601,7 @@ function sendMessage() {
         $('.new_message').append(
             '<div class="chat_content_box" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>'
         );
+        <?php } ?>
 
         var inputValue = $('#type_message').val();
 
@@ -608,10 +611,11 @@ function sendMessage() {
             $('#hidedots').hide();
 
             var charname= "{{ $user->name }}";
-
+            <?php if(session('user_id')) { ?>
             $('.new_message').append(
                 '<div class="col-12"><div class="show_picture"><div class="picture_circle"></div><p id="loading-progress">0%</p><h5>Please Wait</h5><h6 id="loading-text">'+ charname +' is taking a picture</h6></div></div>'
                 );
+                
             setTimeout(function() {
                 updateLoading('0%', 'Please Wait');
             }, 1000);
@@ -632,6 +636,7 @@ function sendMessage() {
                 updateLoading('100%', 'Complete');
             }, 55000);
             // You can add your condition or code here
+            <?php } ?>
         }
 
         setTimeout(function() {
