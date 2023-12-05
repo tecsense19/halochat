@@ -608,7 +608,7 @@ function sendMessage() {
         // Check if the input contains the word "show"
         if (inputValue.includes('show')) {
             // The word "show" is present in the input
-            $('#hidedots').hide();
+            $('.chat_content_box').css('display', 'none');
 
             var charname= "{{ $user->name }}";
             <?php if(session('user_id')) { ?>
