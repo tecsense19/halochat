@@ -72,7 +72,6 @@ alert("{{ $errors->first('chat_persona') }}");
 </script>
 @endif
 
-
 @include('front.layout.front')
 @include('front.layout.header')
 <main id="main" class="pt-0">
