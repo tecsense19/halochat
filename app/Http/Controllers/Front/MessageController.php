@@ -89,12 +89,14 @@ class MessageController extends Controller
             }
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
             
-            if($creditAddManage->currentcredit == 0){
+            if($creditAddManage->currentcredit < 0){
                 return redirect()->route('subscription.index');
             }else{  
                 // Now $message_show contains the original string with all matched words removed
                 if (str_contains($message_show, 'show')) {
+                    if($creditAddManage->currentcredit >= 5){
                     $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
+                    }
                     }
                 $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id']);
                     
