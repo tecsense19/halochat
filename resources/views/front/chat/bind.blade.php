@@ -8,7 +8,9 @@
                                 <div class="col-12 scrolltop mb-2">
                                     <div class="have_we_met">
                                         <div class="chat_content_box">
-                                            <p id="message">{{ $chat_user->message_text }}</p>
+                                            <div class="">
+                                                <p id="message"><?= nl2br($chat_user->message_text) ?></p>
+                                            </div>
                                             <div class="volume">
                                                 <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"
                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -53,7 +55,8 @@
                                 @else
                                 <div class="col-12">
                                     <div class="send_message">
-                                        <span id="chat-message">{{ $chat_user->message_text }}</span>
+                                    <p id="chat-message"><?= nl2br($chat_user->message_text) ?></p>
+                                      
                                     </div>
                                 </div>
 

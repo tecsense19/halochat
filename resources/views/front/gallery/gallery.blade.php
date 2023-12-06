@@ -16,7 +16,7 @@
             </div>
             <div class="col-lg-6">
               <div class="limit_txt justify-content-lg-end">
-                <a href="{{ route('subscription.subscription') }}" class="become_premium_btn"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Become Premium</a>
+                <a href="{{ route('subscription.index') }}" class="become_premium_btn"><img src="{{ URL::asset('public/front/img/premium-white.svg') }}"> Become Premium</a>
               </div>
             </div>
           </div>

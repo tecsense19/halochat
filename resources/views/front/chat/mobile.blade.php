@@ -179,7 +179,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     {!! csrf_field() !!}
                                     <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
-                                        <input type="text" name="message" id="type_message" autocomplete="off" placeholder="Type action message">
+                                        <!-- <input type="text" name="message" id="type_message" autocomplete="off" placeholder="Type action message"> -->
+                                        <textarea name="message" class="type_message_1" id="type_message" autocomplete="off" placeholder="Type action message"></textarea>
                                         <div class="dropdown">
                                             <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
@@ -530,7 +531,7 @@ $(document).ready(function() {
     $('body').on('click', '#new_message', function() {
         if ($('#type_message').val()) {
             <?php if(session('user_id')) { ?>
-        $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><span id="chat-message">'+ $('#type_message').val() +'</span></div></div>');
+        $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><p id="chat-message">'+ $('#type_message').val() +'</p></div></div>');
 
         $('.new_message').append('<div class="chat_content_box hidedots" id="hidedots" style="width: 93px; margin-left: 15px;"> <div class="dot-elastic" > <span class="dot dot1"></span> <span class="dot dot2"></span> <span class="dot dot3"></span> </div> </div>');
         <?php } ?>

@@ -397,6 +397,30 @@ h6 {
     display: inline-block;
     margin: 0px 6px;
   }
+  .type_message input {
+    width: 100%;
+    background: #252525;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    padding: 12px 15px;
+    outline: none;
+    padding-right: 106px !important;
+}
+textarea#type_message {
+  resize: vertical;
+  width: 100%;
+  background: #252525;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  padding: 12px 15px;
+  outline: none;
+  height: 46px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-right: 106px !important;
+}
 }
 
 .current_plan_box {
@@ -1133,18 +1157,36 @@ form.search-form svg {
   /* margin: 30px 0px; */
   text-align: end;
 }
-.send_message span {
+.send_message p {
   background: rgb(38 38 38);
-  font-size: 14px;
-  color: #fff;
   font-weight: 500;
-  word-break: break-all;
-  padding: 16px 25px;
+  padding: 10px 10px 10px 10px;
   border-radius: 15px 0 15px 15px;
   display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #fff;
+  margin: 0;
 }
 .chat_content_img {
   width: 100%;
+  transform: scale(0);
+  -webkit-transform: scale(0);
+  -moz-transform: scale(0);
+  transition: 0.5s ease-in-out;
+  -webkit-transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  opacity: 0;
+  animation: product-load 0.5s 0.5s forwards;
+  -webkit-animation: product-load 0.5s 0.5s forwards;
+  -moz-animation: product-load 0.5s 0.5s forwards;
+}
+@keyframes product-load {
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .chat_content_img img {
   background: #B473E0;
@@ -2647,6 +2689,18 @@ input {
   margin-top: 6px;
   justify-content: space-evenly;
 }
+.send_message p {
+  background: rgb(38 38 38);
+  font-weight: 500;
+  padding: 10px 10px 10px 10px;
+  border-radius: 15px 0 15px 15px;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #fff;
+  margin: 0;
+}
 }
 
 
@@ -2771,4 +2825,18 @@ input {
   justify-content: center;
   font-weight: 700;
   font-size: 35px;
+}
+
+textarea#type_message {
+  resize: vertical;
+  width: 100%;
+  background: #252525;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  padding: 12px 15px;
+  outline: none;
+  height: 46px;
+  overflow-x: hidden; /* hides horizontal scrollbar */
+  overflow-y: hidden; /* hides vertical scrollbar */
 }

@@ -172,19 +172,20 @@ class MessageController extends Controller
                                 $response = curl_exec($curl);
                 
                                 curl_close($curl);
-                                $responseArray = json_decode($response, true);
-                                if (isset($responseArray['data']['ai_message'])) {
-                                    $ai_message = $responseArray['data']['ai_message'];
+                                $responseObject = json_decode($response);
+                                if (isset($responseObject->data->ai_message)) {
+                                    
                                 } else {
-                                    return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();  
+                                    return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
                                 }
+                              
                                 $messageAi = array(
                                     'profile_id'=> $profile_id,
                                     'user_id'=> session('user_id'),
                                     'sender_id'=> session('user_id'),
                                     'receiver_id'=>  $profile_id,
                                     'status'=> 'Active',
-                                    'message_text'=> $ai_message,
+                                    'message_text'=> nl2br($responseObject->data->ai_message),
                                     'updated_at' => now(),
                                 );
                                 Messages::create($messageAi);
