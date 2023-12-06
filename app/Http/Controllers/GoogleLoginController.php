@@ -73,17 +73,22 @@ class GoogleLoginController extends Controller
                             );
 
                             $userId = User::where('email', $user->email)->first();
-                            $creditAdd = Managecredit::updateOrInsert(
-                                ['user_id' => $userId->id],
-                                [
-                                    'user_id' => $userId->id,
-                                    'currentcredit' => 200,
-                                    'usedcredit' => 0,
-                                    'totalcredit' => 200,
-                                    'created_at' => now(),
-                                    'updated_at' => now(),
-                                ]
-                            );
+                            $usermanageId = Managecredit::where('user_id', $userId->id)->first();
+                            if(!$usermanageId)
+                            {
+                                $creditAdd = Managecredit::updateOrInsert(
+                                    ['user_id' => $userId->id],
+                                    [
+                                        'user_id' => $userId->id,
+                                        'currentcredit' => 200,
+                                        'usedcredit' => 0,
+                                        'totalcredit' => 200,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ]
+                                );
+                            }
+                           
                         // Add your code to save or authenticate the user here.
                         // Get the user ID by querying the database based on the email
 

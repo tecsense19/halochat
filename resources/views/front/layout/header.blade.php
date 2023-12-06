@@ -1,5 +1,5 @@
 <!-- ======= Header ======= -->
- <header id="header" class="mobile_view">
+ <header id="header" class="mobile_view mobile_footerbar_hide">
     <div class="d-flex flex-xl-column flex-lg-row justify-content-center">
       
       <nav id="navbar" class="nav-menu navbar">

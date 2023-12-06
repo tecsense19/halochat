@@ -104,7 +104,7 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
             <div class="current_plan_box">
               <div class="current_plan_txt">
                 <h6>Current Plan <span>Free</span></h6>
-                <a href="{{ route('subscription.subscription') }}" class="change_plan_btn">Change Plan</a>
+                <a href="{{ route('subscription.index') }}" class="change_plan_btn">Change Plan</a>
               </div>
               <div class="current_plan_txt" id="pay_txt">
                 <p>Payment date: <span>{{ $formattedDate }}</span></p>

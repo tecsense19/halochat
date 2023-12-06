@@ -255,13 +255,13 @@ $(document).ready(function() {
 @if(!session('user_id'))
 <script>
 if (window.innerWidth <= 1199) {
-    $('.mobile_view').hide();
+    $('.mobile_footerbar_hide').hide();
 }
 </script>
 @else
 <script>
 if (window.innerWidth <= 1199) {
-    $('.mobile_view').show();
+    $('.mobile_footerbar_hide').show();
 }
 </script>
 @endif

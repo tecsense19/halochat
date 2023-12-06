@@ -46,7 +46,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     <section class="position-relative">
         <div class="container-fluid g-0">
             <div class="all_details_box">
-                <div class="chat-menu" id="chat-menu" style="display: none;">
+                <div class="chat-menu chat_mobile" id="chat-menu" style="display: none;">
                     <div class="chat-title">
                         <h3>Chat</h3>
                     </div>
