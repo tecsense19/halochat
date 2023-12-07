@@ -591,6 +591,16 @@ $("#message_form").submit(function(event) {
     sendMessage()
 });
 
+
+function handleKeyPress(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            // Prevent the default behavior (new line) and call the sendMessage function
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+document.getElementById('type_message').addEventListener('keydown', handleKeyPress)
+
 function sendMessage() {
     if ($('#type_message').val()) {
 

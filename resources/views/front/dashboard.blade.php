@@ -101,7 +101,11 @@
   @endphp
             <div class="col-xl-3 col-md-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
               <div class="portfolio-wrap">
+                @if(session('user_id'))
                 <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}">
+                @else
+                <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}" data-profile-id="{{ $item->profile_id }}" id="chatLink_{{ $item->profile_id }}">
+                  @endif
                   <div>
                     <img src="{{ $imgUrl }}" class="img-fluid">
                     <img src="{{ $imgUrl2 }}" class="img-fluid hover_img">
@@ -394,4 +398,22 @@ $('.animemodel').click(function() {
  
 });
 
+</script>
+
+<script>
+function updateLink() {
+    var links = document.querySelectorAll('a[data-profile-id]');
+    var isMobile = window.innerWidth <= 1199; // Adjust the width threshold as needed
+
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var profileId = link.getAttribute('data-profile-id');
+
+        if (isMobile) {
+            link.href = link.href.replace('/chat/message/', '/chat/mobile/message/');
+        }
+    }
+}
+// Update the links when the script is executed
+updateLink();
 </script>

@@ -44,8 +44,8 @@
                                 </div>
                                 @endif  
                                     @if($chat_user->media_url)
-                                    <div class="col-12 mt-4">
-                                        <div class="chat_content_img">
+                                    <div class="col-12 mt-2">
+                                        <div class="chat_content_img mb-2">
                                             <img src="{{ $chat_user->media_url }}">
                                         </div>
                                     </div>
