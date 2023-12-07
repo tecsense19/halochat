@@ -21,7 +21,7 @@ class MessageController extends Controller
 {
     public function loadchats(Request $request)
     {
-        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->get();
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('sequence_message', 'asc')->get();
         return view("front.chat.bind", compact('getAllReciverUser'));
 
     } 
@@ -63,6 +63,8 @@ class MessageController extends Controller
         if (session()->has('authenticated_user')) {
             $userId = User::where('id', $_POST['sender_id'])->first();
 
+            $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->first();
+
             $message = array(
                 'profile_id'=> $user->profile_id,
                 'user_id'=> session('user_id'),
@@ -71,6 +73,7 @@ class MessageController extends Controller
                 'status'=> 'Active',
                 'message_text'=> $message_show,
                 'updated_at' => now(),
+                'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
             );
             Messages::create($message);
 
@@ -117,95 +120,104 @@ class MessageController extends Controller
         if($creditAddManage->currentcredit == 0){
             return "<script>alert('Your trail credit is over');</script>";
         }else{
-                if(!empty($message_url)){
-                    $messageAi = array(
-                        'profile_id'=> $profile_id,
-                        'user_id'=> session('user_id'),
-                        'sender_id'=> session('user_id'),
-                        'receiver_id'=>  $profile_id,
-                        'status'=> 'Active',
-                        'media_url' => $message_url,
+            if(!empty($message_url)){
+                $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->first();
+                $messageAi = array(
+                    'profile_id'=> $profile_id,
+                    'user_id'=> session('user_id'),
+                    'sender_id'=> session('user_id'),
+                    'receiver_id'=>  $profile_id,
+                    'status'=> 'Active',
+                    'media_url' => $message_url,
+                    'updated_at' => now(),
+                    'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
+                );
+                Messages::create($messageAi);
+                $creditAdd = Managecredit::updateOrInsert(
+                    ['user_id' => $userId->id],
+                    [
+                        'currentcredit' => $creditAddManage->currentcredit - 5,
+                        'usedcredit' => $creditAddManage->usedcredit + 5,
+                        'created_at' => now(),
                         'updated_at' => now(),
-                    );
-                    Messages::create($messageAi);
-                    $creditAdd = Managecredit::updateOrInsert(
-                        ['user_id' => $userId->id],
-                        [
-                            'currentcredit' => $creditAddManage->currentcredit - 5,
-                            'usedcredit' => $creditAddManage->usedcredit + 5,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
+                    ]
+                );
 
-                    Usedcredites::Insert(
-                        [
-                            'user_id' => $userId->id,
-                            'debit' => 5,
-                            'credit_debit_date' => now(),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    );
-                    }else{
-                        $maxRetries = 3; // Set the maximum number of retries
-                        $retryDelay = 1; // Set the delay between retries in seconds
+                Usedcredites::Insert(
+                    [
+                        'user_id' => $userId->id,
+                        'debit' => 5,
+                        'credit_debit_date' => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+            }else{
+                $maxRetries = 3; // Set the maximum number of retries
+                $retryDelay = 1; // Set the delay between retries in seconds
 
-                        for ($retry = 0; $retry < $maxRetries; $retry++) {
-                            $curl = curl_init();
-                            curl_setopt_array($curl, array(
-                            CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_ENCODING => '',
-                            CURLOPT_MAXREDIRS => 10,
-                            CURLOPT_TIMEOUT => 25,
-                            CURLOPT_FOLLOWLOCATION => true,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => 'POST',
-                            CURLOPT_POSTFIELDS =>'{
-                                "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'"
-                            }',
-                            CURLOPT_HTTPHEADER => array(
-                                'Content-Type: application/json',
-                                'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
-                            ),
-                            ));
-                            $response = curl_exec($curl);
-                            if (curl_errno($curl)) {
-                                $curlError = curl_error($curl);
-                                // Check if the error is a timeout
-                                if (strpos($curlError, 'Operation timed out') !== false) {
-                                    //echo "Timeout occurred. Retrying...\n";
-                                    sleep($retryDelay); // Add a delay before retrying
-                                    continue; // Retry the loop
-                                } else {
-                                    echo 'Curl error: ' . $curlError;
-                                    break; // Exit the loop if it's not a timeout
-                                }
-                            }
-
-                            $responseObject = json_decode($response);
-                            $this->creditcut($profile_id,$responseObject->data->ai_message,$userId,$creditAddManage);
-                            curl_close($curl);
-                             // Process $response as needed
-                            //echo "Request successful!\n";
-                            break; // Exit the loop on successful request
-                        }
-                            
-                            if (isset($responseObject->data->ai_message)) {
-                                        
-                            
-                            } else {
-                                return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
-                            }
-                        
+                for ($retry = 0; $retry < $maxRetries; $retry++) {
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => env('AI_CHATUSER_URL').'/'.'users/'.$id.'/chat',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 25,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>'{
+                        "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'"
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json',
+                        'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+                    ),
+                    ));
+                    $response = curl_exec($curl);
+                    if (curl_errno($curl)) {
+                        $curlError = curl_error($curl);
+                        // Check if the error is a timeout
+                        if (strpos($curlError, 'Operation timed out') !== false) {
+                            //echo "Timeout occurred. Retrying...\n";
+                            sleep($retryDelay); // Add a delay before retrying
+                            continue; // Retry the loop
+                        } else {
+                            echo 'Curl error: ' . $curlError;
+                            break; // Exit the loop if it's not a timeout
                         }
                     }
+
+                    $responseObject = json_decode($response);
+                    $this->creditcut($profile_id,$responseObject->data->ai_message,$userId,$creditAddManage);
+                    curl_close($curl);
+                        // Process $response as needed
+                    //echo "Request successful!\n";
+                    break; // Exit the loop on successful request
                 }
+                    
+                    if (isset($responseObject->data->ai_message)) {
+                                
+                    
+                    } else {
+                        return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
+                    }
+                
+                }
+            }
+        }
 
     public function creditcut($profile_id,$responseObject,$userId,$creditAddManage)
     {
         $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
+        $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
+        $getMessageSequnce = Messages::where('sender_id', session('user_id'))
+                ->where('receiver_id', $profile_id)
+                ->where('message_text', '!=', $getFirstMessage->first_message)
+                ->orderBy('sequence_message', 'desc')
+                ->first();
+
         $messageAi = array(
             'profile_id'=> $profile_id,
             'user_id'=> session('user_id'),
@@ -214,6 +226,7 @@ class MessageController extends Controller
             'status'=> 'Active',
             'message_text'=> nl2br($responseObject),
             'updated_at' => now(),
+            'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
         );
         Messages::create($messageAi);
         Managecredit::updateOrInsert(
@@ -256,6 +269,7 @@ class MessageController extends Controller
                     'receiver_id'=>  $user->profile_id,
                     'status'=> 'Active',
                     'message_text'=> $user->first_message,
+                    'sequence_message'=> 0,
                     'updated_at' => now(),
                 );
             }else{
@@ -266,6 +280,7 @@ class MessageController extends Controller
                     'receiver_id'=>  $user->profile_id,
                     'status'=> 'Active',
                     'message_text'=> $user->first_message,
+                    'sequence_message'=> 0,
                     'updated_at' => now(),
                 );
             }

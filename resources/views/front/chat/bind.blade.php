@@ -1,7 +1,8 @@
                         <div class="chat_content" id="chatContent">
                             <div class="row new_message" >
                                 @if(!empty($getAllReciverUser))
-                                @foreach ($getAllReciverUser as $chat_user)
+                                @php $totalMessage = (count($getAllReciverUser) - 1); @endphp
+                                @foreach ($getAllReciverUser as $keys => $chat_user)
                                 @if($chat_user->sender_id == $chat_user->user_id)
                                 <!-- style="display: none;" style="display: none;" -->
                                 @if(!empty($chat_user->message_text))
@@ -9,7 +10,7 @@
                                     <div class="have_we_met">
                                         <div class="chat_content_box">
                                             <div class="">
-                                                <p id="message"><?= nl2br($chat_user->message_text) ?></p>
+                                                <p id="message" class="{{ $keys == $totalMessage ? 'typedText' : '' }}"><?= nl2br($chat_user->message_text) ?></p>
                                             </div>
                                             <div class="volume">
                                                 <span><svg id="play-icon" width="20 " class="text-[#C14DA0]"

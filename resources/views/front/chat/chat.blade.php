@@ -926,3 +926,34 @@ $('.remove-chat').click(function(e) {
         });
 });
 </script>
+<script>
+$( document ).ready(function() {
+    setTimeout(function(){
+        const typedTextElements = document.getElementsByClassName("typedText");
+        const typingSpeed = 100;
+
+        console.log('typedTextElements', typedTextElements)
+
+        function typeText(typedTextElement) {
+            const originalText = typedTextElement.textContent || typedTextElement.innerText;
+            
+            for (let i = 0; i <= originalText.length; i++) {
+            setTimeout(() => {
+                typedTextElement.textContent = originalText.slice(0, i);
+            }, i * typingSpeed);
+            }
+
+            // After typing, remove the blur effect (you can adjust the delay as needed)
+            setTimeout(() => {
+            typedTextElement.style.filter = "none";
+            }, originalText.length * typingSpeed + 1000); // 1000 milliseconds = 1 second
+        }
+
+        // Apply blur effect and start typing for each element
+        for (let i = 0; i < typedTextElements.length; i++) {
+            // typedTextElements[i].style.filter = "blur(5px)"; // You can apply blur individually if needed
+            typeText(typedTextElements[i]);
+        }
+    }, 4000);
+});
+</script>

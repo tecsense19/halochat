@@ -29,6 +29,7 @@ class Messages extends Authenticatable
         'timestamp',
         'media_url',
         'isDeleted',
+        'sequence_message'
     ];
 
     public function reciverProfile()
