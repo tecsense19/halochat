@@ -31,6 +31,7 @@ class User extends Authenticatable
         'voice_preview_url',
         'voice_name',
         'persona_id',
+        'deletechat_flag',
     ];
 
     /**

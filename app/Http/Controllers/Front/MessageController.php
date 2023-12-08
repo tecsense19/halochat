@@ -265,6 +265,7 @@ class MessageController extends Controller
 
                 if(session('user_id'))
                 {
+                    User::where('id', session('user_id'))->update(['deletechat_flag' => 0]);
                     $message = array(
                         'profile_id'=> $user->profile_id,
                         'user_id'=> session('user_id'),
