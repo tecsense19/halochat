@@ -5,10 +5,10 @@
                 $totalMessage = (count($getAllReciverUser) - 1); 
                 $receiverCount = 0;
             @endphp
-            @foreach ($getAllReciverUser as $chat_user)  
+            @foreach ($getAllReciverUser as $keys => $chat_user)  
                 @if($chat_user->sender_id == $chat_user->user_id)
                     @if(!empty($chat_user->message_text))
-                        <div class="col-12 scrolltop mb-2">
+                        <div class="col-12 mb-2">
                             <div class="have_we_met">
                                 <div class="chat_content_box">
                                     <div class="">
