@@ -2523,9 +2523,17 @@ img.red-cross-aee {
 a.change_plan_btn {
   margin-top: 30px;
 }
-
-
-
+.hover_img {
+  position: absolute;
+  top: unset;
+  left: unset;
+  z-index: unset;
+  opacity: unset;
+  transition: unset;
+}
+.portfolio-wrap:hover .hover_img {
+  opacity: unset;
+}
 }
 
 @media (max-width: 575px) {
