@@ -280,8 +280,8 @@ $get_voice = json_decode($get_voice, true);
         
     $('.remove-image').click(function(e) {
       
-        // var url = "{{ URL::to('admin/profiles/delete', [], true) }}"
-        var url = "{{ URL::to('admin/profiles/delete') }}"
+        var url = "{{ URL::to('admin/profiles/delete', [], true) }}"
+        // var url = "{{ URL::to('admin/profiles/delete') }}"
 
         e.preventDefault();
       var container = $(this).closest('.image-container');

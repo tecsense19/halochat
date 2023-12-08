@@ -26,25 +26,37 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-    // Auth::logout();
-    $request->session()->forget('authenticated_user');
-    $request->session()->forget('user_id');
-    $request->session()->forget('sessionprofile_id');
-    // $request->session()->invalidate();
-    // $request->session()->regenerateToken();
-    $profileList = Profile::with('profileImages')->get();
-    return view("front.dashboard", compact('profileList'));
+        // Auth::logout();
+        $request->session()->forget('authenticated_user');
+        $request->session()->forget('user_id');
+        $request->session()->forget('sessionprofile_id');
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        $profileList = Profile::with('profileImages')->get();
+        return view("front.dashboard", compact('profileList'));
     }
 
     public function register()
     {
-    return view("front.register");
+        return view("front.register");
     }
     public function dashboard(Request $request)
     {
         if (session()->has('authenticated_user')) {
             $profileList = Profile::with('profileImages')->get();
             $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
+
+            $userischecked = User::where('id', session('user_id'))->where('deletechat_flag',1)->first();
+            if(isset($userischecked))
+            {
+                if($userischecked->deletechat_flag == 1)
+                {
+                    Messages::where('profile_id', $profileList[0]->profile_id)->where('sequence_message','!=',0)->update(['isDeleted' => 1]);
+                }else{
+                    Messages::where('sender_id',$profileList[0]->profile_id)->where('receiver_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->update(['isDeleted' => 1]);
+                }
+            }
+
             return view("front.dashboard", compact('profileList'));
         } else {
             $profileList = Profile::with('profileImages')->get();

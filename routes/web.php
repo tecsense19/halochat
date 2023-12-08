@@ -105,7 +105,7 @@ use App\Http\Controllers\Front\SubscriptionController;
     //Plans Subscription
     Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');
 
-
+    Route::get('/chat/isdelete/{id}', [MessageController::class, 'Ischeckdeleted'])->name('chat.Ischeckdeleted');
 
     Route::get('/clear-cache', function () {
         Artisan::call('cache:clear');

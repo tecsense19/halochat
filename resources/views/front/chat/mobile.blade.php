@@ -50,14 +50,14 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                     <div class="chat-title">
                         <h3>Chat</h3>
                     </div>
-                    <form action="#" class="search-form">
+                    <!-- <form action="#" class="search-form">
                         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
                                 d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
                                 clip-rule="evenodd"></path>
                         </svg>
                         <input type="text" name="search" placeholder="Search...">
-                    </form>
+                    </form> -->
                     @php
                     $imgUrl1 = isset($user->profileImages[0]['image_path']) ?
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
@@ -511,6 +511,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     var appUrl = @json(config('app.url'));
     var lastId = currentUrl.split('/').filter(Boolean).pop();
     var url = appUrl + "/mobile_loadchats/" + lastId;
+    isdeleted(lastId);
 
     $.ajax({
         url: url,
@@ -596,20 +597,20 @@ $(document).ready(function() {
 
         var currentUrl = window.location.href;
         var lastId = currentUrl.split('/').filter(Boolean).pop();
-        $('.profile_'+lastId).css('pointer-events', 'none');
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.profile_'+lastId).hide();
-        $('.profile_info'+lastId).show();
+        // $('.profile_'+lastId).css('pointer-events', 'none');
+        // $('[data-toggle="tooltip"]').tooltip();
+        // $('.profile_'+lastId).hide();
+        // $('.profile_info'+lastId).show();
         // $('.profile_'+lastId).attr('data-tooltip', 'When completed response then after you can delete it');
         $.ajax({
             url: url,
             method: 'POST',
             data: formData, // Serialized form data
             success: function(data) {
-                $('.profile_'+lastId).show();
+                // $('.profile_'+lastId).show();
                 $('.profile_'+lastId).css('pointer-events', 'auto');
                 // Assuming your link has a class, replace '.your-link-class' with your actual class or ID
-                $('.profile_info'+lastId).hide();
+                // $('.profile_info'+lastId).hide();
                 loadchats();
             },
             error: function(xhr, status, error) {
@@ -823,44 +824,57 @@ $('.remove-chat').click(function(e) {
     var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
     url = url.replace(':chatid', chatid);
 
-      e.preventDefault();
-            swal({
-            title: "Are you sure?",
-            text: "Wants to delete chat?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: url,
-                            type: 'GET',
-                            data: {
-                                _token: '{{ csrf_token() }}', // Include the CSRF token
-                                chatid: chatid
-                            },
-                        success: function(result) {
-                            swal("Poof! Your chat has been deleted!", {
-                                icon: "success",
-                            }).then((willDelete) => {
-                                if (willDelete) {
-                                    if(result.data == ''){
-                                    var appUrl = @json(config('app.url'));
-                                    var newUrl = appUrl + "/explore"; // Replace with your desired URL
-                                    window.location.href = newUrl;  
-                                    }else{
-                                    var appUrl = @json(config('app.url'));
-                                    var newUrl = appUrl + "/chat/message/" + result.data; // Replace with your desired URL
-                                    window.location.href = newUrl; 
-                                    }
-                                }
-                            });
+    e.preventDefault();
+    swal({
+        title: "Are you sure?",
+        text: "Wants to delete chat?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+.then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: url,
+                    type: 'GET',
+                    data: {
+                        _token: '{{ csrf_token() }}', // Include the CSRF token
+                        chatid: chatid
+                    },
+                success: function(result) {
+                    swal("Poof! Your chat has been deleted!", {
+                        icon: "success",
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            if(result.data == ''){
+                            var appUrl = @json(config('app.url'));
+                            var newUrl = appUrl + "/explore"; // Replace with your desired URL
+                            window.location.href = newUrl;  
+                            }else{
+                            var appUrl = @json(config('app.url'));
+                            var newUrl = appUrl + "/chat/message/" + result.data; // Replace with your desired URL
+                            window.location.href = newUrl; 
+                            }
                         }
                     });
-                } else {
-                    swal("Your chat is safe!");
                 }
             });
-            });
+        } else {
+            swal("Your chat is safe!");
+        }
+    });
+});
+function isdeleted(Id) {
+    var str = "{{URL::to('chat/isdelete') }}/" + Id;
+    $.ajax({
+        type: "GET",
+        url: str,
+        data: {
+            Id: Id
+        },
+        success: function(result) {
+            console.log(result); // Example: Display the response in the console
+        }
+    });
+}
 </script>

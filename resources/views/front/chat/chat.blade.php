@@ -56,6 +56,11 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
     color: #B473E0;
     /* Set the color of the loader text */
 }
+
+.chat_content_box {
+    max-width: 60%;
+    /* min-width: 60%; */
+}
 </style>
 
 @if ($errors->has('ai_message'))
@@ -82,7 +87,7 @@ alert("{{ $errors->first('chat_persona') }}");
                     <div class="chat-title">
                         <h3>Chat</h3>
                     </div>
-                    <form action="#" class="search-form">
+                    <!-- <form action="#" class="search-form">
 
                         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
@@ -90,7 +95,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                 clip-rule="evenodd"></path>
                         </svg>
                         <input type="text" name="search" placeholder="Search...">
-                    </form>
+                    </form> -->
                     @php
                     $imgUrl1 = isset($user->profileImages[0]['image_path']) ?
                     asset('storage/app/public').'/'.$user->profileImages[0]['image_path'] : '';
@@ -139,7 +144,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                             fill="currentColor"></path>
                                     </g>
                                 </svg> -->
-                                <a href="#" data-bs-chatid="{{ $chat->profile_id }}" style="display: none;" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
+                                <!-- <a href="#" data-bs-chatid="{{ $chat->profile_id }}" style="display: none;" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -150,7 +155,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                                 fill="currentColor"></path>
                                         </g>
                                     </svg>
-                                </a>
+                                </a> -->
                                 <a href="" data-bs-chatid="{{ $chat->profile_id }}"  class="remove-chat profile_{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
@@ -557,6 +562,7 @@ function loadchats(){
     var appUrl = @json(config('app.url'));
     var lastId = currentUrl.split('/').filter(Boolean).pop();
     var url = appUrl + "/loadchat/" + lastId;
+    isdeleted(lastId);
 
     $.ajax({
         url: url,
@@ -596,6 +602,10 @@ function handleKeyPress(event) {
         if (event.key === 'Enter' && !event.shiftKey) {
             // Prevent the default behavior (new line) and call the sendMessage function
             event.preventDefault();
+            <?php if(!session('user_id')){ ?>
+                var myModal = new bootstrap.Modal(document.getElementById('please_register'));
+                myModal.show();
+            <?php } ?>
             sendMessage();
         }
     }
@@ -682,10 +692,10 @@ function sendMessage() {
         
         var currentUrl = window.location.href;
         var lastId = currentUrl.split('/').filter(Boolean).pop();
-        $('.profile_'+lastId).css('pointer-events', 'none');
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.profile_'+lastId).hide();
-        $('.profile_info'+lastId).show();
+        // $('.profile_'+lastId).css('pointer-events', 'none');
+        // $('[data-toggle="tooltip"]').tooltip();
+        // $('.profile_'+lastId).hide();
+        // $('.profile_info'+lastId).show();
         
         // $('.profile_'+lastId).attr('data-tooltip', 'When completed response then after you can delete it');
         $.ajax({
@@ -693,10 +703,10 @@ function sendMessage() {
             method: 'POST',
             data: formData, // Serialized form data
             success: function(data) {
-                $('.profile_'+lastId).show();
+                // $('.profile_'+lastId).show();
                 $('.profile_'+lastId).css('pointer-events', 'auto');
                 // Assuming your link has a class, replace '.your-link-class' with your actual class or ID
-                $('.profile_info'+lastId).hide();
+                // $('.profile_info'+lastId).hide();
                 loadchats();
             },
             error: function(xhr, status, error) {
@@ -882,6 +892,7 @@ function unlikedMessage(message, messageId) {
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
     var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    // var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
     url = url.replace(':chatid', chatid);
 
     e.preventDefault();
@@ -925,35 +936,18 @@ $('.remove-chat').click(function(e) {
             }
         });
 });
-</script>
-<script>
-$( document ).ready(function() {
-    setTimeout(function(){
-        const typedTextElements = document.getElementsByClassName("typedText");
-        const typingSpeed = 100;
 
-        console.log('typedTextElements', typedTextElements)
-
-        function typeText(typedTextElement) {
-            const originalText = typedTextElement.textContent || typedTextElement.innerText;
-            
-            for (let i = 0; i <= originalText.length; i++) {
-            setTimeout(() => {
-                typedTextElement.textContent = originalText.slice(0, i);
-            }, i * typingSpeed);
-            }
-
-            // After typing, remove the blur effect (you can adjust the delay as needed)
-            setTimeout(() => {
-            typedTextElement.style.filter = "none";
-            }, originalText.length * typingSpeed + 1000); // 1000 milliseconds = 1 second
+function isdeleted(Id) {
+    var str = "{{URL::to('chat/isdelete') }}/" + Id;
+    $.ajax({
+        type: "GET",
+        url: str,
+        data: {
+            Id: Id
+        },
+        success: function(result) {
+            console.log(result); // Example: Display the response in the console
         }
-
-        // Apply blur effect and start typing for each element
-        for (let i = 0; i < typedTextElements.length; i++) {
-            // typedTextElements[i].style.filter = "blur(5px)"; // You can apply blur individually if needed
-            typeText(typedTextElements[i]);
-        }
-    }, 4000);
-});
+    });
+}
 </script>

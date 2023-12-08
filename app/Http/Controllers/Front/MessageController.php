@@ -28,7 +28,7 @@ class MessageController extends Controller
 
     public function mobile_loadchats(Request $request)
     {
-        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->get();
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('sequence_message', 'asc')->get();
         return view("front.chat.mobile_bind", compact('getAllReciverUser'));
 
     } 
@@ -121,7 +121,8 @@ class MessageController extends Controller
             return "<script>alert('Your trail credit is over');</script>";
         }else{
             if(!empty($message_url)){
-                $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->first();
+                $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
+                $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('sequence_message', 'desc')->first();
                 $messageAi = array(
                     'profile_id'=> $profile_id,
                     'user_id'=> session('user_id'),
@@ -256,63 +257,38 @@ class MessageController extends Controller
         ->delete();
 
         $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-        $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id', $user->profile_id)->where('isDeleted' , 0)->first();
+        if($user)
+        {
+            $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id', $user->profile_id)->where('isDeleted' , 0)->first();
 
-        if(!$MessageData){
+            if(!$MessageData){
 
-            if(session('user_id'))
-            {
-                $message = array(
-                    'profile_id'=> $user->profile_id,
-                    'user_id'=> session('user_id'),
-                    'sender_id'=> session('user_id'),
-                    'receiver_id'=>  $user->profile_id,
-                    'status'=> 'Active',
-                    'message_text'=> $user->first_message,
-                    'sequence_message'=> 0,
-                    'updated_at' => now(),
-                );
-            }else{
-                $message = array(
-                    'profile_id'=> $user->profile_id,
-                    'user_id'=> session('user_id'),
-                    'sender_id'=> session('user_id'),
-                    'receiver_id'=>  $user->profile_id,
-                    'status'=> 'Active',
-                    'message_text'=> $user->first_message,
-                    'sequence_message'=> 0,
-                    'updated_at' => now(),
-                );
-            }
+                if(session('user_id'))
+                {
+                    $message = array(
+                        'profile_id'=> $user->profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=>  $user->profile_id,
+                        'status'=> 'Active',
+                        'message_text'=> $user->first_message,
+                        'sequence_message'=> 0,
+                        'updated_at' => now(),
+                    );
+                }else{
+                    $message = array(
+                        'profile_id'=> $user->profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=>  $user->profile_id,
+                        'status'=> 'Active',
+                        'message_text'=> $user->first_message,
+                        'sequence_message'=> 0,
+                        'updated_at' => now(),
+                    );
+                }
 
-            Messages::create($message); 
-            $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
-            $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-            $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
-                                        ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
-                                        ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
-                                        ->groupBy('messages.profile_id')
-                                        ->get();
-                                        return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
-            
-        }else{
-            $getAllReciverUser = [];
-            $user = '';
-            $getAllProfile =[];
-            if(session('user_id')){
-
-                $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $id)->where('isDeleted', 0)->get();
-                $user = Profile::with('profileImages')->where('profile_id',$id)->first();
-                $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
-                                            ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
-                                            ->join('profile_images', 'profile_images.profile_id', '=', 'messages.profile_id')
-                                            ->whereNotNull('profiles.profile_id')
-                                            ->groupBy('messages.profile_id')
-                                            ->get();
-            
-                                           
-            }else{
-                
+                Messages::create($message); 
                 $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
@@ -320,13 +296,44 @@ class MessageController extends Controller
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
                                             ->get();
+                                            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
+                
+            }else{
+                $getAllReciverUser = [];
+                $user = '';
+                $getAllProfile =[];
+                if(session('user_id')){
 
-                                        
-                                         
+                    $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $id)->where('isDeleted', 0)->get();
+                    $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+                    $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                                ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
+                                                ->join('profile_images', 'profile_images.profile_id', '=', 'messages.profile_id')
+                                                ->whereNotNull('profiles.profile_id')
+                                                ->groupBy('messages.profile_id')
+                                                ->get();
+                
+                                            
+                }else{
+                    
+                    $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
+                    $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+                    $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
+                                                ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
+                                                ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
+                                                ->groupBy('messages.profile_id')
+                                                ->get();
+
+                                            
+                                            
+                }
+                return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
             }
-            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
         }
-        
+        else
+        {
+            return redirect()->back();
+        }        
     }
 
     public function mobile($id)
@@ -441,10 +448,45 @@ class MessageController extends Controller
         return true;
     }
 
+    // public function delete($id)
+    // {
+
+    //     Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
+    //     $user = User::where('id', session('user_id'))->first();
+    //     $curl = curl_init();
+    //     curl_setopt_array($curl, array(
+    //     CURLOPT_URL => env('AI_CHATUSER_URL').'/users'.'/'.$user->chatuser_id.'/chat',
+    //     CURLOPT_RETURNTRANSFER => true,
+    //     CURLOPT_ENCODING => '',
+    //     CURLOPT_MAXREDIRS => 10,
+    //     CURLOPT_TIMEOUT => 0,
+    //     CURLOPT_FOLLOWLOCATION => true,
+    //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //     CURLOPT_CUSTOMREQUEST => 'DELETE',
+    //     CURLOPT_HTTPHEADER => array(
+    //         'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
+    //     ),
+    //     ));
+    //     $fetchfirst = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->get();
+
+    //     $profile = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->first();
+
+    //     $profile_id = isset($profile->profile_id) ? $profile->profile_id : '';
+    //     // Get the count of records
+    //       $count = $fetchfirst->count();
+    //       if($count < 0){
+    //         return 1;
+    //       }
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+    //     return response()->json(['data' => $profile_id]);
+    // }
+
     public function delete($id)
     {
-
+        
         Messages::where('profile_id', $id)->update(['isDeleted' => 1]);
+        User::where('id', session('user_id'))->update(['deletechat_flag' => 1]);
         $user = User::where('id', session('user_id'))->first();
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -460,8 +502,8 @@ class MessageController extends Controller
             'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
         ),
         ));
-        $fetchfirst = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->get();
 
+        $fetchfirst = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->get();
         $profile = Messages::where('user_id',session('user_id'))->where('isDeleted', 0)->first();
 
         $profile_id = isset($profile->profile_id) ? $profile->profile_id : '';
@@ -470,9 +512,25 @@ class MessageController extends Controller
           if($count < 0){
             return 1;
           }
+          
         $response = curl_exec($curl);
         curl_close($curl);
         return response()->json(['data' => $profile_id]);
+    }
+
+    public function Ischeckdeleted($id)
+    {
+        $user = User::where('id', session('user_id'))->where('deletechat_flag',1)->first();
+        if(isset($user)){
+            if($user->deletechat_flag == 1)
+            {
+                Messages::where('profile_id', $_GET['Id'])->where('sequence_message','!=',0)->update(['isDeleted' => 1]);
+            }else{
+                Messages::where('sender_id',$_GET['Id'])->where('receiver_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->update(['isDeleted' => 1]);
+            }
+            
+            
+        }
     }
 
     public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale) {
