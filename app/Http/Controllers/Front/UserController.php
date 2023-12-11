@@ -154,40 +154,12 @@ class UserController extends Controller
                     ['created_at' => now()]
                     
                 );
-                // Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
-                //    $apiKey = getenv('SENDGRID_API_KEY');
-                //     $sg = new \SendGrid($apiKey);
-
-                //     try {
-                //         $response = $sg->client->senders()->get();
-                //         print $response->statusCode() . "\n";
-                //         print_r($response->headers());
-                //         print $response->body() . "\n";
-                //     } catch (Exception $ex) {
-                //         echo 'Caught exception: '.  $ex->getMessage();
-                //     }
             
-                // $emailContent = 'Welcome to Our Application';
-                // new Resetpasslink($input['_token'], $input['email']);
+                Mail::send('mail/sendlink', ['user' => $input], function ($m) use ($input) {
+                    $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                    $m->to( $input['email'] )->subject('Forgot Password');
+                });
 
-                // $response = Http::withHeaders([
-                //     'Authorization' => 'Bearer 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',
-                // ])->get('https://api.sendgrid.com/v3/senders');
-                
-                // $data = $response->json();
-                //     print_r($data);
-                // die;
-
-            // $res = Mail::raw($emailContent, function ($message) use ($input) {
-            //     $message->from('reset@vice.app', 'Testiing') // Set the "from" address and name
-            //     ->to($input['email'], 'gautam')
-            //             ->subject('Welcome to Our Application');
-            // });
-            // print_r($res);
-            // die;
-
-            // echo "Mail Sent success";
-            // Mail::to($input['email'])->send();
             }
             return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
             }

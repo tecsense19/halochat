@@ -252,7 +252,7 @@ line-height: 24px;color:#202124
                                     <td align="center" class="link-button" valign="middle"
                                         style="padding: 12px 24px; margin: 0; text-decoration: none; border-collapse: collapse; border-spacing: 0; border-radius: 4px; -webkit-border-radius: 6px; -moz-border-radius: 6px; -khtml-border-radius: 4px;"
                                         bgcolor="#6300E4">
-                                        <a href="{{ url('confirmpassword', [$token, $email]) }}" target="_blank">Change
+                                        <a href="{{ url('confirmpassword', [$user['_token'], $user['email']]) }}" target="_blank">Change
                                             Password</a>
                                     </td>
                                 </tr>
