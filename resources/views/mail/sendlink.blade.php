@@ -186,7 +186,7 @@
                             style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;vertical-align:middle"
                             class="hero">
                             <img border="0" vspace="0" hspace="0" width="160"
-                                src="{{ URL::asset('public/front/img/halochat.ai.png') }}"
+                                src="{{ URL::asset('public/front/img/vice.app.png') }}"
                                 alt="Please enable images to view this content" title="Hero Image"
                                 style="color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; border: none; display: block;" />
                         </td>
@@ -272,7 +272,7 @@ line-height: 24px;
                             <p style="font-size: 16px;
 line-height: 24px;color:#202124
                                     ">If you have any questions, please reach out to <a
-                                    src="mailto:help@halochat.ai">halochat.ai</a></p>
+                                    src="mailto:help@vice.app">vice.app</a></p>
                         </td>
                     </tr>
                     <!-- LINE -->
@@ -300,14 +300,14 @@ line-height: 24px;color:#202124
                                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGHSURBVHgB7ZVLbsIwEIZ/h+ybG9RAkLokN4Ab9AaFE7Q3KJyEcBLUEzTLSqDiI9B1E7ljk0cFhtiQ7PJJQcaP+SaeQQAdDcOKAedPHEhnaIU0FoQa+dXk7xsYe0UbyN4jfc5PhF5AK8WXAz0/uI8HeoLTSd+8Vx4gs2lxDa7o8rBsQ3HOhJ75CKMDvQ3nozGcZXTmKOOmdZMwgb5SJZUkHb7AWhZO1JlcpmKIeqGUCaQf5ZsDaqSYAr2jVkaJMWxwrBuVhE2pJT7qhYQQX4I6a1pmyLC4JtVrlFieMZ1NIyG2iWmvdylIJUVSSgfDlVmGRSW73mwXhYVU7HfqetfHeGzG++EnJ7RsMFpVMkpMZlFdZ/uwQOy3Mz4IKXuoax3rDu6HVCeZdzFbqz02sTxYIr53C3qbZS7gWqyHWNrKnISlVLJ5OaFkas4BJ6GWim1M0oiuc+4qU1jV0CBVnZvgBpzf8F46YeOcNw1jz7w/mqARpNUfcGDa2BT/hD36UacCrZDF6GiLP2NemN9fg7f7AAAAAElFTkSuQmCC"
                                             width="14" height="14" />
                                         <a style="text-decoration:none;color:#202124"
-                                            href="mailto:support@anility.io">support@halochat.ai</a>
+                                            href="mailto:support@anility.io">support@vice.app</a>
                                     </td>
 
                                     <td style="vertical-align:middle;text-align:right;padding-right: 9px">
                                         <img style="vertical-align:middle; padding-right: 9px"
                                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAK6SURBVHgB3VbdcdswDAZt5znaIPQ1vetbvUHUCepOEGeCpBNEmaDpBFUmqD1B5Amqx97ZrdkN5HdLLCiCf5IiK3nIQ3AniyIBfACIHwO8dWJDGTkSwEkMUM3w85S29/jkAGUmkIboOQrI+XmMr1vkjHsZJWT48yDEnxReAogORTCa/EBFc3gOSZmix3dPeTzqBvvAgZ388sDWqOgLvgunVHlUfwiQ7AptF/UnYwtg40d9BQMANVj5iIq0AIOvYreNcaHAIs3FHtCYO1pzBSp2mynyuj0NGh0FRLDEgkl5Jf5u763l5JEQ20w9npeX6hd5E+2tAZ387AXk/P3CCCtrwwSQn/WLfXdbGGptjL1nITapigp9xpR03YAWTHmhrHWGqFIw4ck9gYzeEfEAeXpvzxhmeBegvjtKfXs/hiruPNhmjXVBPLNAREoTidhPIM/DMvbWy0AY2IwMyaFNe+Lh4XaZOWMmNuQTx6AsZEZpFGQYA2t9K90l7PD8DFcfO0pB4DOzSRgCjiIlrZVPdtBF/Wdz35MGnVoUeGXyACvqIhhSeZgGD8CKmNYdZ+ZeVz1ne4PihzSnkHJ8FVjdhTnBWspxH+tQnjV7JJ+egzG048zcfd7h4TijBd7lOIaAqE8C49AmUiqDDNZNxFCdsSGgEL8F2GJl1w2luVPkOkfYRUYikHAFv/Y9D5PGFbxqSTfOmI0CNCGOPQkTsoJ4jCG3Xj9OfYgAsO4cDJZk4TfO3106Y9iK9i+cFxQJKZcODGUYJAasOZDbZVEd/NmWamtraSNYN2QdTlvQK/LsRskQv1CDuKm+c+K3ZmI9ZDHcbGRClaHoP2r2hRpj+H3t/oYo/vJT19Tv+YtRgyZuggwmVatzv6wGATpgTG8mF7i8OA4EiT9NXgTogNHjeqJU/mws9H0flkP/Jr59+g+qpkNdmUtKaQAAAABJRU5ErkJggg=="
                                             width="14" height="14" />
-                                        <a style="text-decoration:none;color:#202124" href="https://www.anility.io">halochat.ai</a>
+                                        <a style="text-decoration:none;color:#202124" href="https://www.anility.io">vice.app</a>
                                     </td>
                                 </tr>
 
