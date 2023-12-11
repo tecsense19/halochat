@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.9",
         "laravel/tinker": "^2.8",
+        "sendgrid/sendgrid": "^8.1",
         "stripe/stripe-php": "^13.4"
     },
     "require-dev": {

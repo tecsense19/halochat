@@ -101,11 +101,7 @@
   @endphp
             <div class="col-xl-3 col-md-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
               <div class="portfolio-wrap">
-                @if(session('user_id'))
-                <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}">
-                @else
                 <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}" data-profile-id="{{ $item->profile_id }}" id="chatLink_{{ $item->profile_id }}">
-                  @endif
                   <div>
                     <img src="{{ $imgUrl }}" class="img-fluid">
                     <img src="{{ $imgUrl2 }}" class="img-fluid hover_img">
@@ -397,7 +393,6 @@ $('.animemodel').click(function() {
   $('.model-realistic').hide();
  
 });
-
 </script>
 
 <script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Models\Messages;
 use App\Models\Managecredit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -96,7 +97,16 @@ class GoogleLoginController extends Controller
                             $request->session()->put('authenticated_user', true);
                             $request->session()->put('user_id', $userId->id);
                             // $request->session()->regenerate();
-                            return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+
+                            $lastchatid = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->first();
+                            if(isset($lastchatid->profile_id))
+                            {
+                                return redirect()->route('chat.message',['id' => $lastchatid->profile_id])->withSuccess('You have successfully registered & logged in!'); 
+                            }else{
+                                return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                            }
+                           
+                            
                         }else{
                             return redirect()->route('login')->withErrors(['deleted' => 'Your account has been deleted please contact admin!'])->onlyInput('deleted');
                         }
