@@ -155,10 +155,12 @@ class UserController extends Controller
                     
                 );
             
-                Mail::send('mail/sendlink', ['user' => $input], function ($m) use ($input) {
-                    $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
-                    $m->to( $input['email'] )->subject('Forgot Password');
-                });
+                // Mail::to('john@example.com')->send(new Resetpasslink($data));
+                Mail::to('gautam@tec-sense.com')->send(new Resetpasslink($input['_token'], $input['email']));
+                // Mail::send('mail/sendlink', ['user' => $input], function ($m) use ($input) {
+                //     $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                //     $m->to( $input['email'] )->subject('Forgot Password');
+                // });
 
             }
             return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
@@ -320,6 +322,10 @@ class UserController extends Controller
                 $request->session()->put('authenticated_user', true);
                 $request->session()->put('user_id', auth()->user()->id);
                 // $request->session()->regenerate();
+
+                //check last profile id
+                $profileList = Profile::with('profileImages')->get();
+                $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
 
                 $lastchatid = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->first();
                 if(isset($lastchatid->profile_id))

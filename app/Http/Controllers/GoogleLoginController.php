@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use App\Models\Messages;
+use App\Models\Profile;
 use App\Models\Managecredit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -97,6 +98,10 @@ class GoogleLoginController extends Controller
                             $request->session()->put('authenticated_user', true);
                             $request->session()->put('user_id', $userId->id);
                             // $request->session()->regenerate();
+                            //check last profile id
+
+                            $profileList = Profile::with('profileImages')->get();
+                            $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
 
                             $lastchatid = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->first();
                             if(isset($lastchatid->profile_id))

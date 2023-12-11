@@ -31,7 +31,7 @@ class Resetpasslink extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Reset password link | halochat.ai',
+            subject: 'Reset password link | vice.app',
         );
     }
 
