@@ -742,6 +742,7 @@ function updateLink() {
 
         if (isMobile) {
             link.href = link.href.replace('/chat/message/', '/chat/mobile/message/');
+            link.click();
         }
     }
 }

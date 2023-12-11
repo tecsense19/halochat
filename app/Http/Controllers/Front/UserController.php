@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Messages;
@@ -153,7 +154,40 @@ class UserController extends Controller
                     ['created_at' => now()]
                     
                 );
-            Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
+                // Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
+                //    $apiKey = getenv('SENDGRID_API_KEY');
+                //     $sg = new \SendGrid($apiKey);
+
+                //     try {
+                //         $response = $sg->client->senders()->get();
+                //         print $response->statusCode() . "\n";
+                //         print_r($response->headers());
+                //         print $response->body() . "\n";
+                //     } catch (Exception $ex) {
+                //         echo 'Caught exception: '.  $ex->getMessage();
+                //     }
+            
+                // $emailContent = 'Welcome to Our Application';
+                // new Resetpasslink($input['_token'], $input['email']);
+
+                // $response = Http::withHeaders([
+                //     'Authorization' => 'Bearer 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',
+                // ])->get('https://api.sendgrid.com/v3/senders');
+                
+                // $data = $response->json();
+                //     print_r($data);
+                // die;
+
+            // $res = Mail::raw($emailContent, function ($message) use ($input) {
+            //     $message->from('reset@vice.app', 'Testiing') // Set the "from" address and name
+            //     ->to($input['email'], 'gautam')
+            //             ->subject('Welcome to Our Application');
+            // });
+            // print_r($res);
+            // die;
+
+            // echo "Mail Sent success";
+            // Mail::to($input['email'])->send();
             }
             return back()->with(['success' => 'Reset password link sent to your email address.'])->withInput();
             }
@@ -288,6 +322,7 @@ class UserController extends Controller
         $request->session()->put('authenticated_user', true);
         $request->session()->put('user_id', auth()->user()->id);
         // $request->session()->regenerate();   
+        
         return redirect()->route('dashboard')->withSuccess('You have successfully registered & logged in!');
     }
 
@@ -313,7 +348,15 @@ class UserController extends Controller
                 $request->session()->put('authenticated_user', true);
                 $request->session()->put('user_id', auth()->user()->id);
                 // $request->session()->regenerate();
-                return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+
+                $lastchatid = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->first();
+                if(isset($lastchatid->profile_id))
+                {
+                    return redirect()->route('chat.message',['id' => $lastchatid->profile_id])->withSuccess('You have successfully registered & logged in!'); 
+                }else{
+                    return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                }
+                // return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
             else{
             return back()->withErrors(['email' => 'Your provided credentials do not match in our records.'])->onlyInput('email');
