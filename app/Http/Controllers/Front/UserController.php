@@ -156,7 +156,7 @@ class UserController extends Controller
                 );
             
                 // Mail::to('john@example.com')->send(new Resetpasslink($data));
-                Mail::to('gautam@tec-sense.com')->send(new Resetpasslink($input['_token'], $input['email']));
+                Mail::to($input['email'])->send(new Resetpasslink($input['_token'], $input['email']));
                 // Mail::send('mail/sendlink', ['user' => $input], function ($m) use ($input) {
                 //     $m->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
                 //     $m->to( $input['email'] )->subject('Forgot Password');
