@@ -13,7 +13,7 @@ $userGender = isset($user->gender) ? $user->gender : '';
 $userCreated_at = isset($user->created_at) ? $user->created_at : '';
 $dateString = $userCreated_at; // Replace with your date string
 $timestamp = strtotime($dateString);
-$formattedDate = date('Y-m-d', $timestamp);
+$formattedDate = isset($subscriptions->subscription_start_date) ? $subscriptions->subscription_start_date : '';
 $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcredit : '';
 
 ?>

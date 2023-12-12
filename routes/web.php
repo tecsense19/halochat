@@ -99,8 +99,11 @@ use App\Http\Controllers\Front\SubscriptionController;
     Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
     Route::any('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
-    Route::get('/payment', [PaymentController::class, 'showForm']);
-    Route::post('/payment', [PaymentController::class, 'makePayment']);
+    Route::post('/payment', [PaymentController::class, 'showForm']);
+    // Route::post('/payment', [PaymentController::class, 'makePayment']);
+    Route::post('/orderplaced', [PaymentController::class, 'orderConfirm'])->name('payment.orderConfirm');
+
+   
 
     //Plans Subscription
     Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');

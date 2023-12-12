@@ -1,7 +1,15 @@
 
 @include('front.layout.front')
 @include('front.layout.header')
-
+<style>
+  .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: white;
+    background-color: #B473E0;
+}
+.nav-link{
+  color: white !important;
+}
+</style>
 <main id="main">
 
 <section class="subscribe_section">
@@ -46,66 +54,169 @@
             </div>
           </div>
         </div>
+
+    
         <div class="col-xl-4">
           <div class="discount_box">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              @if(isset($response))
-              @foreach($response['data'] as $key => $plans)
-              @if($plans['sku'] == 'Basic subscription')
-              @if($plans['category']['name'] == 'plans')
+
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="display: flex;justify-content: center;padding-bottom: 10px;">
               <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                    <div class="pricing_box">
-                      <div class="offer_box">50% off</div>
-                      <h6>{{ $plans['sku'] }}</h6>
-                      <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
-                      <p>Cancel anytime, privacy in bank statement</p>
-                    </div>
-                </button>
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Plans</button>
               </li>
-              @endif
-              @elseif($plans['sku'] == 'VIP subscription')
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                    <div class="pricing_box">
-                      <div class="offer_box">70% off</div>
-                      <div class="pupular_plan">
-                        <h6>{{ $plans['sku'] }}</h6>
-                        <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
-                      </div>
-                      <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
-                      <p>Cancel anytime, privacy in bank statement</p>
-                    </div>
-                </button>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Package</button>
               </li>
-              @endif
-              @endforeach
-              @endif
-         
             </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <ul class="nav nav-tabs" id="myTab" role="tablist" >
+              @if(isset($response))
+                @foreach($response['data'] as $key => $plans)
+                  @if($plans['sku'] == 'Basic subscription')
+                    @if($plans['category']['name'] == 'plans')
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][1]['id'] }}', '{{ $response['data'][1]['price'] }}')" data-id="{{ $response['data'][1]['id'] }}">
+                              <div class="offer_box">50% off</div>
+                              <h6>{{ $plans['sku'] }}</h6>
+                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
+                              <p>Cancel anytime, privacy in bank statement</p>
+                            </div>
+                        </button>
+                      </li>
+                    @endif
+                 @elseif($plans['sku'] == 'VIP subscription')
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][2]['id'] }}', '{{ $response['data'][2]['price'] }}')" data-id="{{ $response['data'][2]['id'] }}">
+                              <div class="offer_box">70% off</div>
+                              <div class="pupular_plan">
+                                <h6>{{ $plans['sku'] }}</h6>
+                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                              </div>
+                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
+                              <p>Cancel anytime, privacy in bank statement</p>
+                            </div>
+                        </button>
+                      </li>
+                  @endif
+                @endforeach
+              @endif
+            </ul>
+            <form action="{{ url('payment') }}" id="paymentForm" method="post">
+            {!! csrf_field() !!}
             <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="pay_btn" id="paypal">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+                <!-- <div class="pay_btn" id="paypal">
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
-                </div>
+                </div> -->
                 <div class="pay_btn" id="pay_creditcard">
-                  <a href="{{ url('payment') }}"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                  <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
                 </div>
               </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="pay_btn" id="paypal">
+                <!-- <div class="pay_btn" id="paypal">
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
-                </div>
+                </div> -->
                 <div class="pay_btn" id="pay_creditcard">
-                  <a href="{{ url('payment') }}"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</a>
+                <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
                 </div>
-                <div class="pay_btn" id="pay_bitcoin">
+                <!-- <div class="pay_btn" id="pay_bitcoin">
                   <a href="#">Pay with <img src="{{ URL::asset('public/front/img/bitcoin.svg') }}" class="ps-1"> <img src="{{ URL::asset('public/front/img/eth.svg') }}"> <img src="{{ URL::asset('public/front/img/litecoin.svg') }}"></a>
-                </div>
+                </div> -->
               </div>
             </div>
+            </form>
+              </div>
+
+              <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+              <ul class="nav nav-tabs" id="myTab" role="tablist" >
+              @if(isset($response))
+                @foreach($response['data'] as $key => $plans)
+                  @if($plans['sku'] == '100 credit package')
+                    @if($plans['category']['name'] == 'package')
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                              <div class="offer_box">50% off</div>
+                              <h6>{{ $plans['sku'] }}</h6>
+                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
+                              <p>Cancel anytime, privacy in bank statement</p>
+                            </div>
+                        </button>
+                      </li>
+                    @endif
+                 @elseif($plans['sku'] == '500 credit package')
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                              <div class="offer_box">70% off</div>
+                              <div class="pupular_plan">
+                                <h6>{{ $plans['sku'] }}</h6>
+                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                              </div>
+                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
+                              <p>Cancel anytime, privacy in bank statement</p>
+                            </div>
+                        </button>
+                      </li>
+                  @elseif($plans['sku'] == '2500 credit package')
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                              <div class="offer_box">70% off</div>
+                              <div class="pupular_plan">
+                                <h6>{{ $plans['sku'] }}</h6>
+                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                              </div>
+                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
+                              <p>Cancel anytime, privacy in bank statement</p>
+                            </div>
+                        </button>
+                      </li>
+                  @endif
+                @endforeach
+              @endif
+            </ul>
+            <form action="{{ url('payment') }}" id="paymentForm" method="post">
+            {!! csrf_field() !!}
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+                <!-- <div class="pay_btn" id="paypal">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
+                </div> -->
+                <div class="pay_btn" id="pay_creditcard">
+                  <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
+                  <input type="hidden" id="productid" name="productid" value="2">
+                  <input type="hidden" id="amount" name="amount" value="69.000">
+                </div>
+              </div>
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <!-- <div class="pay_btn" id="paypal">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/paypal.svg') }}"></a>
+                </div> -->
+                <div class="pay_btn" id="pay_creditcard">
+                <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
+                </div>
+                <!-- <div class="pay_btn" id="pay_bitcoin">
+                  <a href="#">Pay with <img src="{{ URL::asset('public/front/img/bitcoin.svg') }}" class="ps-1"> <img src="{{ URL::asset('public/front/img/eth.svg') }}"> <img src="{{ URL::asset('public/front/img/litecoin.svg') }}"></a>
+                </div> -->
+              </div>
+            </div>
+            </form>
+
+            
+              </div>
+            </div>
+       
+
+            
           </div>
         </div>
+
+
+        
         <div class="col-xl-4">
           <div class="discount_box">
             <div class="benefit">
@@ -181,6 +292,15 @@
 }
 
 showTime();
+
+</script>
+
+<script>
+    function handleClick(id, amount) {
+      // Set the value of #productid
+      $('#productid').val(id);
+      $('#amount').val(amount);
+    }
 </script>
 
 @include('front.layout.footer')

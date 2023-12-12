@@ -2848,3 +2848,7 @@ textarea#type_message {
   overflow-x: hidden; /* hides horizontal scrollbar */
   overflow-y: hidden; /* hides vertical scrollbar */
 }
+
+form#paymentForm {
+  margin-bottom: 20px;
+}
