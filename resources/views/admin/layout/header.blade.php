@@ -26,6 +26,14 @@
     <link rel="stylesheet" href="{{ URL::asset('public/css/style.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ URL::asset('public/images/favicon.png') }}">
+    <style>
+      .swal2-modal .swal2-title {
+        color: #545454 !important;
+      }
+      .swal2-modal .swal2-content {
+        color: #545454 !important;
+      }
+    </style>
   </head>
   <link rel="icon" href="{{ URL::asset('public/front/img/fav48x48.ico') }}" type="image/x-icon" sizes="48x48">
 <link rel="icon" href="{{ URL::asset('public/front/img/fav16x16.ico') }}" type="image/x-icon" sizes="16x16">
