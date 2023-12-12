@@ -38,4 +38,9 @@ class Subscriptions extends Authenticatable
         'subscription_end_date',
         'subscription_next_date',
     ];
+    public function subscription_user()
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
+    }
+
 }

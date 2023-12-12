@@ -12,6 +12,7 @@ use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Front\SubscriptionController;
+use App\Http\Controllers\Admin\SubscriptionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,9 @@ use App\Http\Controllers\Front\SubscriptionController;
         Route::get('/globlepromptreal', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
         Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
         Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
+
+        Route::get('/subscription/{id}', [SubscriptionsController::class, 'subscription'])->name('subscription');
+        Route::post('/subscription/list', [SubscriptionsController::class, 'subscriptionList'])->name('subscription.list');
     });
 
     // front routes

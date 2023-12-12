@@ -18,6 +18,8 @@ class PaymentController extends Controller
     {
         $product_id = $request->productid;
         $amount = $request->amount;
+        $productid_plan = $request->productid_plan;
+        $amount_plan = $request->amount_plan;
         return view('front.payment.form', compact('product_id','amount'));
     }
 
@@ -100,6 +102,7 @@ class PaymentController extends Controller
                 $subscriptions->subscription_start_date = date('Y-m-d');
                 $subscriptions->subscription_end_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +30 days'));
                 $subscriptions->subscription_next_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +30 days'));
+                $subscriptions->resp_msg = $response['resp_msg'];
                 $subscriptions->save(); // Save the profile data
 
                 $usercredit = Managecredit::where('user_id', $user->id)->first();

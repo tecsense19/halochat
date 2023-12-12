@@ -46,7 +46,7 @@
                                     <i class="mdi mdi-block-helper" style="font-size: 18px;"></i>
                                 </a>
                             <?php } ?>
-                            <a href="{{  URL::to('admin/users/edit', ['id' => $usersList1->id]) }}" role="button" title="Subscription">
+                            <a href="{{  URL::to('admin/subscription', ['id' => $userId]) }}" role="button" title="Subscription">
                                 <i class="mdi mdi-credit-card" style="font-size: 24px;"></i>
                             </a>
                             <a href="{{  URL::to('admin/users/credit_debit', ['id' => $userId]) }}" role="button" title="Credit-Debit">
