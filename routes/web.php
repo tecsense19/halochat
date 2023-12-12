@@ -30,31 +30,37 @@ use App\Http\Controllers\Front\SubscriptionController;
     Route::post('/admin/authenticate', [LoginRegisterController::class, 'authenticate'])->name('admin.authenticate');
 
     Route::group(['prefix' => '/admin', 'as' => 'admin.',], function () {
-    Route::get('/', [LoginRegisterController::class, 'login'])->name('login');
-    Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
-    Route::get('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
-    Route::get('/users', [UsersController::class, 'users'])->name('users');
-    Route::get('users/edit/{id}', [UsersController::class, 'edit'])->name('users.edit');
-    Route::post('users/store', [UsersController::class, 'store'])->name('users.store');
-    Route::get('users/suspend/{id}', [UsersController::class, 'suspend'])->name('users.suspend');
-    Route::get('users/active/{id}', [UsersController::class, 'active'])->name('users.active');
-    Route::get('/users/credit_debit/{id}', [UsersController::class, 'used_credit_debit'])->name('used_credit_debit');
-    Route::get('/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
-    Route::get('/landerpage', [UsersController::class, 'landerpage'])->name('landerpage');
-    Route::post('/addLanderpagedata/save', [UsersController::class, 'addLanderpagedata'])->name('addLanderpagedata');
-    
-    
-   // ::Profiles
-    Route::get('/add', [ProfileController::class, 'addProfiles'])->name('profile');
-    Route::get('/list', [ProfileController::class, 'profiles'])->name('profile.list');
-    Route::get('profiles/destroy/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('profiles/store', [ProfileController::class, 'store'])->name('profile.store');
-    Route::get('/globlepromptanime', [ProfileController::class, 'addGlobleprompts'])->name('profile.globleprompt');
-    Route::get('/globlepromptreal', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
-    Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
-    Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
-});
+        Route::get('/', [LoginRegisterController::class, 'login'])->name('login');
+        Route::get('/dashboard', [LoginRegisterController::class, 'dashboard'])->name('dashboard');
+        Route::get('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
+
+        Route::get('/users', [UsersController::class, 'users'])->name('users');
+        Route::post('/users/list', [UsersController::class, 'listUser'])->name('users.list');
+        Route::get('users/edit/{id}', [UsersController::class, 'edit'])->name('users.edit');
+        Route::post('users/store', [UsersController::class, 'store'])->name('users.store');
+        Route::get('users/suspend/{id}', [UsersController::class, 'suspend'])->name('users.suspend');
+        Route::get('users/active/{id}', [UsersController::class, 'active'])->name('users.active');
+
+        Route::get('/users/credit_debit/{id}', [UsersController::class, 'usedCreditDebit'])->name('used_credit_debit');
+        Route::post('/users/credit/debit/list', [UsersController::class, 'usedCreditDebitList'])->name('users.credit.debit.list');
+
+        Route::get('/sale_report', [UsersController::class, 'sell_report'])->name('sale_report.sale');
+        Route::get('/landerpage', [UsersController::class, 'landerpage'])->name('landerpage');
+        Route::post('/addLanderpagedata/save', [UsersController::class, 'addLanderpagedata'])->name('addLanderpagedata');
+        
+        
+        // ::Profiles
+        Route::get('/add', [ProfileController::class, 'addProfiles'])->name('profile');
+        Route::get('/list', [ProfileController::class, 'profiles'])->name('profile.list');
+        Route::post('/profile/list', [ProfileController::class, 'profilesList'])->name('profile.lists');
+        Route::get('profiles/destroy/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::get('profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('profiles/store', [ProfileController::class, 'store'])->name('profile.store');
+        Route::get('/globlepromptanime', [ProfileController::class, 'addGlobleprompts'])->name('profile.globleprompt');
+        Route::get('/globlepromptreal', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
+        Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
+        Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
+    });
 
     // front routes
 

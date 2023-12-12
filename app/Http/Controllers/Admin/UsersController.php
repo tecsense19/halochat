@@ -8,39 +8,77 @@ use App\Models\Usedcredites;
 use App\Models\Managecredit;
 use App\Models\Landerpage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-    public function users()
+    public function users(Request $request)
     {
         if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
         try{
-            $usersList = User::with('credit')->where('role', 'User')->paginate(6);
-            return view('admin.users.list' , compact('usersList'));
+            return view('admin.users.users');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
 
-
-    public function used_credit_debit(Request $request)
+    public function listUser(Request $request)
     {
-        if(!session()->has('authenticated_admin')){
-            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
-        }
-        $url = $request->url();
-        $segments = explode('/', rtrim($url, '/'));
-        // Get the last segment (ID)
-        $lastId = end($segments);
+        $input = $request->all();
+
+        $search = $input['search'];
+
+        $usersList = User::with('credit')->where('role', 'User')
+                        ->when($search, function ($query) use ($search) {
+                            return $query->where(function ($query) use ($search) {
+                                $query->where('name', 'like', '%' . $search . '%')
+                                    ->orWhere('email', 'like', '%' . $search . '%');
+                            });
+                        })
+                        ->paginate(10);
+
+        return view('admin.users.list', compact('usersList'));
+    }
+
+
+    public function usedCreditDebit(Request $request, $userId)
+    {
         try{
-            $credit_debit = Usedcredites::with('creditdebit')->where('user_id', $lastId)->paginate(100);
-            return view('admin.users.usedcredit' , compact('credit_debit'));
+            if(!session()->has('authenticated_admin')){
+                return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+            }
+
+            $userId = Crypt::decryptString($userId);
+
+            $checkUser = User::where('id', $userId)->first();
+            if($checkUser)
+            {
+                $totalCredit = Usedcredites::where('user_id', $userId)->sum('credit');
+                $totalDebit = Usedcredites::where('user_id', $userId)->sum('debit');
+                return view('admin.users.usedcredit', compact('userId', 'totalCredit', 'totalDebit'));
+            }
+            else
+            {
+                return redirect()->back();
+            }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+
+    public function usedCreditDebitList(Request $request)
+    {
+        $input = $request->all();
+
+        $search = $input['search'];
+        $user_id = $input['user_id'];
+
+        $credit_debit = Usedcredites::with('creditdebit')->where('user_id', $user_id)->paginate(10);
+
+        return view('admin.users.usercreditlist' , compact('credit_debit'));
     }
 
     public function sell_report(Request $request)
