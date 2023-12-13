@@ -59,13 +59,15 @@ $(document).ready(function() {
 
 function subscriptionList() {
     var search = $('#search').val();
+    var userId = '{{ $userId }}';
+
     $.ajax({
         type: 'post',
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
         url: '{{ route("admin.subscription.list") }}',
-        data: { search: search },
+        data: { search: search, user_id: userId },
         success: function(data) {
             $('.userDataList').html(data);
         }
@@ -74,13 +76,15 @@ function subscriptionList() {
 
 function getPerPageSubscriptionList(get_pagination_url) {
     var search = $('#search').val();
+    var userId = '{{ $userId }}';
+
     $.ajax({
         type: 'post',
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
         url: get_pagination_url,
-        data: { search: search },
+        data: { search: search, user_id: userId },
         success: function(data) {
             $('.userDataList').html(data);
         }
@@ -127,6 +131,52 @@ function getPerPageSubscriptionList(get_pagination_url) {
 //         }
 //     });
 // }
+
+
+
+function cancelSubscription(status, id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: status.charAt(0).toUpperCase() + status.slice(1) + " Subscription",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        confirmButtonColor: '#fe7d22',
+        cancelButtonText: 'No',
+        cancelButtonColor: '#d33',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'post',
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
+                },
+                url: '{{ route("admin.subscription.cancel") }}',
+                data: { status: status, user_id: id },
+                success: function(result) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Subscription has been '+ status + '!',
+                        icon: 'success',
+                        confirmButtonColor: '#fe7d22',
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            subscriptionList();
+                        }
+                    });
+                }
+            });
+        } else {
+            swal("account is safe!");
+        }
+    });
+}
+</script>
 
 $('body').on('keyup', '#search', function(e) {
     subscriptionList();

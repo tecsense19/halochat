@@ -63,7 +63,7 @@ class MessageController extends Controller
         if (session()->has('authenticated_user')) {
             $userId = User::where('id', $_POST['sender_id'])->first();
 
-            $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->first();
+            $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->where('isDeleted', 0)->first();
 
             $message = array(
                 'profile_id'=> $user->profile_id,
@@ -91,15 +91,15 @@ class MessageController extends Controller
                                             ->get();
             }
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
-            
-            if($creditAddManage->currentcredit < 0){
-                return redirect()->route('subscription.index');
+        
+            if($creditAddManage->currentcredit <= 0){
+                return "credit over";
             }else{  
                 // Now $message_show contains the original string with all matched words removed
                 if (str_contains($message_show, 'show')) {
-                    if($creditAddManage->currentcredit >= 5){
-                    $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
-                    
+                    if($creditAddManage->currentcredit >= 5)
+                    {
+                        $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);    
                     }
                 }
                 sleep(1);
@@ -122,7 +122,7 @@ class MessageController extends Controller
         }else{
             if(!empty($message_url)){
                 $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
-                $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('sequence_message', 'desc')->first();
+                $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('isDeleted', 0)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('sequence_message', 'desc')->first();
                 $messageAi = array(
                     'profile_id'=> $profile_id,
                     'user_id'=> session('user_id'),
@@ -215,6 +215,7 @@ class MessageController extends Controller
         $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
         $getMessageSequnce = Messages::where('sender_id', session('user_id'))
                 ->where('receiver_id', $profile_id)
+                ->where('isDeleted', 0)
                 ->where('message_text', '!=', $getFirstMessage->first_message)
                 ->orderBy('sequence_message', 'desc')
                 ->first();
@@ -624,24 +625,33 @@ class MessageController extends Controller
                     die;
                 }
 
-                $response_Base64 = $this->performInitialCheck($response_image);
-                $response_Base64 = json_decode($response_Base64, true); // Ensure the second parameter is set to true
+                try {
+                    $responseJson = $this->performInitialCheck($response_image);
+                    $responseArray = json_decode($responseJson, true);
 
-                if(isset($response_Base64))
-                {
-                    while ($response_Base64['status'] == "IN_PROGRESS" || $response_Base64['status'] == "IN_QUEUE") {
-                        // Perform the time-based check
-                        $response_Base64 = $this->performInitialCheck($response_image);
-                        $response_Base64 = json_decode($response_Base64, true);
-                        // Check if the status is now "COMPLETED"
-                        if (isset($response_Base64['status']) && $response_Base64['status'] == "COMPLETED") {
-                            if (isset($response_Base64['output']['images'][0])) {
-                                $response_image = $response_Base64['output']['images'][0];
-                                break;
-                            } 
+                    if (isset($responseArray)) {
+                        while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
+                            // Introduce a delay between checks to avoid excessive requests
+                            sleep(1);
+
+                            $responseJson = $this->performInitialCheck($response_image);
+                            $responseArray = json_decode($responseJson, true);
+
+                            // Check if the status is now "COMPLETED"
+                            if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
+                                if (isset($responseArray['output']['images'][0])) {
+                                    $response_image = $responseArray['output']['images'][0];
+                                    break;
+                                }
+                            }
                         }
-                
+                    } else {
+                        // Handle the case where decoding fails
+                        throw new \Exception("Failed to decode JSON response");
                     }
+                } catch (\Exception $e) {
+                    // Handle exceptions (e.g., log the error, notify the user, etc.)
+                    //echo "Error: " . $e->getMessage();
                 }
 
                 if(isset($response_image)){

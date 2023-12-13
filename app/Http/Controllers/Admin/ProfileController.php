@@ -305,6 +305,7 @@ class ProfileController extends Controller
                     'ethnicity' => $input['profile_ethnicity'],
                     'personality' => $input['profile_personality'],
                     'age' => $input['profile_age'],
+                    'subscription_type' => $input['subscription_type'],
                     'gender' => $input['profile_gender'],
                     'occupation' => $input['profile_occupation'],
                     'hobbies' => $input['profile_hobbies'],
@@ -378,6 +379,7 @@ class ProfileController extends Controller
             $profile->ethnicity = $input['profile_ethnicity'];
             $profile->personality = $input['profile_personality'];
             $profile->age = $input['profile_age'];
+            $profile->subscription_type = $input['subscription_type'];
             $profile->gender = $input['profile_gender'];
             $profile->occupation = $input['profile_occupation'];
             $profile->hobbies = $input['profile_hobbies'];

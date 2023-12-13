@@ -18,6 +18,7 @@ $system_instruction = isset($profileList->system_instruction) ? $profileList->sy
 $prompt = isset($profileList->prompt) ? $profileList->prompt : '';
 $negative_prompt = isset($profileList->negative_prompt) ? $profileList->negative_prompt : '';
 $profileListpersona = isset($profileList->personatype) ? $profileList->personatype : '';
+$subscription_type = isset($profileList->subscription_type) ? $profileList->subscription_type : '';
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
 // print_r($voice_name);
@@ -91,6 +92,20 @@ $get_voice = json_decode($get_voice, true);
                             @error('profile_personatype')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
+
+                            <div class="form-group">
+                                <label for="exampleSelectpersonatype">Select Subscription Type</label>
+                                <select class="form-control" id="subscription_type" value="{{ $subscription_type }}"
+                                    name="subscription_type">
+                                    <option value="Basic subscription" <?php if($subscription_type == "Basic subscription") { ?> selected <?php } ?> >Basic subscription</option>
+                                    <option value="VIP subscription" <?php if($subscription_type == "VIP subscription") { ?> selected <?php } ?>>VIP subscription</option>
+                                </select>
+                            </div>
+                            @error('profile_personatype')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            
 
 
                             <div class="form-group">

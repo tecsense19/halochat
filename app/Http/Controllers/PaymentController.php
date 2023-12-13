@@ -18,9 +18,10 @@ class PaymentController extends Controller
     {
         $product_id = $request->productid;
         $amount = $request->amount;
-        $productid_plan = $request->productid_plan;
-        $amount_plan = $request->amount_plan;
-        return view('front.payment.form', compact('product_id','amount'));
+        $billing_model = $request->billing_model;
+        $subscription_type = $request->subscription_type;
+
+        return view('front.payment.form', compact('product_id','amount','billing_model','subscription_type'));
     }
 
     public function orderConfirm(Request $request)
@@ -62,7 +63,7 @@ class PaymentController extends Controller
                     {
                         "offer_id": "2",
                         "product_id": '.$request->product_id.',
-                        "billing_model_id": 4,
+                        "billing_model_id": "5",
                         "quantity": 1
                     }
                 ],
@@ -77,7 +78,7 @@ class PaymentController extends Controller
             }',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Basic dmljZWFwcF8xMDExNDo1NDE4NTI5NWY0ZTkyYw=='
+                'Authorization: Basic '.env('STICKYIO_KEY'),
               ),
             ));
 
@@ -93,6 +94,7 @@ class PaymentController extends Controller
                 $subscriptions->plan_id = $request->product_id;
                 $subscriptions->order_id = $response['order_id'];   
                 $subscriptions->transactionID = $response['transactionID'];
+                $subscriptions->subscription_type = $request->subscription_type;
                 $subscriptions->customerId = $response['customerId'];
                 $subscriptions->authId = $response['authId'];
                 $subscriptions->orderTotal = $response['orderTotal'];
@@ -141,6 +143,7 @@ class PaymentController extends Controller
                 $subscriptions = new Subscriptions;
                 $subscriptions->user_id = session('user_id');
                 $subscriptions->plan_id = $request->product_id;
+                $subscriptions->subscription_type = $request->subscription_type;
                 $subscriptions->order_id = $response['order_id']; 
                 $subscriptions->decline_reason = $response['decline_reason'];   
                 $subscriptions->error_message = $response['error_message'];
@@ -155,6 +158,49 @@ class PaymentController extends Controller
             {
                 return redirect()->route('profile.index')->withError('subscription not done');
             }
+
+            
+    }
+
+    public function cancel(Request $request)
+    {
+
+            $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
+            if($subscriptionsUser->status == "stop"){
+                 $param1 = "start"; 
+            }else{
+                $param1 = "stop"; 
+            }
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => env('STICKYIO_URLV2').'/subscriptions'.'/'.$subscriptionsUser->subscription_id.'/'.$param1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Basic '.env('STICKYIO_KEY'),
+            ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+
+            if($subscriptionsUser->status == "stop"){
+                Subscriptions::where('subscription_id', $subscriptionsUser->subscription_id)->update([
+                    'status' => "start",
+                ]);
+                return redirect()->route('profile.index')->withSuccess('subscription start');
+           }else{
+            Subscriptions::where('subscription_id', $subscriptionsUser->subscription_id)->update([
+                'status' => "stop",
+            ]);
+            return redirect()->route('profile.index')->withSuccess('subscription stoped');
+           }
+         
 
             
     }

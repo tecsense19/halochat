@@ -23,6 +23,7 @@ class Profile extends Authenticatable
         'profile_id',
         'name',
         'description',
+        'subscription_type',
         'age',
         'gender',
         'ethnicity',

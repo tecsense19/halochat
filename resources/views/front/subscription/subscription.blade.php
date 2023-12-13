@@ -76,10 +76,11 @@
                     @if($plans['category']['name'] == 'plans')
                       <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][1]['id'] }}', '{{ $response['data'][1]['price'] }}')" data-id="{{ $response['data'][1]['id'] }}">
+                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][1]['id'] }}', '{{ $response['data'][1]['price'] }}', '4', '{{ $plans['sku'] }}')" data-id="{{ $response['data'][1]['id'] }}">
                               <div class="offer_box">50% off</div>
                               <h6>{{ $plans['sku'] }}</h6>
                               <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
+                              
                               <p>Cancel anytime, privacy in bank statement</p>
                             </div>
                         </button>
@@ -88,7 +89,7 @@
                  @elseif($plans['sku'] == 'VIP subscription')
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][2]['id'] }}', '{{ $response['data'][2]['price'] }}')" data-id="{{ $response['data'][2]['id'] }}">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][2]['id'] }}', '{{ $response['data'][2]['price'] }}', '4', '{{ $plans['sku'] }}')" data-id="{{ $response['data'][2]['id'] }}">
                               <div class="offer_box">70% off</div>
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
@@ -121,6 +122,8 @@
                 <div class="pay_btn" id="pay_creditcard">
                 <input type="hidden" id="productid2" name="productid" value="2">
                   <input type="hidden" id="amount2" name="amount" value="69.000">
+                  <input type="hidden" id="billing_model2" name="billing_model" value="4">
+                  <input type="hidden" id="subscription_type2" name="subscription_type" value="Basic">
                 <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
                 </div>
                 <!-- <div class="pay_btn" id="pay_bitcoin">
@@ -140,7 +143,7 @@
                     @if($plans['category']['name'] == 'package')
                       <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                            <div class="pricing_box"  onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}', '2')" data-id="{{ $response['data'][$key]['id'] }}">
                               <div class="offer_box">50% off</div>
                               <h6>{{ $plans['sku'] }}</h6>
                               <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
@@ -152,7 +155,7 @@
                  @elseif($plans['sku'] == '500 credit package')
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}', '2')" data-id="{{ $response['data'][$key]['id'] }}">
                               <div class="offer_box">70% off</div>
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
@@ -166,7 +169,7 @@
                   @elseif($plans['sku'] == '2500 credit package')
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}')" data-id="{{ $response['data'][$key]['id'] }}">
+                            <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}' , '2')" data-id="{{ $response['data'][$key]['id'] }}">
                               <div class="offer_box">70% off</div>
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
@@ -192,6 +195,8 @@
                   <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
                   <input type="hidden" id="productid" name="productid" value="4">
                   <input type="hidden" id="amount" name="amount" value="10.000">
+                  <input type="hidden" id="billing_model" name="billing_model" value="2">
+                  <input type="hidden" id="subscription_type" name="subscription_type" value="package">
                 </div>
               </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -298,12 +303,20 @@ showTime();
 </script>
 
 <script>
-    function handleClick(id, amount) {
+    function handleClick(id, amount, bill, subscription) {
       // Set the value of #productid
       $('#productid').val(id);
       $('#amount').val(amount);
       $('#productid2').val(id);
       $('#amount2').val(amount);
+
+      $('#subscription_type').val(subscription);
+      $('#subscription_type2').val(subscription);
+
+      $('#billing_model').val(bill);
+      $('#billing_model2').val(bill);
+     
+      
     }
 </script>
 

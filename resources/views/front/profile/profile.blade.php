@@ -14,6 +14,8 @@ $userCreated_at = isset($user->created_at) ? $user->created_at : '';
 $dateString = $userCreated_at; // Replace with your date string
 $timestamp = strtotime($dateString);
 $formattedDate = isset($subscriptions->subscription_start_date) ? $subscriptions->subscription_start_date : '';
+$subscription_type = isset($subscriptions->subscription_type) ? $subscriptions->subscription_type : 'Free';
+$subscription_status = isset($subscriptions->status) ? $subscriptions->status : 'Free';
 $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcredit : '';
 
 ?>
@@ -21,6 +23,12 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
   label {
     color: red;
   }
+  a.change_plan_btn.badge.badge-danger {
+    background: red;
+}
+a.change_plan_btn.badge.success {
+    background: #00a700;
+}
  </style>
 
 <main id="main">
@@ -103,12 +111,18 @@ $currentcredit = isset($managecredit->currentcredit) ? $managecredit->currentcre
           <div class="col-12 col-sm-8 col-md-6 ">
             <div class="current_plan_box">
               <div class="current_plan_txt">
-                <h6>Current Plan <span>Free</span></h6>
+                <h6>Current Plan <span>{{ $subscription_type }}</span></h6>
+                @if($subscription_status == "stop")
+                <a href="{{ route('payment.cancel') }}" class="change_plan_btn badge success">Start</a>
+                @else
+                <a href="{{ route('payment.cancel') }}" class="change_plan_btn badge badge-danger">Stop</a>
+                @endif
+                
                 <a href="{{ route('subscription.index') }}" class="change_plan_btn">Change Plan</a>
               </div>
               <div class="current_plan_txt" id="pay_txt">
                 <p>Payment date: <span>{{ $formattedDate }}</span></p>
-                <p>Subscription <span>{{ $currentcredit }} Credit</span></p>
+                <p>Credit balance <span>{{ $currentcredit }} Credit</span></p>
               </div>
             </div>
           </div>

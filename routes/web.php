@@ -64,6 +64,7 @@ use App\Http\Controllers\Admin\SubscriptionsController;
 
         Route::get('/subscription/{id}', [SubscriptionsController::class, 'subscription'])->name('subscription');
         Route::post('/subscription/list', [SubscriptionsController::class, 'subscriptionList'])->name('subscription.list');
+        Route::post('/admin/cancel', [SubscriptionsController::class, 'subscriptionCancel'])->name('subscription.cancel');
     });
 
     // front routes
@@ -112,6 +113,7 @@ use App\Http\Controllers\Admin\SubscriptionsController;
     Route::post('/payment', [PaymentController::class, 'showForm']);
     // Route::post('/payment', [PaymentController::class, 'makePayment']);
     Route::post('/orderplaced', [PaymentController::class, 'orderConfirm'])->name('payment.orderConfirm');
+    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
    
 
