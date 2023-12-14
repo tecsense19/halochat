@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>halochat.AI | chat and connect with AI companions</title>
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <title>vice.app</title>
+  <title>vice.app | chat and connect with AI companions</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
