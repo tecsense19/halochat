@@ -16,7 +16,7 @@ class SubscriptionController extends Controller
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://viceapp.sticky.io/api/v2/products',
+            CURLOPT_URL => env('STICKYIO_URLV2').'/products',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -25,7 +25,7 @@ class SubscriptionController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic dmljZWFwcF8xMDExNDo1NDE4NTI5NWY0ZTkyYw=='
+                'Authorization: Basic '.env('STICKYIO_KEY')
             ),
         ));
         $response = curl_exec($curl);
