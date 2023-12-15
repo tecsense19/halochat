@@ -896,8 +896,8 @@ function unlikedMessage(message, messageId) {
 <script>  
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
-    // var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
-    var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
+    var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    // var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
     url = url.replace(':chatid', chatid);
 
     e.preventDefault();
