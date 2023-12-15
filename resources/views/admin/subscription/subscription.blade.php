@@ -66,7 +66,7 @@ function subscriptionList() {
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        url: '{{ route("admin.subscription.list") }}',
+        url: "{{ URL::to('admin/subscription/list', [], true) }}",
         data: { search: search, user_id: userId },
         success: function(data) {
             $('.userDataList').html(data);
