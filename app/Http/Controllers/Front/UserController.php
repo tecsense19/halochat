@@ -10,6 +10,7 @@ use App\Models\Messages;
 use App\Models\Managecredit;
 use App\Models\Usedcredites;
 use App\Models\Passwordresets;
+use App\Models\Subscriptions;
 use App\Models\Feedback;
 use App\Mail\Resetpasslink;
 use Illuminate\Support\Facades\Mail;
@@ -44,8 +45,20 @@ class UserController extends Controller
     public function dashboard(Request $request)
     {
         if (session()->has('authenticated_user')) {
-            $profileList = Profile::with('profileImages')->get();
-            $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
+
+            $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
+            if(isset($subscriptionsUser->subscription_type) && $subscriptionsUser->subscription_type == 'Basic subscription'){
+                $profileList = Profile::with('profileImages')->where('subscription_type', 'Basic subscription')->take(10)->get();
+                $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
+            }
+            elseif(isset($subscriptionsUser->subscription_type) && $subscriptionsUser->subscription_type == 'VIP subscription')
+            {
+                $profileList = Profile::with('profileImages')->get();
+                $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
+            }else{
+                $profileList = Profile::with('profileImages')->get();
+                $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
+            }
 
             $userischecked = User::where('id', session('user_id'))->where('deletechat_flag',1)->first();
             if(isset($userischecked))

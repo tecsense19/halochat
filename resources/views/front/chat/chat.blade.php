@@ -704,6 +704,10 @@ function sendMessage() {
             data: formData, // Serialized form data
             success: function(data) {
                 // $('.profile_'+lastId).show();
+                if(data == "credit over"){
+                    window.location.href = appUrl + "/subscriprion/plans";
+                }
+
                 $('.profile_'+lastId).css('pointer-events', 'auto');
                 // Assuming your link has a class, replace '.your-link-class' with your actual class or ID
                 // $('.profile_info'+lastId).hide();

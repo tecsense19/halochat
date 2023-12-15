@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Managecredit;
+use App\Models\Subscriptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,8 +21,9 @@ class ProfilesController extends Controller
             // Use the user ID to fetch the user data
             $user = User::where('id', $userId)->first();
             $managecredit = Managecredit::where('user_id', $userId)->first();
-
-            return view("front.profile.profile", compact('user','managecredit'));
+            $subscriptions = Subscriptions::where('user_id', $userId)->first();
+            
+            return view("front.profile.profile", compact('user','managecredit','subscriptions'));
         }
         else {
             return redirect()->route('login');

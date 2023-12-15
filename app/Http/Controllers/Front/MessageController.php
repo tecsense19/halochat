@@ -9,6 +9,7 @@ use App\Models\Messages;
 use App\Models\Profile;
 use App\Models\Managecredit;
 use App\Models\Globle_prompts;
+use App\Models\Chatapi_responses;
 use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -21,14 +22,14 @@ class MessageController extends Controller
 {
     public function loadchats(Request $request)
     {
-        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('sequence_message', 'asc')->get();
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('guid', 'asc')->get();
         return view("front.chat.bind", compact('getAllReciverUser'));
 
     } 
 
     public function mobile_loadchats(Request $request)
     {
-        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('sequence_message', 'asc')->get();
+        $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('guid', 'asc')->get();
         return view("front.chat.mobile_bind", compact('getAllReciverUser'));
 
     } 
@@ -63,7 +64,7 @@ class MessageController extends Controller
         if (session()->has('authenticated_user')) {
             $userId = User::where('id', $_POST['sender_id'])->first();
 
-            $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('sequence_message', 'desc')->first();
+            $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('guid', 'desc')->where('isDeleted', 0)->first();
 
             $message = array(
                 'profile_id'=> $user->profile_id,
@@ -73,7 +74,8 @@ class MessageController extends Controller
                 'status'=> 'Active',
                 'message_text'=> $message_show,
                 'updated_at' => now(),
-                'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
+                'guid' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
+                'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
             );
             Messages::create($message);
 
@@ -91,19 +93,21 @@ class MessageController extends Controller
                                             ->get();
             }
             $creditAddManage = Managecredit::where('user_id', session('user_id'))->first();
-            
-            if($creditAddManage->currentcredit < 0){
-                return redirect()->route('subscription.index');
+        
+            if($creditAddManage->currentcredit <= 0){
+                return "credit over";
             }else{  
                 // Now $message_show contains the original string with all matched words removed
                 if (str_contains($message_show, 'show')) {
-                    if($creditAddManage->currentcredit >= 5){
-                    $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale);
-                    
+                    if($creditAddManage->currentcredit >= 5)
+                    {
+                        $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message);    
+                        
                     }
                 }
                 sleep(1);
-                $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id']);
+ 
+                $this->callAPI($userId->chatuser_id, $message_show, $user->profile_id, $userId, $message_url,$user->first_message,$_POST['receiver_id'],$getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0);
             }
             return view("front.chat.bind", compact('getAllReciverUser'));
             // return true;
@@ -114,7 +118,7 @@ class MessageController extends Controller
            
     }
 
-    public function callAPI($id, $message, $profile_id, $userId, $message_url, $first_message, $receiver_id)
+    public function callAPI($id, $message, $profile_id, $userId, $message_url, $first_message, $receiver_id, $sequnce_number)
     {
         $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
         if($creditAddManage->currentcredit == 0){
@@ -122,19 +126,22 @@ class MessageController extends Controller
         }else{
             if(!empty($message_url)){
                 $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
-                $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('sequence_message', 'desc')->first();
-                $messageAi = array(
-                    'profile_id'=> $profile_id,
-                    'user_id'=> session('user_id'),
-                    'sender_id'=> session('user_id'),
-                    'receiver_id'=>  $profile_id,
-                    'status'=> 'Active',
-                    'media_url' => $message_url,
-                    'updated_at' => now(),
-                    'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
+                $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('isDeleted', 0)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('guid', 'desc')->first();
+                Messages::updateOrInsert(
+                    ['image_id' => $message_url['image_id']],
+                    [
+                        'profile_id'=> $profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=>  $profile_id,
+                        'status'=> 'Active',
+                        'media_url' => $message_url['image_url'],
+                        'image_id' => $message_url['image_id'],
+                        'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
+                    ]
                 );
-                Messages::create($messageAi);
-                $creditAdd = Managecredit::updateOrInsert(
+
+                Managecredit::updateOrInsert(
                     ['user_id' => $userId->id],
                     [
                         'currentcredit' => $creditAddManage->currentcredit - 5,
@@ -169,54 +176,59 @@ class MessageController extends Controller
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS =>'{
-                        "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'"
+                        "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'",
+                        "request_id": "'.$sequnce_number.'"
                     }',
                     CURLOPT_HTTPHEADER => array(
                         'Content-Type: application/json',
                         'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
                     ),
                     ));
-                    $response = curl_exec($curl);
-                    if (curl_errno($curl)) {
-                        $curlError = curl_error($curl);
-                        // Check if the error is a timeout
-                        if (strpos($curlError, 'Operation timed out') !== false) {
-                            //echo "Timeout occurred. Retrying...\n";
-                            sleep($retryDelay); // Add a delay before retrying
-                            continue; // Retry the loop
-                        } else {
-                            echo 'Curl error: ' . $curlError;
-                            break; // Exit the loop if it's not a timeout
+                        $response = curl_exec($curl);
+                        if (curl_errno($curl)) {
+                            $curlError = curl_error($curl);
+                            // Check if the error is a timeout
+                            if (strpos($curlError, 'Operation timed out') !== false) {
+                                //echo "Timeout occurred. Retrying...\n";
+                                sleep($retryDelay); // Add a delay before retrying
+                                continue; // Retry the loop
+                            } else {
+                                echo 'Curl error: ' . $curlError;
+                                break; // Exit the loop if it's not a timeout
+                            }
                         }
+                        $responseObject = json_decode($response);
+                        $chatjson = array(
+                            'user_id'=> session('user_id'),
+                            'json'=> 'message'.$response,
+                            'message'=> isset($responseObject->data->ai_message) ? $responseObject->data->ai_message : '',
+                        );
+                        Chatapi_responses::create($chatjson);
+                        if (isset($responseObject->data->ai_message)) {
+                            $this->creditcut($profile_id,$responseObject->data->ai_message,$responseObject->data->request_id,$userId,$creditAddManage);
+                            curl_close($curl);    
+                        } else {
+                            return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
+                        }
+                            // Process $response as needed
+                        //echo "Request successful!\n";
+                        break; // Exit the loop on successful request
                     }
-
-                    $responseObject = json_decode($response);
-                    $this->creditcut($profile_id,$responseObject->data->ai_message,$userId,$creditAddManage);
-                    curl_close($curl);
-                        // Process $response as needed
-                    //echo "Request successful!\n";
-                    break; // Exit the loop on successful request
-                }
                     
-                    if (isset($responseObject->data->ai_message)) {
-                                
                     
-                    } else {
-                        return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
-                    }
-                
                 }
             }
         }
 
-    public function creditcut($profile_id,$responseObject,$userId,$creditAddManage)
+    public function creditcut($profile_id,$responseObjectAi_message,$responseObjectRequest_id,$userId,$creditAddManage)
     {
         $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
         $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
         $getMessageSequnce = Messages::where('sender_id', session('user_id'))
                 ->where('receiver_id', $profile_id)
+                ->where('isDeleted', 0)
                 ->where('message_text', '!=', $getFirstMessage->first_message)
-                ->orderBy('sequence_message', 'desc')
+                ->orderBy('guid', 'desc')
                 ->first();
 
         $messageAi = array(
@@ -225,11 +237,13 @@ class MessageController extends Controller
             'sender_id'=> session('user_id'),
             'receiver_id'=>  $profile_id,
             'status'=> 'Active',
-            'message_text'=> nl2br($responseObject),
+            'message_text'=> nl2br($responseObjectAi_message),
+            'guid' => $responseObjectRequest_id,
             'updated_at' => now(),
-            'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->sequence_message + 1) : 0,
+            'sequence_message' => $responseObjectRequest_id,
         );
         Messages::create($messageAi);
+
         Managecredit::updateOrInsert(
             ['user_id' => $userId->id],
             [
@@ -274,6 +288,7 @@ class MessageController extends Controller
                         'status'=> 'Active',
                         'message_text'=> $user->first_message,
                         'sequence_message'=> 0,
+                        'guid'=> 0,
                         'updated_at' => now(),
                     );
                 }else{
@@ -284,6 +299,7 @@ class MessageController extends Controller
                         'receiver_id'=>  $user->profile_id,
                         'status'=> 'Active',
                         'message_text'=> $user->first_message,
+                        'guid'=> 0,
                         'sequence_message'=> 0,
                         'updated_at' => now(),
                     );
@@ -525,16 +541,16 @@ class MessageController extends Controller
         if(isset($user)){
             if($user->deletechat_flag == 1)
             {
-                Messages::where('profile_id', $_GET['Id'])->where('sequence_message','!=',0)->update(['isDeleted' => 1]);
+                Messages::where('profile_id', $_GET['Id'])->where('guid','!=',0)->update(['isDeleted' => 1]);
             }else{
-                Messages::where('sender_id',$_GET['Id'])->where('receiver_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->update(['isDeleted' => 1]);
+                Messages::where('sender_id',$_GET['Id'])->where('receiver_id', session('user_id'))->where('isDeleted', 0)->orderBy('guid', 'DESC')->update(['isDeleted' => 1]);
             }
             
             
         }
     }
 
-    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale, $profile_id, $first_message) {
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -602,55 +618,94 @@ class MessageController extends Controller
                 $response_image = curl_exec($curl);
                 if (curl_errno($curl)) {
                     $curlError = curl_error($curl);
-                    // Check if the error is a timeout
-                    if (strpos($curlError, 'Operation timed out') !== false) {
-                        //echo "Timeout occurred. Retrying...\n";
-                        sleep($retryDelay); // Add a delay before retrying
-                        continue; // Retry the loop
-                    } else {
-                        echo 'Curl error: ' . $curlError;
-                        break; // Exit the loop if it's not a timeout
+                        // Check if the error is a timeout
+                        if (strpos($curlError, 'Operation timed out') !== false) {
+                        
+                            sleep($retryDelay); 
+                            continue;
+                        } else {
+                            echo 'Curl error: ' . $curlError;
+                            break; 
+                        }
                     }
+                    curl_close($curl);
+                    break; 
                 }
-                curl_close($curl);
-                break; // Exit the loop on successful request
-            }
-                // echo $response_image;    
+
                 $response_image = json_decode($response_image, true);
+                $response_image_id = '';
                 if (isset($response_image['id'])) {
-                    $response_image = $response_image['id'];
+                    $response_image_id  = $response_image['id'];
+              
+                    $getMessageSequnce_guid = Messages::where('receiver_id', session('user_id'))->where('sender_id', $profile_id)->where('isDeleted', 0)->where('message_text', '!=', $first_message)->orderBy('guid', 'desc')->first();
+    
+                    $message_guid = array(
+                        'profile_id'=> $profile_id,
+                        'user_id'=> session('user_id'),
+                        'sender_id'=> session('user_id'),
+                        'receiver_id'=> $profile_id,
+                        'status'=> 'Active',
+                        'image_id' => $response_image_id,
+                        'guid' => $getMessageSequnce_guid ? ($getMessageSequnce_guid->guid) : 0,
+                        'sequence_message' => $getMessageSequnce_guid ? ($getMessageSequnce_guid->guid) : 0
+                    );
+                    Messages::create($message_guid);
+
                 } else {
                     return back()->withErrors(['ai_message' => 'Message and person image not found in the response'])->withInput();  
                     die;
                 }
 
-                $response_Base64 = $this->performInitialCheck($response_image);
-                $response_Base64 = json_decode($response_Base64, true); // Ensure the second parameter is set to true
+                try {
+                    $responseJson = $this->performInitialCheck($response_image_id);
+                    $responseArray = json_decode($responseJson, true);
 
-                if(isset($response_Base64))
-                {
-                    while ($response_Base64['status'] == "IN_PROGRESS" || $response_Base64['status'] == "IN_QUEUE") {
-                        // Perform the time-based check
-                        $response_Base64 = $this->performInitialCheck($response_image);
-                        $response_Base64 = json_decode($response_Base64, true);
-                        // Check if the status is now "COMPLETED"
-                        if (isset($response_Base64['status']) && $response_Base64['status'] == "COMPLETED") {
-                            if (isset($response_Base64['output']['images'][0])) {
-                                $response_image = $response_Base64['output']['images'][0];
-                                break;
-                            } 
+                    if (isset($responseArray)) {
+                        while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
+                            // Introduce a delay between checks to avoid excessive requests
+                            sleep(1);
+
+                            $responseJson = $this->performInitialCheck($response_image_id);
+                            $responseArray = json_decode($responseJson, true);
+
+                            // Check if the status is now "COMPLETED"
+                            if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
+                                if (isset($responseArray['output']['images'][0])) {
+                                    $response_image_base64 = $responseArray['output']['images'][0];
+                                    // $chatjson2 = array(
+                                    //     'user_id'=> session('user_id'),
+                                    //     'json'=> 'Image'.$responseJson,
+                                    //     'image_base64'=> $responseArray['output']['images'][0],
+                                    // );
+                                    // Chatapi_responses::create($chatjson2);
+                                    break;
+                                }
+                            }
                         }
-                
+                    } else {
+                        // Handle the case where decoding fails
+                        throw new \Exception("Failed to decode JSON response");
                     }
+                } catch (\Exception $e) {
+                    // Handle exceptions (e.g., log the error, notify the user, etc.)
+                    //echo "Error: " . $e->getMessage();
                 }
 
-                if(isset($response_image)){
-                    $base64Image = $response_image;
+                if(isset($response_image_base64)){
+                    $base64Image = $response_image_base64;
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
                     // Generate a unique filename for the image
                     $imageName = uniqid() . '.png';
                     //remove metadata G::Meta
+
+                    // $chatjson2 = array(
+                    //     'user_id'=> session('user_id'),
+                    //     'json'=> 'test'.$responseJson,
+                    //     'image_base64'=> $response_image_base64,
+                    // );
+                    // Chatapi_responses::create($chatjson2);
+
                     $image = Image::make(imagecreatefromstring($imageData));
                     $modifiedImagePath = storage_path($imageName);
                     // Remove all EXIF data from the image
@@ -661,7 +716,11 @@ class MessageController extends Controller
 
                     $imgUrl = env('APP_URL') ? env('APP_URL') . ('/storage'.'/'.$imageName) : url('/') . ('/storage'.'/'.$imageName);
 
-                    return $imgUrl;
+                    $result = array(
+                        'image_id' => $response_image_id,
+                        'image_url' => $imgUrl
+                    );
+                    return $result;
                 }
 
                return '';

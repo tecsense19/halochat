@@ -9,7 +9,7 @@
         {!! csrf_field() !!}
         <div class="content-wrapper">
             <div class="page-header">
-                <h3 class="page-title"> Credit Report </h3>
+                <h3 class="page-title"> Manage Profiles </h3>
                 <!-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="#">Tables</a></li>
@@ -23,25 +23,20 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex">
-                                    <div class="d-flex">
-                                        <div><h4 class="card-title">Credit Debit Report</h4></div>
-                                        <div class="ms-5 text-success">Total Credit - <label class="badge badge-success">{{ $totalCredit }}</label></div>
-                                        <div class="ms-5 text-danger">Total Debit - <label class="badge badge-danger">{{ $totalDebit }}</label></div>
-                                    </div>
+                                    <h4 class="card-title">Profiles</h4>
                                 </div>
                                 <div class="d-flex">
                                     <input name="search" id="search" class="form-control me-2"
-                                        placeholder="Search Users" />
+                                        placeholder="Search Profiles" />
                                     <button name="clear-button" id="clear-button" class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
-                            <div class="table-responsive creditDebitList">
-
+                            <div class="table-responsive profileList">
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -49,57 +44,94 @@
 </div>
 </div>
 @include('admin.layout.footer')
-
 <script type="text/javascript">
 $(document).ready(function() {
-    usersList();
+    profilesList();
 
     $('body').on('click', '.pagination a', function(e) {
         e.preventDefault();
 
         var url = $(this).attr('href');
-        getPerPageUsersList(url);
+        getPerPageProfilesList(url);
     });
 });
 
-function usersList() {
+function profilesList() {
     var search = $('#search').val();
-    var userId = '{{ $userId }}';
     $.ajax({
         type: 'post',
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        url: '{{ route("admin.users.credit.debit.list") }}',
-        data: { search: search, user_id: userId },
+        url: '{{ route("admin.profile.lists") }}',
+        data: { search: search },
         success: function(data) {
-            $('.creditDebitList').html(data);
+            $('.profileList').html(data);
         }
     });
 }
 
-function getPerPageUsersList(get_pagination_url) {
+function getPerPageProfilesList(get_pagination_url) {
     var search = $('#search').val();
-    var userId = '{{ $userId }}';
     $.ajax({
         type: 'post',
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
         url: get_pagination_url,
-        data: { search: search, user_id: userId },
+        data: { search: search },
         success: function(data) {
-            $('.creditDebitList').html(data);
+            $('.profileList').html(data);
         }
     });
 }
 
 $('body').on('keyup', '#search', function(e) {
-    usersList();
+    profilesList();
 });
 
 $('body').on('click', '#clear-button', function(e) {
     $('#search').val('');
-    usersList();
+    profilesList();
 });
+
+function deleteProfile(id) {
+    var str = "{{URL::to('admin/profiles/destroy')}}/" + id;
+        
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Once deleted, you will not be able to recover this imaginary file!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        confirmButtonColor: '#fe7d22',
+        cancelButtonText: 'No',
+        cancelButtonColor: '#d33',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: str,
+                success: function(result) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Your imaginary file has been deleted!',
+                        icon: 'success',
+                        confirmButtonColor: '#fe7d22',
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            profilesList();
+                        }
+                    });
+                }
+            });
+        } else {
+            swal("Your imaginary file is safe!");
+        }
+    });
+}
 </script>

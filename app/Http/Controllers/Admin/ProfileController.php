@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Models\Globle_prompts;
 use App\Models\ProfileImage;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -22,15 +23,33 @@ class ProfileController extends Controller
 
     public function profiles()
     {
-        if(!session()->has('authenticated_admin')){
-            return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
-        }
         try{
-            $profileList = Profile::with('profileImages')->paginate(5);
-            return view('admin.profiles.list' , compact('profileList'));
+            if(!session()->has('authenticated_admin')){
+                return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
+            }
+
+            return view('admin.profiles.profile');
+
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+
+    public function profilesList(Request $request)
+    {
+        $input = $request->all();
+
+        $search = $input['search'];
+
+        $profileList = Profile::with('profileImages')
+                        ->when($search, function ($query) use ($search) {
+                            return $query->where(function ($query) use ($search) {
+                                $query->where('name', 'like', '%' . $search . '%');
+                            });
+                        })
+                        ->paginate(10);
+
+        return view('admin.profiles.list', compact('profileList'));
     }
 
     public function destroy($id)
@@ -57,9 +76,20 @@ class ProfileController extends Controller
         if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
         }
-        $profileList = Profile::where('profile_id', $id)->first();
-        $get_voice = $this->get_voice();
-        return view('admin.profiles.addedit', compact('profileList', 'id', 'get_voice'));
+
+        $id = Crypt::decryptString($id);
+
+        $checkProfile = Profile::where('profile_id', $id)->first();
+        if($checkProfile)
+        {
+            $profileList = Profile::where('profile_id', $id)->first();
+            $get_voice = $this->get_voice();
+            return view('admin.profiles.addedit', compact('profileList', 'id', 'get_voice'));
+        }
+        else
+        {
+            return redirect()->back();
+        }
     }
 
     public function get_voice()
@@ -275,6 +305,7 @@ class ProfileController extends Controller
                     'ethnicity' => $input['profile_ethnicity'],
                     'personality' => $input['profile_personality'],
                     'age' => $input['profile_age'],
+                    'subscription_type' => $input['subscription_type'],
                     'gender' => $input['profile_gender'],
                     'occupation' => $input['profile_occupation'],
                     'hobbies' => $input['profile_hobbies'],
@@ -348,6 +379,7 @@ class ProfileController extends Controller
             $profile->ethnicity = $input['profile_ethnicity'];
             $profile->personality = $input['profile_personality'];
             $profile->age = $input['profile_age'];
+            $profile->subscription_type = $input['subscription_type'];
             $profile->gender = $input['profile_gender'];
             $profile->occupation = $input['profile_occupation'];
             $profile->hobbies = $input['profile_hobbies'];
