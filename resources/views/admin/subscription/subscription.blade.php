@@ -176,7 +176,7 @@ function cancelSubscription(status, id) {
         }
     });
 }
-</script>
+
 
 $('body').on('keyup', '#search', function(e) {
     subscriptionList();
