@@ -198,12 +198,12 @@ class MessageController extends Controller
                             }
                         }
                         $responseObject = json_decode($response);
-                        $chatjson = array(
-                            'user_id'=> session('user_id'),
-                            'json'=> 'message'.$response,
-                            'message'=> isset($responseObject->data->ai_message) ? $responseObject->data->ai_message : '',
-                        );
-                        Chatapi_responses::create($chatjson);
+                        // $chatjson = array(
+                        //     'user_id'=> session('user_id'),
+                        //     'json'=> 'message'.$response,
+                        //     'message'=> isset($responseObject->data->ai_message) ? $responseObject->data->ai_message : '',
+                        // );
+                        // Chatapi_responses::create($chatjson);
                         if (isset($responseObject->data->ai_message)) {
                             $this->creditcut($profile_id,$responseObject->data->ai_message,$responseObject->data->request_id,$userId,$creditAddManage);
                             curl_close($curl);    
