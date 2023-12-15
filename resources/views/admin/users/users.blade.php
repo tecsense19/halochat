@@ -64,7 +64,7 @@ function usersList() {
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        url: '{{ route("admin.users.list") }}',
+        url: "{{ URL::to('admin/users/list', [], true) }}",
         data: { search: search },
         success: function(data) {
             $('.userDataList').html(data);

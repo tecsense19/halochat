@@ -70,7 +70,7 @@ function usersList() {
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        url: '{{ route("admin.users.credit.debit.list", [], true) }}',
+        url: "{{ URL::to('admin/users/credit/debit/list', [], true) }}",
         data: { search: search, user_id: userId },
         success: function(data) {
             $('.creditDebitList').html(data);
