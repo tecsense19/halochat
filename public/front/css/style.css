@@ -1394,6 +1394,7 @@ button.carousel-control-next {
   padding: 5px 0px;
   position: fixed;
   z-index: 1;
+  top: 78px;
 }
 
 .subscribe-item {
@@ -2418,7 +2419,8 @@ a.change_plan_btn {
   .discount_box .discount_only_today h3 {
     font-size: 18px;
     width: 100%;
-  }
+    padding-top: 30px;
+}
   section.gallery_section {
     padding-left: 0px;
   }
@@ -2534,6 +2536,15 @@ a.change_plan_btn {
 .portfolio-wrap:hover .hover_img {
   opacity: unset;
 }
+.subscribe_section {
+  width: 100%;
+  /* background: linear-gradient(90deg,#4d1d28 .9%,#4d1d2800); */
+  background: linear-gradient(90deg, rgba(180, 115, 224, 0.9) 0%, rgba(180, 115, 224, 0) 100%);
+  padding: 5px 0px;
+  position: fixed;
+  z-index: 1;
+  top: 60px;
+}
 }
 
 @media (max-width: 575px) {
@@ -2541,7 +2552,10 @@ a.change_plan_btn {
     padding: 10px 0px;
   }
   .breadcrumbs_top .logo a img {
-    width: 160px;
+    width: 145px;
+  }
+  .profile_dropdown .display-picture span {
+    margin-left: 5px;
   }
   .breadcrumbs_top ul li .register_btn {
     width: 70px;

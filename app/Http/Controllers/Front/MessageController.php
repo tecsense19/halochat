@@ -65,7 +65,7 @@ class MessageController extends Controller
             $userId = User::where('id', $_POST['sender_id'])->first();
 
             $getMessageSequnce = Messages::where('sender_id', $user->profile_id)->where('receiver_id', session('user_id'))->orderBy('guid', 'desc')->where('isDeleted', 0)->first();
-
+    
             $message = array(
                 'profile_id'=> $user->profile_id,
                 'user_id'=> session('user_id'),

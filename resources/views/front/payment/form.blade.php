@@ -70,7 +70,7 @@
 
   <form action="{{ route('payment.orderConfirm') }}" method="post">
   {!! csrf_field() !!}
-    <img src="http://127.0.0.1/halochat/public/front/img/viceapp.png" width="300" height="100" alt="">
+    <img src="{{ URL::asset('public/front/img/viceapp.png') }}" width="300" height="100" alt="">
 
     <label for="cardNumber">Card Number:</label>
     <input type="text" id="cardNumber" name="cardNumber" pattern="\d{4} \d{4} \d{4} \d{4}" placeholder="Please enter a valid credit card number" title="Please enter a valid credit card number in the format xxxx xxxx xxxx xxxx" required>
@@ -80,7 +80,7 @@
     <input type="text" id="cardName" name="cardName" placeholder="Please enter a valid credit card name holder"  required>
 
     <label for="expirationDate">Expiration Date:</label>
-    <input type="text" id="expirationDate" name="expirationDate" placeholder="MM/YY" pattern="\d{2}/\d{2}" title="Please enter a valid MM/YY format">
+    <input type="text" id="expirationDate" name="expirationDate" placeholder="MM/YY" pattern="\d{2}/\d{2}" title="Please enter a valid MM/YY format" required>
 
     <label for="cvv">CVV:</label>
     <input type="text" id="cvv" name="cvv" required>
@@ -100,7 +100,7 @@
     <!-- Include jQuery Validation Plugin -->
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
-<script>
+<!-- <script>
     document.getElementById('expirationDate').addEventListener('input', function (e) {
         var input = e.target;
         var value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
@@ -120,6 +120,31 @@
         } else if (enteredMonth === 12 && enteredDate < currentDate) {
 
             input.setCustomValidity('Expiration date must be in the future');
+        } else if (enteredDate < currentDate) {
+            input.setCustomValidity('Invalid expiration date. Please enter a future date.');
+        } else {
+            input.setCustomValidity('');
+        }
+    });
+</script> -->
+
+<script>
+    document.getElementById('expirationDate').addEventListener('input', function (e) {
+        var input = e.target;
+        var value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+        var formattedValue = value.replace(/(\d{2})(\d{0,2})/, '$1/$2').substring(0, 5);
+
+        input.value = formattedValue;
+
+        // Validate for a future date
+        var currentDate = new Date();
+        var enteredDate = new Date('20' + formattedValue.split('/').reverse().join('-')); // Assuming years start with '20'
+
+        // Validate the month (01-12)
+        var enteredMonth = parseInt(formattedValue.split('/')[0], 10);
+
+        if (isNaN(enteredMonth) || enteredMonth < 1 || enteredMonth > 12) {
+            input.setCustomValidity('Invalid month. Please enter a valid month (01-12).');
         } else if (enteredDate < currentDate) {
             input.setCustomValidity('Invalid expiration date. Please enter a future date.');
         } else {
