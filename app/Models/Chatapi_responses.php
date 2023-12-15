@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Messages extends Authenticatable
+class Chatapi_responses extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,27 +17,13 @@ class Messages extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'messages';
+    protected $table = 'chatapi_responses';
 
     protected $fillable = [
-        'profile_id', 
-        'user_id',
-        'sender_id',
-        'receiver_id',
-        'status',
-        'message_text',
-        'timestamp',
-        'media_url',
-        'guid',
-        'image_id',
-        'isDeleted',
-        'sequence_message'
+        'id', 
+        'user_id', 
+        'json', 
+        'message',
+        'image_base64',
     ];
-
-    public function reciverProfile()
-    {
-        return $this->hasMany(Profile::class, 'profile_id', 'receiver_id');
-    }
-
-
 }

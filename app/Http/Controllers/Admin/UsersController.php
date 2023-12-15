@@ -156,6 +156,7 @@ class UsersController extends Controller
 
                     $user_update = Managecredit::where('user_id', $input['id'])->update([
                         'totalcredit' => $input['totalcredit'],
+                        'currentcredit' => $input['totalcredit'],
                         'updated_at' => now(),
                     ]);
                  
