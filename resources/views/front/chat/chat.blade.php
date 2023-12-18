@@ -223,7 +223,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                         {!! csrf_field() !!}
                                         <!-- <input type="text" name="message" class="type_message_1" id="type_message"
                                             placeholder="Type action message" autocomplete="off" required> -->
-                                         <textarea name="message" class="type_message_1" id="type_message" autocomplete="off" placeholder="Type action message"></textarea>
+                                         <textarea name="message" class="type_message_1" id="type_message" autocomplete="off" placeholder="Type action message" oninput="adjustTextareaHeight()" onkeydown="handleKeyDown(event)"></textarea>
                                         <input type="hidden" name="receiver_id"
                                             value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
@@ -955,4 +955,18 @@ function isdeleted(Id) {
         }
     });
 }
+</script>
+
+<script>
+    function adjustTextareaHeight() {
+        var textarea = document.getElementById('type_message');
+        textarea.style.height = 'auto'; // Reset height to auto
+        textarea.style.height = (textarea.scrollHeight) + 'px'; // Set new height based on scrollHeight
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            adjustTextareaHeight(); // Adjust height when Enter key is pressed
+        }
+    }
 </script>

@@ -73,8 +73,8 @@ class PaymentController extends Controller
                 "shippingState": "FL",
                 "shippingZip": "34684",
                 "shippingCountry": "US",
-                "forceGatewayId": "1",
-                "preserve_force_gateway": "1"
+                "forceGatewayId": "3",
+                "preserve_force_gateway": "3"
             }',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',

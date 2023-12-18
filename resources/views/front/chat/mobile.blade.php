@@ -103,7 +103,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         </g>
                                     </svg> -->
                                     
-                                    <a href="#" data-bs-chatid="{{ $chat->profile_id }}" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
+                                    <!-- <a href="#" data-bs-chatid="{{ $chat->profile_id }}" data-toggle="tooltip" data-placement="top" title="When completed response then after you can delete it" class="profile_info{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -114,8 +114,8 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                                 fill="currentColor"></path>
                                         </g>
                                     </svg>
-                                </a>
-                                <a href="" data-bs-chatid="{{ $chat->profile_id }}" style="display: none;" class="remove-chat profile_{{ $chat->profile_id }}">
+                                </a> -->
+                                <a href="" data-bs-chatid="{{ $chat->profile_id }}"  class="remove-chat profile_{{ $chat->profile_id }}">
                                     <svg width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g>
                                             <path
@@ -180,7 +180,7 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     <input type="hidden" name="receiver_id" value="{{ request()->segment(count(request()->segments())) }}">
                                         <input type="hidden" name="sender_id" value="{{ session('user_id') }}">
                                         <!-- <input type="text" name="message" id="type_message" autocomplete="off" placeholder="Type action message"> -->
-                                        <textarea name="message" class="type_message_1" id="type_message" autocomplete="off" placeholder="Type action message"></textarea>
+                                        <textarea name="message" class="type_message_1" id="type_message" autocomplete="off" placeholder="Type action message" oninput="adjustTextareaHeight()" onkeydown="handleKeyDown(event)"></textarea>
                                         <div class="dropdown">
                                             <a class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
@@ -822,6 +822,7 @@ function unlikedMessage(message, messageId) {
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
     var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    // var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
     url = url.replace(':chatid', chatid);
 
     e.preventDefault();
@@ -877,4 +878,19 @@ function isdeleted(Id) {
         }
     });
 }
+</script>
+
+
+<script>
+    function adjustTextareaHeight() {
+        var textarea = document.getElementById('type_message');
+        textarea.style.height = 'auto'; // Reset height to auto
+        textarea.style.height = (textarea.scrollHeight) + 'px'; // Set new height based on scrollHeight
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            adjustTextareaHeight(); // Adjust height when Enter key is pressed
+        }
+    }
 </script>
