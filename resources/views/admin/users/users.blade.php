@@ -53,6 +53,11 @@ $(document).ready(function() {
         e.preventDefault();
 
         var url = $(this).attr('href');
+        // Check if the URL starts with "http://"
+        if (url.startsWith('http://')) {
+            // Replace "http://" with "https://"
+            url = url.replace('http://', 'https://');
+        }
         getPerPageUsersList(url);
     });
 });
@@ -65,6 +70,7 @@ function usersList() {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
         url: "{{ URL::to('admin/users/list', [], true) }}",
+        // url: "{{ URL::to('admin/users/list') }}",
         data: { search: search },
         success: function(data) {
             $('.userDataList').html(data);
