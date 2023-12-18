@@ -531,6 +531,7 @@ $(document).ready(function() {
     loadchats();
     $('body').on('click', '#new_message', function() {
         if ($('#type_message').val()) {
+            $('#type_message').css('height', '45px');
             <?php if(session('user_id')) { ?>
         $('.new_message').append('<div class="col-12" bis_skin_checked="1"><div class="send_message" bis_skin_checked="1"><p id="chat-message">'+ $('#type_message').val() +'</p></div></div>');
 
@@ -717,7 +718,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Set the input field's value to the suggestion text
         messageInput.value = suggestionText;
-
+        $('#type_message').css('height', '70px');
         // Hide the suggestion by setting its display to "none"
         suggestionLink.parentNode.style.display = "none";
     });

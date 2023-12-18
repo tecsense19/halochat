@@ -594,6 +594,7 @@ $(document).ready(function() {
 
 $("#message_form").submit(function(event) {
     event.preventDefault()
+    
     sendMessage()
 });
 
@@ -612,6 +613,7 @@ function handleKeyPress(event) {
 document.getElementById('type_message').addEventListener('keydown', handleKeyPress)
 
 function sendMessage() {
+    $('#type_message').css('height', '45px');
     if ($('#type_message').val()) {
 
         <?php if(session('user_id')) { ?>
@@ -792,7 +794,7 @@ suggestionLink.addEventListener('click', function(event) {
 
     // Set the input field's value to the suggestion text
     messageInput.value = suggestionText;
-
+    $('#type_message').css('height', '45px');
     // Hide the suggestion by setting its display to "none"
     suggestionLink.parentNode.style.display = "none";
 
