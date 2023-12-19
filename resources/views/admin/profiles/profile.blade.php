@@ -68,6 +68,7 @@ function profilesList() {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
         url: "{{ URL::to('admin/profile/list', [], true) }}",
+        // url: "{{ URL::to('admin/profile/list') }}",
         data: { search: search },
         success: function(data) {
             $('.profileList').html(data);

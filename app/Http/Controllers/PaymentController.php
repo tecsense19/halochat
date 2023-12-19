@@ -108,6 +108,25 @@ class PaymentController extends Controller
                 $subscriptions->save(); // Save the profile data
 
                 $usercredit = Managecredit::where('user_id', $user->id)->first();
+
+                if($request->product_id == 2)
+                {
+                    if ($usercredit) {
+                        $newTotalCredit = $usercredit->totalcredit + 100;
+                        $currentcredit = $usercredit->currentcredit + 100;
+                        $usercredit->update(['totalcredit' => $newTotalCredit,'currentcredit' => $currentcredit]);
+                    }     
+                }
+
+                if($request->product_id == 3)
+                {
+                    if ($usercredit) {
+                        $newTotalCredit = $usercredit->totalcredit + 500;
+                        $currentcredit = $usercredit->currentcredit + 500;
+                        $usercredit->update(['totalcredit' => $newTotalCredit,'currentcredit' => $currentcredit]);
+                    }     
+                }
+
                 if($request->product_id == 4)
                 {
                     if ($usercredit) {

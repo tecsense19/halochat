@@ -9,6 +9,7 @@ use App\Models\Messages;
 use App\Models\Profile;
 use App\Models\Managecredit;
 use App\Models\Globle_prompts;
+use App\Models\Subscriptions;
 use App\Models\Chatapi_responses;
 use App\Models\Usedcredites;
 use Illuminate\Support\Facades\Storage;
@@ -99,10 +100,12 @@ class MessageController extends Controller
             }else{  
                 // Now $message_show contains the original string with all matched words removed
                 if (str_contains($message_show, 'show')) {
-                    if($creditAddManage->currentcredit >= 5)
+                    if($creditAddManage->currentcredit >= 2)
                     {
-                        $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message);    
-                        
+                        // $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
+                        // if(!empty($subscriptionsUser)){
+                            $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message);    
+                        // }
                     }
                 }
                 sleep(1);
@@ -144,8 +147,8 @@ class MessageController extends Controller
                 Managecredit::updateOrInsert(
                     ['user_id' => $userId->id],
                     [
-                        'currentcredit' => $creditAddManage->currentcredit - 5,
-                        'usedcredit' => $creditAddManage->usedcredit + 5,
+                        'currentcredit' => $creditAddManage->currentcredit - 2,
+                        'usedcredit' => $creditAddManage->usedcredit + 2,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]
@@ -154,7 +157,7 @@ class MessageController extends Controller
                 Usedcredites::Insert(
                     [
                         'user_id' => $userId->id,
-                        'debit' => 5,
+                        'debit' => 2,
                         'credit_debit_date' => now(),
                         'created_at' => now(),
                         'updated_at' => now(),

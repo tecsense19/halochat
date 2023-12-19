@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Managecredit;
+use App\Models\Subscriptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,7 +32,8 @@ class SubscriptionController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         $response = json_decode($response, true);
-        return view("front.subscription.subscription",  compact('response'));
+        $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
+        return view("front.subscription.subscription",  compact('response', 'subscriptionsUser'));
     }
 
 }

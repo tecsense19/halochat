@@ -1,4 +1,9 @@
+<?php
 
+// print_r($subscriptionsUser);
+// die;
+
+?>
 @include('front.layout.front')
 @include('front.layout.header')
 <style>
@@ -27,9 +32,9 @@
         </div>
       </div>
       <div class="col-6 col-sm-6 col-xl-4">
-        <div class="subscribe-item text-end">
+        <!-- <div class="subscribe-item text-end">
           <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -77,11 +82,11 @@
                       <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
                             <div class="pricing_box"  onclick="handleClick('{{ $response['data'][1]['id'] }}', '{{ $response['data'][1]['price'] }}', '4', '{{ $plans['sku'] }}')" data-id="{{ $response['data'][1]['id'] }}">
-                              <div class="offer_box">50% off</div>
+                              <!-- <div class="offer_box">50% off</div> -->
                               <h6>{{ $plans['sku'] }}</h6>
-                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
+                              <h3>${{ number_format($plans['price'], 2) }} <span></span><small> / month</small></h3>
                               
-                              <p>Cancel anytime, privacy in bank statement</p>
+                              <p>With free 100 credit</p>
                             </div>
                         </button>
                       </li>
@@ -90,13 +95,13 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                             <div class="pricing_box" onclick="handleClick('{{ $response['data'][2]['id'] }}', '{{ $response['data'][2]['price'] }}', '4', '{{ $plans['sku'] }}')" data-id="{{ $response['data'][2]['id'] }}">
-                              <div class="offer_box">70% off</div>
+                              <!-- <div class="offer_box">70% off</div> -->
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
-                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                                <!-- <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div> -->
                               </div>
-                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
-                              <p>Cancel anytime, privacy in bank statement</p>
+                              <h3>${{ number_format($plans['price'], 2) }} <span></span><small> / month</small></h3>
+                              <p>With free 500 credit</p>
                             </div>
                         </button>
                       </li>
@@ -144,10 +149,10 @@
                       <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
                             <div class="pricing_box"  onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}', '2')" data-id="{{ $response['data'][$key]['id'] }}">
-                              <div class="offer_box">50% off</div>
+                              <!-- <div class="offer_box">50% off</div> -->
                               <h6>{{ $plans['sku'] }}</h6>
-                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / month</small></h3>
-                              <p>Cancel anytime, privacy in bank statement</p>
+                              <h3>${{ number_format($plans['price'], 2) }} <span></span><small></small></h3>
+                              <p></p>
                             </div>
                         </button>
                       </li>
@@ -156,13 +161,13 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                             <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}', '2')" data-id="{{ $response['data'][$key]['id'] }}">
-                              <div class="offer_box">70% off</div>
+                              <!-- <div class="offer_box">70% off</div> -->
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
-                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                                <!-- <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div> -->
                               </div>
-                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
-                              <p>Cancel anytime, privacy in bank statement</p>
+                              <h3>${{ number_format($plans['price'], 2) }} <span></span><small></small></h3>
+                              <p></p>
                             </div>
                         </button>
                       </li>
@@ -170,13 +175,13 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                             <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}' , '2')" data-id="{{ $response['data'][$key]['id'] }}">
-                              <div class="offer_box">70% off</div>
+                              <!-- <div class="offer_box">70% off</div> -->
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
-                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div>
+                                <!-- <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div> -->
                               </div>
-                              <h3>${{ number_format($plans['price'], 2) }} <span> ${{ $plans['cost_of_goods'] }} </span><small> / year</small></h3>
-                              <p>Cancel anytime, privacy in bank statement</p>
+                              <h3>${{ number_format($plans['price'], 2) }} <span></span><small></small></h3>
+                              <p></p>
                             </div>
                         </button>
                       </li>
@@ -319,5 +324,36 @@ showTime();
       
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<?php if(empty($subscriptionsUser)) { ?>
+  <script>
+        // Wait for the DOM to be fully loaded
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     // Find the element with the ID "pills-profile-tab"
+        //     var profileTab = document.getElementById('pills-profile-tab');
+        //     var homeTab = document.getElementById('pills-home-tab');
+        //     // Add a click event listener
+        //     profileTab.addEventListener('click', function() {
+        //      // Handle the click event here
+        //      homeTab.click();
+        //      Swal.fire({
+        //             text: "Need Basic Subscription",
+        //             icon: "info",
+        //             confirmButtonText: "OK"
+        //         }).then((result) => {
+        //             // Additional action after clicking "OK"
+        //             if (result.isConfirmed) {
+        //                 // You can add your additional logic here
+        //                 console.log("OK clicked");
+        //                 homeTab.click();
+                        
+        //             }
+        //         });
+        //     });
+        // });
+        $('#pills-profile-tab').hide();
+    </script>    
+    
+<?php } ?>
 @include('front.layout.footer')

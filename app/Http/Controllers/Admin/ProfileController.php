@@ -233,10 +233,45 @@ class ProfileController extends Controller
     {
         if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
-        }
+        }   
+        
         try {
         $input = $request->all();
 
+      
+            
+        if(!empty($input['speakerBoostCheckbox']))
+        {
+            $speakerBoostCheckbox = 1;
+            $speakerBoostCheckboxreq = true;
+        }else{
+            $speakerBoostCheckbox = 0;
+            $speakerBoostCheckboxreq = false;
+        }
+
+        if(isset($input['eleven_monolingual_v1']))
+        {
+            $multiplemodel = $input['eleven_multilingual_v2'].'/'.$input['eleven_monolingual_v1'];
+        }else{
+            $multiplemodel = $input['eleven_multilingual_v2'];
+        }
+
+        $postfiled = '{
+            "name": "'.$input['profile_name'].'",
+            "system_prompt": "'.$input['system_prompt'].'",
+            "system_instruction": "'.$input['system_instruction'].'",
+            "voice_name": "'.$input['profile_get_voice'].'",
+            "voice_model": "'.$multiplemodel.'",
+            "voice_settings": {
+                "stability": '.$input['stability'].',
+                "similarity_boost": '.$input['similarity_boost'].',
+                "style": '.$input['style'].',
+                "use_speaker_boost": '.$speakerBoostCheckboxreq.'
+            },
+            "short_description": "'.$input['profile_body_description'].'",
+            "first_message": "'.$input['first_message'].'"
+        }';
+        
         $validator = Validator::make($input, [
             'profile_name' => 'required|string',
             'profile_ethnicity' => 'required|string',
@@ -261,10 +296,11 @@ class ProfileController extends Controller
             //return redirect()->route('admin.profile.addProfiles')->withErrors($validator)->withInput();
         }
         else {
-
+           
             $profile_update = Profile::where('profile_id',$input['profile_id'])->first();
             if($profile_update)
             {
+                
                     // update profile
                     $curl = curl_init();
                     curl_setopt_array($curl, array(
@@ -276,21 +312,7 @@ class ProfileController extends Controller
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'PUT',
-                    CURLOPT_POSTFIELDS =>'{
-                        "name": "'.$input['profile_name'].'",
-                        "system_prompt": "'.$input['system_prompt'].'",
-                        "system_instruction": "'.$input['system_instruction'].'",
-                        "voice_name": "'.$input['profile_get_voice'].'",
-                        "voice_model": "eleven_multilingual_v2",
-                        "voice_settings": {
-                            "stability": 0.5,
-                            "similarity_boost": 0.75,
-                            "style": 0,
-                            "use_speaker_boost": true
-                        },
-                        "short_description": "'.$input['profile_body_description'].'",
-                        "first_message": "'.$input['first_message'].'"
-                    }',
+                    CURLOPT_POSTFIELDS => $postfiled,
                     CURLOPT_HTTPHEADER => array(
                         'Content-Type: application/json',
                         'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
@@ -313,10 +335,16 @@ class ProfileController extends Controller
                     'body_description' => $input['profile_body_description'],
                     'description' => $input['description'],
                     'voice_name' => $input['profile_get_voice'],
+                    'voice_id' => $input['voice_id'],
+                    'voice_model' => $multiplemodel,
                     'voice_preview_url' => $input['audio_url'],
                     'first_message' => $input['first_message'],
                     'system_prompt' => $input['system_prompt'],
                     'system_instruction' => $input['system_instruction'],
+                    'stability' => $input['stability'],
+                    'similarity_boost' => $input['similarity_boost'],
+                    'style' => $input['style'],
+                    'use_speaker_boost' => $speakerBoostCheckbox,
                     // 'prompt' => $input['prompt'],
                     // 'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
@@ -344,21 +372,7 @@ class ProfileController extends Controller
                   CURLOPT_FOLLOWLOCATION => true,
                   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                   CURLOPT_CUSTOMREQUEST => 'POST',
-                  CURLOPT_POSTFIELDS =>'{
-                    "name": "'.$input['profile_name'].'",
-                    "system_prompt": "'.$input['system_prompt'].'",
-                    "system_instruction": "'.$input['system_instruction'].'",
-                    "voice_name": "'.$input['profile_get_voice'].'",
-                    "voice_model": "eleven_multilingual_v2",
-                    "voice_settings": {
-                        "stability": 0.5,
-                        "similarity_boost": 0.75,
-                        "style": 0,
-                        "use_speaker_boost": true
-                    },
-                    "short_description": "'.$input['profile_body_description'].'",
-                    "first_message": "'.$input['first_message'].'"
-                }',
+                  CURLOPT_POSTFIELDS => $postfiled,
                   CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
@@ -387,11 +401,17 @@ class ProfileController extends Controller
             $profile->body_description = $input['profile_body_description'];
             $profile->description = $input['description'];
             $profile->voice_name = $input['profile_name'];
+            $profile->voice_model = $multiplemodel;
+            $profile->voice_id = $input['voice_id'];
             $profile->voice_preview_url = $input['audio_url'];
             $profile->persona_id = $personaId;
             $profile->first_message = $input['first_message'];  
             $profile->system_prompt = $input['system_prompt'];
             $profile->system_instruction = $input['system_instruction'];
+            $profile->stability = $input['stability'];
+            $profile->similarity_boost = $input['similarity_boost'];
+            $profile->style = $input['style'];
+            $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->save(); // Save the profile data
             $profileId = $profile->id;
                
