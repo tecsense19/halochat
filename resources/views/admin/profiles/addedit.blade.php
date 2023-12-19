@@ -25,6 +25,10 @@ $style = isset($profileList->style) ? $profileList->style : '';
 $voice_id = isset($profileList->voice_id) ? $profileList->voice_id : '';
 $voice_model = isset($profileList->voice_model) ? $profileList->voice_model : '';
 $use_speaker_boost = isset($profileList->use_speaker_boost) ? $profileList->use_speaker_boost : '';
+$max_ai_reply_length = isset($profileList->max_ai_reply_length) ? $profileList->max_ai_reply_length : '';
+$max_prompt_length = isset($profileList->max_prompt_length) ? $profileList->max_prompt_length : '';
+$short_description = isset($profileList->short_description) ? $profileList->short_description : '';
+
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
 // print_r($voice_name);
@@ -191,6 +195,24 @@ $get_voice = json_decode($get_voice, true);
                                     name="profile_voice_id" placeholder="voice_id">
                             </div>
 
+                            <div class="form-group">
+                                <label for="voice_id">Max AI Reply Length</label>
+                                <input type="text" class="form-control" id="max_ai_reply_length" value="{{ $max_ai_reply_length }}"
+                                    name="max_ai_reply_length" placeholder="Max AI Reply Length">
+                            </div>
+                            @error('max_ai_reply_length')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="max_prompt_length">Max Prompt Length</label>
+                                <input type="text" class="form-control" id="max_prompt_length" value="{{ $max_prompt_length }}"
+                                    name="max_prompt_length" placeholder="Max Prompt Length">
+                            </div>
+                            @error('max_prompt_length')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
 
                             <!-- <div class="form-group">
                                 <label for="exampleSelectpersonatype">Voice Model</label>
@@ -337,6 +359,12 @@ $get_voice = json_decode($get_voice, true);
                             @error('description')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
+
+                            <div class="form-group">
+                                <label for="short_description">Short Description</label>
+                                <input type="text" class="form-control" id="short_description" value="{{ $short_description }}"
+                                    name="short_description" placeholder="short_description">
+                            </div>
 
                             <div class="form-group">
                                 <label for="first_message">First message</label>

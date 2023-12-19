@@ -237,9 +237,6 @@ class ProfileController extends Controller
         
         try {
         $input = $request->all();
-
-      
-            
         if(!empty($input['speakerBoostCheckbox']))
         {
             $speakerBoostCheckbox = 1;
@@ -285,6 +282,8 @@ class ProfileController extends Controller
             'description' => 'required|string',
             'system_prompt' => 'required|string',
             'system_instruction' => 'required|string',
+            'max_ai_reply_length' => 'required|integer|min:1|max:5000',
+            'max_prompt_length' => 'required|integer|min:1|max:5000',
             // 'prompt' => 'required|string',
             // 'negative_prompt' => 'required|string',
             'profile_personatype' => 'required',
@@ -292,7 +291,7 @@ class ProfileController extends Controller
         
         if ($validator->fails()) {
 
-            return redirect()->route('admin.profile')->withErrors($validator);
+            return redirect()->back()->withErrors($validator);
             //return redirect()->route('admin.profile.addProfiles')->withErrors($validator)->withInput();
         }
         else {
@@ -343,6 +342,9 @@ class ProfileController extends Controller
                     'system_instruction' => $input['system_instruction'],
                     'stability' => $input['stability'],
                     'similarity_boost' => $input['similarity_boost'],
+                    'max_prompt_length' => $input['max_prompt_length'],
+                    'max_ai_reply_length' => $input['max_ai_reply_length'],
+                    'short_description'=> $input['short_description'],
                     'style' => $input['style'],
                     'use_speaker_boost' => $speakerBoostCheckbox,
                     // 'prompt' => $input['prompt'],
@@ -411,6 +413,9 @@ class ProfileController extends Controller
             $profile->stability = $input['stability'];
             $profile->similarity_boost = $input['similarity_boost'];
             $profile->style = $input['style'];
+            $profile->max_prompt_length = $input['max_prompt_length'];
+            $profile->max_ai_reply_length = $input['max_ai_reply_length'];
+            $profile->short_description = $input['short_description'];
             $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->save(); // Save the profile data
             $profileId = $profile->id;

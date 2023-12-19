@@ -124,11 +124,12 @@ class MessageController extends Controller
     public function callAPI($id, $message, $profile_id, $userId, $message_url, $first_message, $receiver_id, $sequnce_number)
     {
         $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
+        $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
         if($creditAddManage->currentcredit == 0){
             return "<script>alert('Your trail credit is over');</script>";
         }else{
             if(!empty($message_url)){
-                $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
+               
                 $getMessageSequnce = Messages::where('receiver_id', $profile_id)->where('sender_id', $userId->id)->where('isDeleted', 0)->where('message_text', '!=', $getFirstMessage->first_message)->orderBy('guid', 'desc')->first();
                 Messages::updateOrInsert(
                     ['image_id' => $message_url['image_id']],
@@ -164,6 +165,30 @@ class MessageController extends Controller
                     ]
                 );
             }else{
+
+                $postfeild = '{
+                            "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'",
+                            "persona_id": "'.$getFirstMessage->persona_id.'",
+                            "max_completion_tokens": '.$getFirstMessage->max_prompt_length.',
+                            "max_prompt_words": '.$getFirstMessage->max_ai_reply_length.',
+                            "request_id": "'.$sequnce_number.'",
+                            "persona": {
+                            "name": "'.$getFirstMessage->name.'",
+                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).'",
+                            "system_instruction": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction).'",
+                            "voice_name": "'.$getFirstMessage->voice_name.'",
+                            "voice_model": "'.$getFirstMessage->voice_model.'",
+                            "voice_settings": {
+                                "stability": '.$getFirstMessage->stability.',
+                                "similarity_boost": '.$getFirstMessage->similarity_boost.',
+                                "style": '.$getFirstMessage->style.',
+                                "use_speaker_boost": '.$getFirstMessage->use_speaker_boost.'
+                            },
+                            "short_description": "'.$getFirstMessage->short_description.'",
+                            "first_message": "'.$getFirstMessage->first_message.'"
+                            }
+                        }';
+
                 $maxRetries = 3; // Set the maximum number of retries
                 $retryDelay = 1; // Set the delay between retries in seconds
 
@@ -178,10 +203,7 @@ class MessageController extends Controller
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS =>'{
-                        "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'",
-                        "request_id": "'.$sequnce_number.'"
-                    }',
+                    CURLOPT_POSTFIELDS => $postfeild,
                     CURLOPT_HTTPHEADER => array(
                         'Content-Type: application/json',
                         'Authorization: Basic '.env('AI_CHATUSER_APIKEY')
