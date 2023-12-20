@@ -971,7 +971,7 @@ form.search-form svg {
 }
 /* * ==== CONTENT ==== */
 .start_chat_part .content {
-  height: 100vh;
+  height: 87vh;
   flex-grow: 9;
   padding: 0;
   transform: translate3d(0, 0, 0);
@@ -2886,17 +2886,13 @@ form#paymentForm {
 }
 
 
-/* Styles for iPhone 11 and devices with similar sizes */
-@media only screen and (min-width: 375px) and (max-width: 414px) {
-  .start_chat_part .content {
-    height: 100vh;
-  }
-}
+
 
 /* Styles for iPhone 12, iPhone 13, and devices with similar sizes */
 @media only screen and (min-width: 390px) and (max-width: 428px) {
   .start_chat_part .content {
     height: 100vh;
+    height: fill-available; /* fallback without prefix */
   }
 }
 
