@@ -2889,14 +2889,14 @@ form#paymentForm {
 /* Styles for iPhone 11 and devices with similar sizes */
 @media only screen and (min-width: 375px) and (max-width: 414px) {
   .start_chat_part .content {
-    height: 93vh;
+    height: 100vh;
   }
 }
 
 /* Styles for iPhone 12, iPhone 13, and devices with similar sizes */
 @media only screen and (min-width: 390px) and (max-width: 428px) {
   .start_chat_part .content {
-    height: 87vh;
+    height: 100vh;
   }
 }
 
