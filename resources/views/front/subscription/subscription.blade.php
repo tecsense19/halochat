@@ -234,11 +234,11 @@
             <div class="benefit">
               <h3>Premium Benefits</h3>
               <ul>
-                <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Create your own AI characters</li>
+                <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> More hot and steamy chat Unlock all girls</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Unlimited text messages</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Get 100 FREE tokens / month</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Remove image blur</li>
-                <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Generate images</li>
+                <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Generate NSFW images</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Listen to voice messages</li>
                 <li><img src="{{ URL::asset('public/front/img/check_circle.svg') }}"> Fast response time</li>
               </ul>
