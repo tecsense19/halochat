@@ -2545,6 +2545,7 @@ a.change_plan_btn {
   z-index: 1;
   top: 60px;
 }
+
 }
 
 @media (max-width: 575px) {
@@ -2647,7 +2648,7 @@ input {
 @media (max-width: 1199px) {
 
   .start_chat_part .content {
-    height: 100vh;
+    /* height: 93vh; */
     flex-grow: 9;
     padding: 0;
     transform: translate3d(0, 0, 0);
@@ -2657,6 +2658,15 @@ input {
     width: 75%;
     padding-top: unset;
   }
+
+  .profile_dropdown .card ul li a {
+    display: block;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+}
 
   .chat_content {
     width: 100%;
@@ -2685,7 +2695,7 @@ input {
     border-bottom: 1px solid #3F3F46;
     padding: 18px 20px;
     position: absolute;
-    margin-top: 64px;
+    margin-top: 60px;
     z-index: 1;
 }
 
@@ -2722,6 +2732,14 @@ input {
   line-height: 20px;
   color: #fff;
   margin: 0;
+}
+.privacy_bank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin: 50px 0px;
+  padding-bottom: 70px;
 }
 }
 
@@ -2865,4 +2883,28 @@ textarea#type_message {
 
 form#paymentForm {
   margin-bottom: 20px;
+}
+
+
+/* Styles for iPhone 11 and devices with similar sizes */
+@media only screen and (min-width: 375px) and (max-width: 414px) {
+  .start_chat_part .content {
+    height: 93vh;
+  }
+}
+
+/* Styles for iPhone 12, iPhone 13, and devices with similar sizes */
+@media only screen and (min-width: 390px) and (max-width: 428px) {
+  .start_chat_part .content {
+    height: 87vh;
+  }
+}
+
+/* Additional media queries for iPhone 14 and iPhone 15 can be added once their sizes are known */
+
+/* General styles for larger screens (fallback) */
+@media only screen and (min-width: 767px) and  (max-width: 1199px){
+  .start_chat_part .content {
+    height: 93vh !important;
+  }
 }
