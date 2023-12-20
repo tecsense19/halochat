@@ -970,6 +970,22 @@ form.search-form svg {
   margin-right: 20px;
 }
 /* * ==== CONTENT ==== */
+/* Desktop View */
+@media only screen and (min-width: 1024px) {
+  /* Styles for desktop view go here */
+  .start_chat_part .content {
+    height: 100vh !important;
+    flex-grow: 9;
+    padding: 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s;
+    position: sticky;
+    top: 0;
+    width: 75%;
+    padding-top: 73px;
+  }
+}
+
 .start_chat_part .content {
   height: 87vh;
   flex-grow: 9;
