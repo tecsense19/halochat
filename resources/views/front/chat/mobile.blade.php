@@ -527,38 +527,6 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
         }
     });
 }
-
-var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-var isFirefox = typeof InstallTrigger !== 'undefined';
-var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-var isEdge = /Edg/.test(navigator.userAgent);
-var isOpera = (!!window.opr && !!opr.addons) || navigator.userAgent.indexOf(' OPR/') >= 0;
-var isIE = !!document.documentMode;
-var isEdgeChromium = isChrome && isEdge;
-var isBlink = (isChrome || isOpera) && !!window.CSS;
-// var output = '<h1>Detecting browsers</h1>';
-// output += '<p>isChrome: ' + isChrome + '</p>';
-// output += '<p>isFirefox: ' + isFirefox + '</p>';
-// output += '<p>isEdge: ' + isEdge + '</p>';
-// output += '<p>isOpera: ' + isOpera + '</p>';
-// output += '<p>isSafari: ' + isSafari + '</p>';
-// output += '<p>isEdgeChromium: ' + isEdgeChromium + '</p>';
-// output += '<p>isIE: ' + isIE + '</p>';
-// output += '<p>isBlink: ' + isBlink + '</p>';
-// document.body.innerHTML = output;
-
-
-if(isSafari == true)
-{
-//  alert("true");
-}else{
-//  alert("false");
- var contentElement = document.getElementById("content");
- contentElement.classList.remove("brave");
-}
-
-
-
 $(document).ready(function() {
     loadchats();
     $('body').on('click', '#new_message', function() {

@@ -931,8 +931,8 @@ form.search-form svg {
 
 .start_chat_part {
   width: 100%;
+  /* height: 100vh; */
 }
-
 .start_chat_part .wrapper {
   width: 100%;
   display: flex;
@@ -1125,9 +1125,8 @@ form.search-form svg {
   padding: 30px;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 75%;
+  height: 84%;
 }
-
 /* Add this CSS rule to ensure the content starts at the top */
 .chat_content {
   scroll-behavior: auto;
@@ -2388,12 +2387,21 @@ a.change_plan_btn {
     padding-top: 0 !important; 
   }
 
-  .searchbar-footer {
+  /* .searchbar-footer {
     position: fixed;
     bottom: 45px;
     left: 0;
     width: 100%;
     padding: 0px 15px;
+} */
+
+.searchbar-footer {
+  position: sticky;
+  bottom: 48px;
+  background-color: #131313;
+  /* left: 0; */
+  /* width: 100%; */
+  padding: 0px 15px;
 }
 
   .nav-menu ul li a {
@@ -2498,6 +2506,9 @@ a.change_plan_btn {
 }
 
 @media (max-width: 767px) {
+  .chat_content {
+    height: 75%;
+  }
 .explore_ai_title h2 {
   font-size: 22px;
 }
@@ -2684,15 +2695,17 @@ input {
     color: #fff;
 }
 
-  .chat_content {
-    width: 100%;
-    padding: 30px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 86%;
-    padding-top: 45%;
-    /* z-index: 99999999 !important; */
+.chat_content {
+  width: 100%;
+  padding: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 86%;
+  padding-top: 18%;
+  padding-bottom: 50px !important;
+  /* z-index: 99999999 !important; */
 }
+
 
   .chat-menu {
     background: #1A1A1A;
@@ -2702,7 +2715,7 @@ input {
     top: 0;
   }
 
-.chat-profile-bar {
+/* .chat-profile-bar {
     display: flex;
     align-items: center;
     width: 100%;
@@ -2711,9 +2724,14 @@ input {
     border-bottom: 1px solid #3F3F46;
     padding: 18px 20px;
     position: absolute;
-    /* margin-top: 60px; */
+    margin-top: 60px;
     padding-top: 76px;
     z-index: 1;
+} */
+.chat-profile-bar {
+  z-index: 1;
+  position: sticky;
+  top: 59px;
 }
 
 .start_chat_part .sidebar {
@@ -2904,5 +2922,5 @@ form#paymentForm {
 
 
 /* #content.content.brave {
-  height: 90vh !important;
+  height: 86vh !important;
 } */
