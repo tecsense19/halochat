@@ -42,7 +42,7 @@
                         </div>
                     @endif
                     @if($keys == $totalMessage && $chat_user->media_url == '')
-                        <script>
+                        <!-- <script>
                             $( document ).ready(function() {
                                 // setTimeout(function(){
                                 $('.sender_message_{{ ($keys) }}').addClass('typedText');
@@ -71,7 +71,7 @@
                                     typeText(typedTextElements[i]);
                                 }
                             });
-                        </script>
+                        </script> -->
                     @endif
                     @if($chat_user->media_url)
                         <div class="col-12 mt-2">
@@ -80,14 +80,14 @@
                             </div>
                         </div>
 
-                        <script>
+                        <!-- <script>
                             $( document ).ready(function() {
                                 // setTimeout(function(){
                                 $('.hidedots').hide();
 
                                 $('.sender_message_{{ ($keys - 2) }}').removeClass('typedText');
                             });
-                        </script>
+                        </script> -->
                     @endif
                 @else
                     @php 
@@ -104,7 +104,7 @@
                         </div>
                     @endif
                     @if(!$checkNextMessage)
-                        <script>
+                        <!-- <script>
                             $( document ).ready(function() {
                                 // setTimeout(function(){
                                     $('.sender_message_{{ ($keys - 1) }}').addClass('typedText')
@@ -134,7 +134,7 @@
                                     }
                                 // }, 500);
                             });
-                        </script>
+                        </script> -->
                         <div class="chat_content_box hidedots" id="hidedots" style="width: 93px; margin-left: 15px;">
                             <div class="dot-elastic" >
                                 <span class="dot dot1"></span>
