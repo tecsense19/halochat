@@ -987,7 +987,7 @@ form.search-form svg {
 }
 
 .start_chat_part .content {
-  height: 87vh;
+  height: 100vh;
   flex-grow: 9;
   padding: 0;
   transform: translate3d(0, 0, 0);
@@ -2711,7 +2711,8 @@ input {
     border-bottom: 1px solid #3F3F46;
     padding: 18px 20px;
     position: absolute;
-    margin-top: 60px;
+    /* margin-top: 60px; */
+    padding-top: 76px;
     z-index: 1;
 }
 
@@ -2904,19 +2905,22 @@ form#paymentForm {
 
 
 
-/* Styles for iPhone 12, iPhone 13, and devices with similar sizes */
-@media only screen and (min-width: 390px) and (max-width: 428px) {
+/* Targeting only Brave browser */
+@media screen and (min-width: 390px) and (max-width: 428px) and (-webkit-min-device-pixel-ratio:0) {
+  /* Default height for the element */
+
   .start_chat_part .content {
     height: 100vh;
-    height: fill-available; /* fallback without prefix */
+  }
+  
+/* Exclude Safari on all devices (including Apple devices) */
+@media not all and (min-resolution:.001dpcm) { 
+  @supports (-webkit-appearance:none) {
+    #content.content.brave {
+      height: 86vh;
+    }
   }
 }
 
-/* Additional media queries for iPhone 14 and iPhone 15 can be added once their sizes are known */
-
-/* General styles for larger screens (fallback) */
-@media only screen and (min-width: 767px) and  (max-width: 1199px){
-  .start_chat_part .content {
-    height: 93vh !important;
-  }
 }
+
