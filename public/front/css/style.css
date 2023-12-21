@@ -974,7 +974,7 @@ form.search-form svg {
 @media only screen and (min-width: 1024px) {
   /* Styles for desktop view go here */
   .start_chat_part .content {
-    height: 100vh !important;
+    height: 100vh;
     flex-grow: 9;
     padding: 0;
     transform: translate3d(0, 0, 0);
@@ -2903,24 +2903,6 @@ form#paymentForm {
 }
 
 
-
-
-/* Targeting only Brave browser */
-@media screen and (min-width: 390px) and (max-width: 428px) and (-webkit-min-device-pixel-ratio:0) {
-  /* Default height for the element */
-
-  .start_chat_part .content {
-    height: 100vh;
-  }
-  
-/* Exclude Safari on all devices (including Apple devices) */
-@media not all and (min-resolution:.001dpcm) { 
-  @supports (-webkit-appearance:none) {
-    #content.content.brave {
-      height: 86vh;
-    }
-  }
+#content.content.brave {
+  height: 90vh !important;
 }
-
-}
-

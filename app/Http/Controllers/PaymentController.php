@@ -148,8 +148,8 @@ class PaymentController extends Controller
                 if($request->product_id == 6)
                 {
                     if ($usercredit) {
-                        $newTotalCredit = $usercredit->totalcredit + 2500;
-                        $currentcredit = $usercredit->currentcredit + 2500;
+                        $newTotalCredit = $usercredit->totalcredit + 1000;
+                        $currentcredit = $usercredit->currentcredit + 1000;
                         $usercredit->update(['totalcredit' => $newTotalCredit,'currentcredit' => $currentcredit]);
                     }      
                 }

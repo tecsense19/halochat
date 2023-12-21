@@ -270,7 +270,7 @@ class ProfileController extends Controller
         }';
         
         $validator = Validator::make($input, [
-            'profile_name' => 'required|string',
+            'profile_name' => 'required|string|regex:/^[^\d]+$/',
             'profile_ethnicity' => 'required|string',
             'profile_personality' => 'required|string',
             'profile_age' => 'required|string',

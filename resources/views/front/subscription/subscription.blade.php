@@ -17,7 +17,7 @@
 </style>
 <main id="main">
 
-<section class="subscribe_section">
+<!-- <section class="subscribe_section">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-6 col-sm-6 col-xl-4 d-none d-xl-block">
@@ -32,13 +32,13 @@
         </div>
       </div>
       <div class="col-6 col-sm-6 col-xl-4">
-        <!-- <div class="subscribe-item text-end">
+         <div class="subscribe-item text-end">
           <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
-        </div> -->
+        </div> 
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <section class="choose_plan">
   <div class="container">
@@ -171,7 +171,7 @@
                             </div>
                         </button>
                       </li>
-                  @elseif($plans['sku'] == '2500 credit package')
+                  @elseif($plans['sku'] == '1000 credit package')
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                             <div class="pricing_box" onclick="handleClick('{{ $response['data'][$key]['id'] }}', '{{ $response['data'][$key]['price'] }}' , '2')" data-id="{{ $response['data'][$key]['id'] }}">
