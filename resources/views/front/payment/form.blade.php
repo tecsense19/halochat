@@ -86,7 +86,7 @@
     <input type="text" id="cvv" name="cvv" required>
 
     <label for="cardNumber">Amount:</label>
-    <input type="text" readonly id="amount" name="amount" value="{{ $amount }}" required>
+    <input type="text" readonly id="amount" name="amount" value="${{ $amount }}" required>
 
     <input type="hidden" name="billing_model" id="billing_model" value="{{ $billing_model }}">
     <input type="hidden" name="subscription_type" id="subscription_type" value="{{ $subscription_type }}">
