@@ -174,7 +174,7 @@ class MessageController extends Controller
                             "request_id": "'.$sequnce_number.'",
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
-                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).','.str_replace(["\n", "\r", '"'], '', $getFirstMessage->prompt).'",
+                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).'",
                             "system_instruction": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction).'",
                             "voice_name": "'.$getFirstMessage->voice_name.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
@@ -222,6 +222,19 @@ class MessageController extends Controller
                                 break; // Exit the loop if it's not a timeout
                             }
                         }
+                        // Create a timestamp
+                        $timestamp = date('Y-m-d H:i:s');
+                        // Combine the timestamp and the response array
+                        $dataToWrite = "Timestamp: $timestamp\n\nText request: ". print_r($postfeild, true) ." \nText API Response: ". print_r($response, true) ."";
+                        // Define the file path
+                        $filePath = 'Text-API-Response.txt';
+                        // Open the file in append mode, or create it if it doesn't exist
+                        $file = fopen($filePath, 'a');
+                        // Write the data to the file
+                        fwrite($file, $dataToWrite);
+                        // Close the file
+                        fclose($file);
+                        // store response
                         $responseObject = json_decode($response);
                         // $chatjson = array(
                         //     'user_id'=> session('user_id'),
@@ -661,7 +674,20 @@ class MessageController extends Controller
                 $response_image_id = '';
                 if (isset($response_image['id'])) {
                     $response_image_id  = $response_image['id'];
-              
+                    // store response
+                    // Create a timestamp
+                    $timestamp = date('Y-m-d H:i:s');
+                    // Combine the timestamp and the response array
+                    $dataToWrite = "Timestamp: $timestamp\n\n Image request: ". print_r($data, true) ." \nImage ID: ". print_r($response_image_id, true) ."";
+                    // Define the file path
+                    $filePath = 'Image-API-Response.txt';
+                    // Open the file in append mode, or create it if it doesn't exist
+                    $file = fopen($filePath, 'a');
+                    // Write the data to the file
+                    fwrite($file, $dataToWrite);
+                    // Close the file
+                    fclose($file);
+                    // store response
                     $getMessageSequnce_guid = Messages::where('receiver_id', session('user_id'))->where('sender_id', $profile_id)->where('isDeleted', 0)->where('message_text', '!=', $first_message)->orderBy('guid', 'desc')->first();
     
                     $message_guid = array(
