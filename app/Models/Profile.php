@@ -46,6 +46,7 @@ class Profile extends Authenticatable
         'system_instruction',
         'prompt',
         'negative_prompt',
+        'image_prompt',
         'created_at',
         'updated_at',
     ];

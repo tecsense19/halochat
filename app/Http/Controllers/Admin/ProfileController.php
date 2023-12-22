@@ -278,8 +278,8 @@ class ProfileController extends Controller
             'system_instruction' => 'required|string',
             'max_ai_reply_length' => 'required|integer|min:1|max:5000',
             'max_prompt_length' => 'required|integer|min:1|max:5000',
-            // 'prompt' => 'required|string',
-            // 'negative_prompt' => 'required|string',
+            'prompt' => 'required|string',
+            'negative_prompt' => 'required|string',
             'profile_personatype' => 'required',
         ]);
         
@@ -335,14 +335,15 @@ class ProfileController extends Controller
                     'system_prompt' => $input['system_prompt'],
                     'system_instruction' => $input['system_instruction'],
                     'stability' => $input['stability'],
+                    'image_prompt' => $input['image_prompt'],
                     'similarity_boost' => $input['similarity_boost'],
                     'max_prompt_length' => $input['max_prompt_length'],
                     'max_ai_reply_length' => $input['max_ai_reply_length'],
                     'short_description'=> $input['short_description'],
                     'style' => $input['style'],
                     'use_speaker_boost' => $speakerBoostCheckbox,
-                    // 'prompt' => $input['prompt'],
-                    // 'negative_prompt' => $input['negative_prompt'],
+                    'prompt' => $input['prompt'],
+                    'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
                 ]);
                 $profileId = $input['profile_id'];
@@ -411,6 +412,9 @@ class ProfileController extends Controller
             $profile->max_ai_reply_length = $input['max_ai_reply_length'];
             $profile->short_description = $input['short_description'];
             $profile->use_speaker_boost = $speakerBoostCheckbox;
+            $profile->image_prompt = $input['image_prompt'];
+            $profile->negative_prompt = $input['negative_prompt'];
+            $profile->prompt = $input['prompt'];
             $profile->save(); // Save the profile data
             $profileId = $profile->id;
                

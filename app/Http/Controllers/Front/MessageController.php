@@ -104,7 +104,7 @@ class MessageController extends Controller
                     {
                         // $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
                         // if(!empty($subscriptionsUser)){
-                            $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message);    
+                            $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message,$user->image_prompt,$user->nagative_prompt);    
                         // }
                     }
                 }
@@ -174,7 +174,7 @@ class MessageController extends Controller
                             "request_id": "'.$sequnce_number.'",
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
-                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).'",
+                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).','.str_replace(["\n", "\r", '"'], '', $getFirstMessage->prompt).'",
                             "system_instruction": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction).'",
                             "voice_name": "'.$getFirstMessage->voice_name.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
@@ -575,7 +575,7 @@ class MessageController extends Controller
         }
     }
 
-    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale, $profile_id, $first_message) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale, $profile_id, $first_message, $image_prompt ,$negative_profile_prompt) {
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -602,9 +602,9 @@ class MessageController extends Controller
             $data = '{
                 "input": {
                     "api_name": "txt2img",
-                    "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $globle_realistic_prompts).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_terms).'",
+                    "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $image_prompt).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_prompts).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_terms).'",
                     "restore_faces": '.$restore_faces.',
-                    "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_prompt).'",
+                    "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_prompt).','. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
                     "seed": '.$seed.',
                     "override_settings": {
                         "sd_model_checkpoint": ""

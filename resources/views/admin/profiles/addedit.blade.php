@@ -28,6 +28,7 @@ $use_speaker_boost = isset($profileList->use_speaker_boost) ? $profileList->use_
 $max_ai_reply_length = isset($profileList->max_ai_reply_length) ? $profileList->max_ai_reply_length : '';
 $max_prompt_length = isset($profileList->max_prompt_length) ? $profileList->max_prompt_length : '';
 $short_description = isset($profileList->short_description) ? $profileList->short_description : '';
+$image_prompt = isset($profileList->image_prompt) ? $profileList->image_prompt : '';
 
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
@@ -146,6 +147,37 @@ $get_voice = json_decode($get_voice, true);
                             @error('system_instruction')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
+
+                            <div class="form-group">
+                                <label for="promt">Prompt</label>
+
+                                <textarea class="form-control custom-min-height" name="prompt" id="prompt" cols="30" rows="10" placeholder="prompt">{{ $prompt }}</textarea>
+                                
+                            </div>
+                            @error('prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="systempromt">Image prompt</label>
+                                <textarea class="form-control custom-min-height" name="image_prompt"
+                                    id="image_prompt" cols="30" rows="10"
+                                    placeholder="Image prompt">{{ $image_prompt }}</textarea>
+
+                            </div>
+                            @error('image_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="negative_prompt">Negative prompt</label>
+                                <textarea class="form-control custom-min-height" name="negative_prompt" id="negative_prompt" cols="30" rows="10" placeholder="Negative prompt">{{ $negative_prompt }}</textarea>
+                            </div>
+                            @error('negative_prompt')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                           
 
                             <div class="col-md-12 mt-4">
                                 <div class="form-group row">

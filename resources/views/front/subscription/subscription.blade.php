@@ -92,19 +92,19 @@
                       </li>
                     @endif
                  @elseif($plans['sku'] == 'VIP subscription')
-                    <li class="nav-item" role="presentation">
+                    <!-- <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                             <div class="pricing_box" onclick="handleClick('{{ $response['data'][2]['id'] }}', '{{ $response['data'][2]['price'] }}', '4', '{{ $plans['sku'] }}')" data-id="{{ $response['data'][2]['id'] }}">
-                              <!-- <div class="offer_box">70% off</div> -->
+                               <div class="offer_box">70% off</div>
                               <div class="pupular_plan">
                                 <h6>{{ $plans['sku'] }}</h6>
-                                <!-- <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div> -->
+                                <div class="pupular_btn"><img src="{{ URL::asset('public/front/img/download-fire.svg') }}"> Popular</div> 
                               </div>
                               <h3>${{ number_format($plans['price'], 2) }} <span></span><small> / month</small></h3>
                               <p>With free 500 credit</p>
                             </div>
                         </button>
-                      </li>
+                      </li> -->
                   @endif
                 @endforeach
               @endif
