@@ -885,7 +885,7 @@ function isdeleted(Id) {
 <script>
     function adjustTextareaHeight() {
         var textarea = document.getElementById('type_message');
-        textarea.style.height = 'auto'; // Reset height to auto
+        textarea.style.height = '45px'; // Reset height to auto
         textarea.style.height = (textarea.scrollHeight) + 'px'; // Set new height based on scrollHeight
     }
 
