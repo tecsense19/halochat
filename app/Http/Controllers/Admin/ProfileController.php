@@ -246,19 +246,13 @@ class ProfileController extends Controller
             $speakerBoostCheckboxreq = false;
         }
 
-        if(isset($input['eleven_monolingual_v1']))
-        {
-            $multiplemodel = $input['eleven_multilingual_v2'].'/'.$input['eleven_monolingual_v1'];
-        }else{
-            $multiplemodel = $input['eleven_multilingual_v2'];
-        }
 
         $postfiled = '{
             "name": "'.$input['profile_name'].'",
             "system_prompt": "'.$input['system_prompt'].'",
             "system_instruction": "'.$input['system_instruction'].'",
             "voice_name": "'.$input['profile_get_voice'].'",
-            "voice_model": "'.$multiplemodel.'",
+            "voice_model": "'.$input['eleven_radio'].'",
             "voice_settings": {
                 "stability": '.$input['stability'].',
                 "similarity_boost": '.$input['similarity_boost'].',
@@ -335,7 +329,7 @@ class ProfileController extends Controller
                     'description' => $input['description'],
                     'voice_name' => $input['profile_get_voice'],
                     'voice_id' => $input['voice_id'],
-                    'voice_model' => $multiplemodel,
+                    'voice_model' => $input['eleven_radio'],
                     'voice_preview_url' => $input['audio_url'],
                     'first_message' => $input['first_message'],
                     'system_prompt' => $input['system_prompt'],
@@ -403,7 +397,7 @@ class ProfileController extends Controller
             $profile->body_description = $input['profile_body_description'];
             $profile->description = $input['description'];
             $profile->voice_name = $input['profile_name'];
-            $profile->voice_model = $multiplemodel;
+            $profile->voice_model = $input['eleven_radio'];
             $profile->voice_id = $input['voice_id'];
             $profile->voice_preview_url = $input['audio_url'];
             $profile->persona_id = $personaId;

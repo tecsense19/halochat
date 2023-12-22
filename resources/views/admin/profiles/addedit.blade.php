@@ -128,7 +128,7 @@ $get_voice = json_decode($get_voice, true);
                             @enderror
 
                             <div class="form-group">
-                                <label for="systempromt">System prompt</label>
+                                <label for="systempromt">Context | (character cards, knowledge insertion, etc.)</label>
                                 <textarea class="form-control custom-min-height" name="system_prompt" id="system_prompt"
                                     cols="30" rows="10" placeholder="System prompt">{{ $system_prompt }}</textarea>
                             </div>
@@ -137,7 +137,7 @@ $get_voice = json_decode($get_voice, true);
                             @enderror
 
                             <div class="form-group">
-                                <label for="systempromt">System instruction</label>
+                                <label for="systempromt">Instruction</label>
                                 <textarea class="form-control custom-min-height" name="system_instruction"
                                     id="system_instruction" cols="30" rows="10"
                                     placeholder="System instruction">{{ $system_instruction }}</textarea>
@@ -147,22 +147,31 @@ $get_voice = json_decode($get_voice, true);
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 
-                            <div class="form-group">
-                                <label for="range1">Stability</label>
-                                <input id="range1" name="stability" type="range" min="0" max="1" step="0.05" value="{{ $stability }}">
-                            </div>
+                            <div class="col-md-12 mt-4">
+                                <div class="form-group row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="range1">Stability</label>
+                                            <input id="range1" name="stability" type="range" min="0.01" max="1" step="0.01" value="{{ $stability }}">
+                                        </div>
+                                    </div>
 
-                            
-                            <div class="form-group">
-                                <label for="range2">Similarity boost</label>
-                                <input id="range2" name="similarity_boost" type="range" min="0" max="1" step="0.05" value="{{ $similarity_boost }}">
-                            </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="range2">Similarity boost</label>
+                                            <input id="range2" name="similarity_boost" type="range" min="0.01" max="1" step="0.01" value="{{ $similarity_boost }}">
+                                        </div>
+                                    </div>
 
-                            <div class="form-group">
-                                <label for="range3">Style</label>
-                                <input id="range3" name="style" type="range" min="0" max="1" step="0.05" value="{{ $style }}">
-                            </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="range3">Style</label>
+                                            <input id="range3" name="style" type="range" min="0.01" max="1" step="0.01" value="{{ $style }}">
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
                             <div class="form-check form-check-flat form-check-primary" bis_skin_checked="1">
                                 <label class="form-check-label">
                                 <input type="checkbox" class="form-check-input" id="speakerBoostCheckbox" name="speakerBoostCheckbox" <?php if($use_speaker_boost == 1){ ?>checked <?php } else { ?> <?php }?>> Use Speaker Boost <i class="input-helper"></i></label>
@@ -175,19 +184,27 @@ $get_voice = json_decode($get_voice, true);
                                     <option value="eleven_monolingual_v1" data-select2-id="16">Eleven Monolingual V1</option>
                                 </select>
                             </div> -->
-                            <div style="display: flex;">
+                            
+
+                            <div class="col-md-6">
+                          <div class="form-group row">
+                          
+                            <div class="col-sm-4">
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" id="eleven_multilingual_v2" name="eleven_radio" value="eleven_multilingual_v2" <?php if($voice_model == "eleven_multilingual_v2") { ?> checked <?php } else{ ?> <?php } ?>  > Eleven Multilingual V2 </label>
+                              </div>
+                            </div>
+                            <div class="col-sm-5">
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" id="eleven_monolingual_v1" name="eleven_radio" value="eleven_monolingual_v1" <?php if($voice_model == "eleven_monolingual_v1") { ?> checked <?php } else{ ?> <?php } ?>  > Eleven Monolingual V1 </label>
+                              </div>
+                            </div>
+                            </div>
+                            </div>
                     
-                            <div class="form-check form-check-flat form-check-primary" style="padding-right: 20px" bis_skin_checked="1">
-                                <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="eleven_multilingual_v2" name="eleven_multilingual_v2" value="eleven_multilingual_v2" <?php if($voice_model == "eleven_multilingual_v2/eleven_monolingual_v1"){ ?> checked <?php } else if($voice_model == "eleven_multilingual_v2") { ?> checked <?php } else{ ?> <?php } ?>> Eleven Multilingual V2 <i class="input-helper"></i></label>
-                            </div>
-
-                            <div class="form-check form-check-flat form-check-primary" bis_skin_checked="1">
-                                <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="eleven_monolingual_v1" name="eleven_monolingual_v1" value="eleven_monolingual_v1" <?php if($voice_model == "eleven_multilingual_v2/eleven_monolingual_v1"){ ?> checked <?php } else if($voice_model == "eleven_monolingual_v1") { ?> checked <?php } else{ ?> <?php } ?>> Eleven Monolingual V1 <i class="input-helper"></i></label>
-                            </div>
-
-                            </div>
+                     
                             
                             <div class="form-group">
                                 <label for="voice_id">Voice id</label>
@@ -554,70 +571,71 @@ $get_voice = json_decode($get_voice, true);
     }
 
     buildSlider() {
-        // Calculate the number of steps based on the step size
-        let numberOfSteps = Math.ceil((this.el.max - this.el.min) / this.el.step) + 1;
+    // Calculate the number of steps based on the step size
+    let numberOfSteps = Math.ceil((this.el.max - this.el.min) / this.el.step) + 1;
+    // Set the max attribute based on the step size
+    // this.el.max = this.el.min + (this.el.step * (numberOfSteps - 1));
+    // create a div to contain the <input>
+    let rangeWrap = document.createElement("div");
+    rangeWrap.className = "range";
+    this.el.parentElement.insertBefore(rangeWrap, this.el);
+    // create another div to contain the <input> and fill
+    let rangeInput = document.createElement("span");
+    rangeInput.className = "range__input";
+    rangeWrap.appendChild(rangeInput);
+    // range fill, place the <input> and fill inside container <span>
+    let rangeFill = document.createElement("span");
+    rangeFill.className = "range__input-fill";
+    rangeInput.appendChild(this.el);
+    rangeInput.appendChild(rangeFill);
+    // create the counter
+    let counter = document.createElement("span");
+    counter.className = "range__counter";
+    rangeWrap.appendChild(counter);
+    // screen reader value
+    let srValue = document.createElement("span");
+    srValue.className = "range__counter-sr";
+    srValue.textContent = "0";
+    counter.appendChild(srValue);
 
-        // Set the max attribute based on the step size
-        this.el.max = this.el.min + (this.el.step * (numberOfSteps - 1));
+    // Modify the loop to create columns based on the number of steps
+    for (let i = 0; i < numberOfSteps; i++) {
+        let digitCol = document.createElement("span");
+        digitCol.className = "range__counter-column";
+        digitCol.setAttribute("aria-hidden", "true");
+        counter.appendChild(digitCol);
 
-        // create a div to contain the <input>
-        let rangeWrap = document.createElement("div");
-        rangeWrap.className = "range";
-        this.el.parentElement.insertBefore(rangeWrap, this.el);
-        // create another div to contain the <input> and fill
-        let rangeInput = document.createElement("span");
-        rangeInput.className = "range__input";
-        rangeWrap.appendChild(rangeInput);
-        // range fill, place the <input> and fill inside container <span>
-        let rangeFill = document.createElement("span");
-        rangeFill.className = "range__input-fill";
-        rangeInput.appendChild(this.el);
-        rangeInput.appendChild(rangeFill);
-        // create the counter
-        let counter = document.createElement("span");
-        counter.className = "range__counter";
-        rangeWrap.appendChild(counter);
-        // screen reader value
-        let srValue = document.createElement("span");
-        srValue.className = "range__counter-sr";
-        srValue.textContent = "0";
-        counter.appendChild(srValue);
-
-        // Modify the loop to create columns based on the number of steps
-        for (let i = 0; i < numberOfSteps; i++) {
-            let digitCol = document.createElement("span");
-            digitCol.className = "range__counter-column";
-            digitCol.setAttribute("aria-hidden", "true");
-            counter.appendChild(digitCol);
-
-            // digits (blank, 0–9, fake 0)
-            for (let d = 0; d <= 11; ++d) {
-                let digit = document.createElement("span");
-                digit.className = "range__counter-digit";
-                if (d > 0)
-                    digit.textContent = d == 11 ? 0 : `${d - 1}`;
-                digitCol.appendChild(digit);
+        // digits (blank, 0–9, fake 0)
+        for (let d = 0; d <= 11; ++d) {
+            let digit = document.createElement("span");
+            digit.className = "range__counter-digit";
+            if (d > 0) {
+                // Adjust the content based on the minimum value
+                digit.textContent = d == 11 ? (this.el.min + this.el.step * i) : `${d - 1}`;
             }
+            digitCol.appendChild(digit);
         }
-
-        this.srValue = srValue;
-        this.fill = rangeFill;
-        this.digitCols = counter.querySelectorAll(".range__counter-column");
-        this.lastDigits = this.el.value;
-        while (this.lastDigits.length < this.digitCols.length)
-            this.lastDigits = " " + this.lastDigits;
-        this.changeValue();
-
-        // Use the transition duration from CSS
-        let colCS = window.getComputedStyle(this.digitCols[0]),
-            transDur = colCS.getPropertyValue("transition-duration"),
-            msLabelPos = transDur.indexOf("ms"),
-            sLabelPos = transDur.indexOf("s");
-        if (msLabelPos > -1)
-            this.rollDuration = transDur.substr(0, msLabelPos);
-        else if (sLabelPos > -1)
-            this.rollDuration = transDur.substr(0, sLabelPos) * 1e3;
     }
+
+    this.srValue = srValue;
+    this.fill = rangeFill;
+    this.digitCols = counter.querySelectorAll(".range__counter-column");
+    this.lastDigits = this.el.value;
+    while (this.lastDigits.length < this.digitCols.length)
+        this.lastDigits = " " + this.lastDigits;
+    this.changeValue();
+
+    // Use the transition duration from CSS
+    let colCS = window.getComputedStyle(this.digitCols[0]),
+        transDur = colCS.getPropertyValue("transition-duration"),
+        msLabelPos = transDur.indexOf("ms"),
+        sLabelPos = transDur.indexOf("s");
+    if (msLabelPos > -1)
+        this.rollDuration = transDur.substr(0, msLabelPos);
+    else if (sLabelPos > -1)
+        this.rollDuration = transDur.substr(0, sLabelPos) * 1e3;
+}
+
         changeValue() {
             // keep the value within range
             if (+this.el.value > this.el.max)

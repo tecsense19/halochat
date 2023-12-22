@@ -794,7 +794,7 @@ suggestionLink.addEventListener('click', function(event) {
 
     // Set the input field's value to the suggestion text
     messageInput.value = suggestionText;
-    $('#type_message').css('height', '45px');
+    // $('#type_message').css('height', '45px');
     // Hide the suggestion by setting its display to "none"
     suggestionLink.parentNode.style.display = "none";
 
@@ -962,7 +962,7 @@ function isdeleted(Id) {
 <script>
     function adjustTextareaHeight() {
         var textarea = document.getElementById('type_message');
-        textarea.style.height = 'auto'; // Reset height to auto
+        textarea.style.height = '45px'; // Reset height to auto
         textarea.style.height = (textarea.scrollHeight) + 'px'; // Set new height based on scrollHeight
     }
 
