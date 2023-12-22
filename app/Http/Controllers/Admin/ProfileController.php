@@ -278,7 +278,7 @@ class ProfileController extends Controller
             'system_instruction' => 'required|string',
             'max_ai_reply_length' => 'required|integer|min:1|max:5000',
             'max_prompt_length' => 'required|integer|min:1|max:5000',
-            'prompt' => 'required|string',
+            // 'prompt' => 'required|string',
             'negative_prompt' => 'required|string',
             'profile_personatype' => 'required',
         ]);
@@ -342,7 +342,7 @@ class ProfileController extends Controller
                     'short_description'=> $input['short_description'],
                     'style' => $input['style'],
                     'use_speaker_boost' => $speakerBoostCheckbox,
-                    'prompt' => $input['prompt'],
+                    // 'prompt' => $input['prompt'],
                     'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
                 ]);
@@ -414,7 +414,7 @@ class ProfileController extends Controller
             $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->image_prompt = $input['image_prompt'];
             $profile->negative_prompt = $input['negative_prompt'];
-            $profile->prompt = $input['prompt'];
+            // $profile->prompt = $input['prompt'];
             $profile->save(); // Save the profile data
             $profileId = $profile->id;
                
