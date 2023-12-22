@@ -126,7 +126,7 @@
                 </div> -->
                 <div class="pay_btn" id="pay_creditcard">
                 <input type="hidden" id="productid2" name="productid" value="2">
-                  <input type="hidden" id="amount2" name="amount" value="69.000">
+                  <input type="hidden" id="amount2" name="amount" value="9.99">
                   <input type="hidden" id="billing_model2" name="billing_model" value="4">
                   <input type="hidden" id="subscription_type2" name="subscription_type" value="Basic">
                 <button type="submit" style="background: border-box;border: 0;color: white;"><img src="{{ URL::asset('public/front/img/credit-card.svg') }}" class="pe-1"> Pay with Credit / Debit Card</button>
