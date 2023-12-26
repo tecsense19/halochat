@@ -2,6 +2,8 @@
 
 $profile_id = isset($profileList->profile_id) ? $profileList->profile_id : '';
 $profileListName = isset($profileList->name) ? $profileList->name : '';
+$voice_preview_url = isset($profileList->voice_preview_url) ? $profileList->voice_preview_url : '';
+$profileListLastName = isset($profileList->last_name) ? $profileList->last_name : '';
 $profileListEthnicity = isset($profileList->ethnicity) ? $profileList->ethnicity : '';
 $profileListPersonality = isset($profileList->personality) ? $profileList->personality : '';
 $profileListAge = isset($profileList->age) ? $profileList->age : '';
@@ -62,7 +64,7 @@ $get_voice = json_decode($get_voice, true);
                             enctype="multipart/form-data">
                             {!! csrf_field() !!}
                             <div class="form-group">
-                                <label for="Name">Name</label>
+                                <label for="Name">Frist Name</label>
                                 <input type="text" class="form-control" id="exampleInputName1" id="profile_name"
                                     value="{{ $profileListName }}" name="profile_name" placeholder="Name">
                                 <input type="hidden" value="{{ $profile_id }}" name="profile_id">
@@ -70,16 +72,25 @@ $get_voice = json_decode($get_voice, true);
                             @error('profile_name')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
+
+
+                            <div class="form-group">
+                                <label for="Name">Last Name</label>
+                                <input type="text" class="form-control" id="exampleInputName1" id="profile_lastname"
+                                    value="{{ $profileListLastName }}" name="profile_lastname" placeholder="Last Name">
+                                <input type="hidden" value="{{ $profile_id }}" name="profile_id">
+                            </div>
+
                             <div class="form-group">
                                 <label for="exampleSelectGender">Select Voice</label>
                                 <select class="form-control" id="profile_get_voice" name="profile_get_voice" >
                                     @if ($get_voice !== null)
                                     @foreach ($get_voice['data'] as $item)
                                     <option data-audio-src="{{ $item['preview_url'] }}"
-                                        data-profile-gender="{{ isset($item['labels']['gender']) ? $item['labels']['gender'] : '' }}"
-                                        data-body-discription="{{ isset($item['labels']['description']) ? $item['labels']['description'] : '' }}"
+                                        data-profile-gender="{{ isset($item['labels']['gender']) ? $item['labels']['gender'] : 'female' }}"
+                                        data-body-discription="{{ isset($item['labels']['description']) ? $item['labels']['description'] : 'test' }}"
                                         data-age="{{ isset($item['labels']['age']) ? $item['labels']['age'] : 0 }}"
-                                        data-voice_id="{{ isset($item['voice_id']) ? $item['voice_id'] : '' }}">
+                                        data-voice_id="{{ isset($item['voice_id']) ? $item['voice_id'] : '' }}" value="{{ $item['name'] }}" <?php echo ($item['name'] === $voice_name) ? 'selected' : ''; ?>>
                                         {{ $item['name'] }}</option>
                                     @endforeach
                                     @endif
@@ -91,11 +102,11 @@ $get_voice = json_decode($get_voice, true);
                             @enderror
 
                             <div class="form-group">
-                                <audio id="audio-preview" name="audio_preview" controls>
+                                <audio id="audio-preview" name="audio_preview" value="{{ $voice_preview_url }}" controls src="{{ $voice_preview_url }}">
                                     <source src="" type="audio/mpeg">
                                     Your browser does not support the audio element.
                                 </audio>
-                                <input type="hidden" id="audio_url" name="audio_url" value="">
+                                <input type="hidden" id="audio_url" name="audio_url" value="{{ $voice_preview_url }}">
                             </div>
 
                             <div class="form-group">
@@ -198,7 +209,7 @@ $get_voice = json_decode($get_voice, true);
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="range3">Style</label>
-                                            <input id="range3" name="style" type="range" min="0.01" max="1" step="0.01" value="{{ $style }}">
+                                            <input id="range3" name="style" type="range" min="0" max="1" step="0.01" value="{{ $style }}">
                                         </div>
                                     </div>
 
@@ -325,7 +336,7 @@ $get_voice = json_decode($get_voice, true);
                                 <select class="form-control" id="profile_gender" value="{{ $profileListGender }}"
                                     name="profile_gender">
                                     <option value="male" <?php if($profileListGender == "male") { ?> selected
-                                        <?php } ?>>Male</option>
+                                        <?php } ?> >Male</option>
                                     <option value="female" <?php if($profileListGender == "female") { ?> selected
                                         <?php } ?>>Female</option>
                                 </select>
@@ -559,17 +570,17 @@ $get_voice = json_decode($get_voice, true);
         if (dataprofile_ethnicity !== null) {
             profile_ethnicity.value = dataprofile_ethnicity;
         } else {
-            profile_age.value = 'Age information not available';
+            profile_age.value = '30';
         }
         if (dataBodyDescription !== null) {
             body_description.value = dataBodyDescription;
         } else {
-            body_description.value = 'Body description not available';
+            body_description.value = 'Test';
         }
         if (dataGender !== null) {
             profile_gender.value = dataGender;
         } else {
-            profile_gender.value = 'Gender information not available';
+            profile_gender.value = '';
         }
         audioPreview.src = audioSrc;
         audioUrlInput.value = audioSrc;

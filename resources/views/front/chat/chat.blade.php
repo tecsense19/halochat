@@ -122,7 +122,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                 </div>
                                 <div class="admin_deatail">
                                     <h6>{{ $chat->name }}</h6>
-                                    <p>{{ $chat->first_message }}</p>
+                                    <p id="lastmsg">{{ $lastmessage->message_text }}</p>
                                 </div>
                         </a>
                         <div class="chat_delete">

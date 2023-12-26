@@ -22,6 +22,7 @@ class Profile extends Authenticatable
     protected $fillable = [
         'profile_id',
         'name',
+        'last_name',
         'description',
         'subscription_type',
         'age',
