@@ -2657,9 +2657,10 @@ a.change_plan_btn {
 }
 
 .chat-admin a {
+  width: 87%;
+  gap: 10px;
   display: flex;
   align-content: stretch;
-  justify-content: space-around;
 }
 
 .chat_delete p {

@@ -104,7 +104,54 @@ class MessageController extends Controller
                     {
                         // $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
                         // if(!empty($subscriptionsUser)){
-                            $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->globle_realistic_nagative_prompt,$globleprompts->globle_realistic_prompts,$globleprompts->globle_anime_prompts,$globleprompts->globle_realistic_terms,$globleprompts->globle_anime_terms,$globleprompts->restore_faces,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message,$user->image_prompt,$user->nagative_prompt);    
+                            $message_url = $this->checkStringForWord($message_show,$user->persona_id,$user->prompt,$globleprompts->args,
+                            $globleprompts->method,
+                            $globleprompts->endpoint,
+                            $globleprompts->sd_model_checkpoint,
+                            $globleprompts->sd_vae,
+                            $globleprompts->width,
+                            $globleprompts->height,
+                            $globleprompts->sampler_name,
+                            $globleprompts->override_settings_restore_afterwards,
+                            $globleprompts->ad_cfg_scale,
+                            $globleprompts->ad_checkpoint,
+                            $globleprompts->ad_clip_skip,
+                            $globleprompts->ad_confidence,
+                            $globleprompts->ad_controlnet_guidance_end,
+                            $globleprompts->ad_controlnet_guidance_start,
+                            $globleprompts->ad_controlnet_model,
+                            $globleprompts->ad_controlnet_module,
+                            $globleprompts->ad_controlnet_weight,
+                            $globleprompts->ad_denoising_strength,
+                            $globleprompts->ad_dilate_erode,
+                            $globleprompts->ad_inpaint_height,
+                            $globleprompts->ad_inpaint_only_masked,
+                            $globleprompts->ad_inpaint_only_masked_padding,
+                            $globleprompts->ad_inpaint_width,
+                            $globleprompts->ad_mask_blur,
+                            $globleprompts->ad_mask_k_largest,
+                            $globleprompts->ad_mask_max_ratio,
+                            $globleprompts->ad_mask_merge_invert,
+                            $globleprompts->ad_mask_min_ratio,
+                            $globleprompts->ad_model,
+                            $globleprompts->ad_negative_prompt,
+                            $globleprompts->ad_noise_multiplier,
+                            $globleprompts->ad_prompt,
+                            $globleprompts->ad_restore_face,
+                            $globleprompts->ad_sampler,
+                            $globleprompts->ad_steps,
+                            $globleprompts->ad_use_cfg_scale,
+                            $globleprompts->ad_use_checkpoint,
+                            $globleprompts->ad_use_clip_skip,
+                            $globleprompts->ad_use_inpaint_width_height,
+                            $globleprompts->ad_use_noise_multiplier,
+                            $globleprompts->ad_use_sampler,
+                            $globleprompts->ad_use_steps,
+                            $globleprompts->ad_use_vae,
+                            $globleprompts->ad_vae,
+                            $globleprompts->ad_x_offset,
+                            $globleprompts->ad_y_offset,
+                            $globleprompts->is_api,$globleprompts->seed,$globleprompts->denoising_strength,$globleprompts->enable_hr,$globleprompts->hr_scale,$globleprompts->hr_upscaler,$globleprompts->sampler_index,$globleprompts->email,$globleprompts->steps,$globleprompts->cfg_scale,$user->profile_id,$user->first_message,$user->image_prompt,$user->nagative_prompt);    
                         // }
                     }
                 }
@@ -176,7 +223,7 @@ class MessageController extends Controller
                             "name": "'.$getFirstMessage->name.'",
                             "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).'",
                             "system_instruction": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction).'",
-                            "voice_name": "'.$getFirstMessage->voice_name.'",
+                            "voice_name": "'.$getFirstMessage->voice_id.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
                             "voice_settings": {
                                 "stability": '.$getFirstMessage->stability.',
@@ -188,7 +235,7 @@ class MessageController extends Controller
                             "first_message": "'.$getFirstMessage->first_message.'"
                             }
                         }';
-
+    
                 $maxRetries = 3; // Set the maximum number of retries
                 $retryDelay = 1; // Set the delay between retries in seconds
 
@@ -345,13 +392,14 @@ class MessageController extends Controller
 
                 Messages::create($message); 
                 $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
+                $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
                                             ->get();
-                                            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
+                                            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user", "lastmessage"));
                 
             }else{
                 $getAllReciverUser = [];
@@ -360,6 +408,7 @@ class MessageController extends Controller
                 if(session('user_id')){
 
                     $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $id)->where('isDeleted', 0)->get();
+                    $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
                     $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                     $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                                 ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
@@ -372,6 +421,7 @@ class MessageController extends Controller
                 }else{
                     
                     $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
+                    $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
                     $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                     $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                                 ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
@@ -382,7 +432,7 @@ class MessageController extends Controller
                                             
                                             
                 }
-                return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
+                return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user", "lastmessage"));
             }
         }
         else
@@ -588,7 +638,54 @@ class MessageController extends Controller
         }
     }
 
-    public function checkStringForWord($show, $persona_id ,$prompt, $negative_prompt, $globle_realistic_prompts, $globle_anime_prompts ,$globle_realistic_terms ,$globle_anime_terms, $restore_faces, $seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale, $profile_id, $first_message, $image_prompt ,$negative_profile_prompt) {
+    public function checkStringForWord($show, $persona_id ,$prompt, $args,
+    $method,
+    $endpoint,
+    $sd_model_checkpoint,
+    $sd_vae,
+    $width,
+    $height,
+    $sampler_name,
+    $override_settings_restore_afterwards,
+    $ad_cfg_scale,
+    $ad_checkpoint,
+    $ad_clip_skip,
+    $ad_confidence,
+    $ad_controlnet_guidance_end,
+    $ad_controlnet_guidance_start,
+    $ad_controlnet_model,
+    $ad_controlnet_module,
+    $ad_controlnet_weight,
+    $ad_denoising_strength,
+    $ad_dilate_erode,
+    $ad_inpaint_height,
+    $ad_inpaint_only_masked,
+    $ad_inpaint_only_masked_padding,
+    $ad_inpaint_width,
+    $ad_mask_blur,
+    $ad_mask_k_largest,
+    $ad_mask_max_ratio,
+    $ad_mask_merge_invert,
+    $ad_mask_min_ratio,
+    $ad_model,
+    $ad_negative_prompt,
+    $ad_noise_multiplier,
+    $ad_prompt,
+    $ad_restore_face,
+    $ad_sampler,
+    $ad_steps,
+    $ad_use_cfg_scale,
+    $ad_use_checkpoint,
+    $ad_use_clip_skip,
+    $ad_use_inpaint_width_height,
+    $ad_use_noise_multiplier,
+    $ad_use_sampler,
+    $ad_use_steps,
+    $ad_use_vae,
+    $ad_vae,
+    $ad_x_offset,
+    $ad_y_offset,
+    $is_api,$seed, $denoising_strength, $enable_hr, $hr_scale, $hr_upscaler, $sampler_index, $email, $steps, $cfg_scale, $profile_id, $first_message, $image_prompt ,$negative_profile_prompt) {
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -612,33 +709,319 @@ class MessageController extends Controller
             } else {
                 return back()->withErrors(['ai_message' => 'Message and person not found in the response'])->withInput();  
             }
-            $data = '{
+            // $data = '{
+            //     "input": {
+            //         "api_name": "txt2img",
+            //         "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $image_prompt).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_prompts).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_terms).'",
+            //         "restore_faces": '.$restore_faces.',
+            //         "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_prompt).','. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
+            //         "seed": '.$seed.',
+            //         "override_settings": {
+            //             "sd_model_checkpoint": ""
+            //         },
+            //         "cfg_scale": '.$cfg_scale.',
+            //         "denoising_strength": '.$denoising_strength.',
+            //         "enable_hr": '.$enable_hr.',
+            //         "hr_scale":'.$hr_scale.',
+            //         "hr_upscaler": "'.$hr_upscaler.'",
+            //         "sampler_index": "'.$sampler_index.'",
+            //         "steps": '.$steps.',
+            //         "email": "'.$email.'"
+            //     }
+            // }';
+
+                $ad_cfg_scale = explode(',', $ad_cfg_scale);
+                $ad_cfg_scale0 = isset($ad_cfg_scale[0] ) ? $ad_cfg_scale[0] : '';
+                $ad_cfg_scale1 = isset($ad_cfg_scale[1] ) ? $ad_cfg_scale[1] : '';
+
+
+                $ad_checkpoint = explode(',', $ad_checkpoint);
+                $ad_checkpoint0 = isset($ad_checkpoint[0] ) ? $ad_checkpoint[0] : '';
+                $ad_checkpoint1 = isset($ad_checkpoint[1] ) ? $ad_checkpoint[1] : '';
+
+                $ad_clip_skip = explode(',', $ad_clip_skip);
+                $ad_clip_skip0 = isset($ad_clip_skip[0] ) ? $ad_clip_skip[0] : '';
+                $ad_clip_skip1 = isset($ad_clip_skip[1] ) ? $ad_clip_skip[1] : '';
+
+                $ad_confidence = explode(',', $ad_confidence);
+                $ad_confidence0 = isset($ad_confidence[0] ) ? $ad_confidence[0] : '';
+                $ad_confidence1 = isset($ad_confidence[1] ) ? $ad_confidence[1] : '';
+
+
+                $ad_controlnet_guidance_end = explode(',', $ad_controlnet_guidance_end);
+                $ad_controlnet_guidance_end0 = isset($ad_controlnet_guidance_end[0] ) ? $ad_controlnet_guidance_end[0] : '';
+                $ad_controlnet_guidance_end1 = isset($ad_controlnet_guidance_end[1] ) ? $ad_controlnet_guidance_end[1] : '';
+
+                $ad_controlnet_guidance_start = explode(',', $ad_controlnet_guidance_start);
+                $ad_controlnet_guidance_start0 = isset($ad_controlnet_guidance_start[0] ) ? $ad_controlnet_guidance_start[0] : '';
+                $ad_controlnet_guidance_start1 = isset($ad_controlnet_guidance_start[1] ) ? $ad_controlnet_guidance_start[1] : '';
+
+                $ad_controlnet_model = explode(',', $ad_controlnet_model);
+                $ad_controlnet_model0 = isset($ad_controlnet_model[0] ) ? $ad_controlnet_model[0] : '';
+                $ad_controlnet_model1 = isset($ad_controlnet_model[1] ) ? $ad_controlnet_model[1] : '';
+
+                $ad_controlnet_module = explode(',', $ad_controlnet_module);
+                $ad_controlnet_module0 = isset($ad_controlnet_module[0] ) ? $ad_controlnet_module[0] : '';
+                $ad_controlnet_module1 = isset($ad_controlnet_module[1] ) ? $ad_controlnet_module[1] : '';
+
+                $ad_controlnet_weight = explode(',', $ad_controlnet_weight);
+                $ad_controlnet_weight0 = isset($ad_controlnet_weight[0] ) ? $ad_controlnet_weight[0] : '';
+                $ad_controlnet_weight1 = isset($ad_controlnet_weight[1] ) ? $ad_controlnet_weight[1] : '';
+
+                $ad_denoising_strength = explode(',', $ad_denoising_strength);
+                $ad_denoising_strength0 = isset($ad_denoising_strength[0] ) ? $ad_denoising_strength[0] : '';
+                $ad_denoising_strength1 = isset($ad_denoising_strength[1] ) ? $ad_denoising_strength[1] : '';
+
+                $ad_dilate_erode = explode(',', $ad_dilate_erode);
+                $ad_dilate_erode0 = isset($ad_dilate_erode[0] ) ? $ad_dilate_erode[0] : '';
+                $ad_dilate_erode1 = isset($ad_dilate_erode[1] ) ? $ad_dilate_erode[1] : '';
+
+                $ad_inpaint_height = explode(',', $ad_inpaint_height);
+                $ad_inpaint_height0 = isset($ad_inpaint_height[0] ) ? $ad_inpaint_height[0] : '';
+                $ad_inpaint_height1 = isset($ad_inpaint_height[1] ) ? $ad_inpaint_height[1] : '';
+
+                $ad_inpaint_only_masked = explode(',', $ad_inpaint_only_masked);
+                $ad_inpaint_only_masked0 = isset($ad_inpaint_only_masked[0] ) ? $ad_inpaint_only_masked[0] : '';
+                $ad_inpaint_only_masked1 = isset($ad_inpaint_only_masked[1] ) ? $ad_inpaint_only_masked[1] : '';
+
+
+                $ad_inpaint_only_masked_padding = explode(',', $ad_inpaint_only_masked_padding);
+                $ad_inpaint_only_masked_padding0 = isset($ad_inpaint_only_masked_padding[0] ) ? $ad_inpaint_only_masked_padding[0] : '';
+                $ad_inpaint_only_masked_padding1 = isset($ad_inpaint_only_masked_padding[1] ) ? $ad_inpaint_only_masked_padding[1] : '';
+
+                $ad_inpaint_width = explode(',', $ad_inpaint_width);
+                $ad_inpaint_width0 = isset($ad_inpaint_width[0] ) ? $ad_inpaint_width[0] : '';
+                $ad_inpaint_width1 = isset($ad_inpaint_width[1] ) ? $ad_inpaint_width[1] : '';
+
+                $ad_mask_blur = explode(',', $ad_mask_blur);
+                $ad_mask_blur0 = isset($ad_mask_blur[0] ) ? $ad_mask_blur[0] : '';
+                $ad_mask_blur1 = isset($ad_mask_blur[1] ) ? $ad_mask_blur[1] : '';
+
+                $ad_mask_k_largest = explode(',', $ad_mask_k_largest);
+                $ad_mask_k_largest0 = isset($ad_mask_k_largest[0] ) ? $ad_mask_k_largest[0] : '';
+                $ad_mask_k_largest1 = isset($ad_mask_k_largest[1] ) ? $ad_mask_k_largest[1] : '';
+
+                $ad_mask_max_ratio = explode(',', $ad_mask_max_ratio);
+                $ad_mask_max_ratio0 = isset($ad_mask_max_ratio[0] ) ? $ad_mask_max_ratio[0] : '';
+                $ad_mask_max_ratio1 = isset($ad_mask_max_ratio[1] ) ? $ad_mask_max_ratio[1] : '';
+
+                $ad_mask_merge_invert = explode(',', $ad_mask_merge_invert);
+                $ad_mask_merge_invert0 = isset($ad_mask_merge_invert[0] ) ? $ad_mask_merge_invert[0] : '';
+                $ad_mask_merge_invert1 = isset($ad_mask_merge_invert[1] ) ? $ad_mask_merge_invert[1] : '';
+
+                $ad_mask_min_ratio = explode(',', $ad_mask_min_ratio);
+                $ad_mask_min_ratio0 = isset($ad_mask_min_ratio[0] ) ? $ad_mask_min_ratio[0] : '';
+                $ad_mask_min_ratio1 = isset($ad_mask_min_ratio[1] ) ? $ad_mask_min_ratio[1] : '';
+
+                $ad_model = explode(',', $ad_model);
+                $ad_model0 = isset($ad_model[0] ) ? $ad_model[0] : '';
+                $ad_model1 = isset($ad_model[1] ) ? $ad_model[1] : '';
+
+                $ad_negative_prompt = explode(',', $ad_negative_prompt);
+                $ad_negative_prompt0 = isset($ad_negative_prompt[0] ) ? $ad_negative_prompt[0] : '';
+                $ad_negative_prompt1 = isset($ad_negative_prompt[1] ) ? $ad_negative_prompt[1] : '';
+
+                $ad_noise_multiplier = explode(',', $ad_noise_multiplier);
+                $ad_noise_multiplier0 = isset($ad_noise_multiplier[0] ) ? $ad_noise_multiplier[0] : '';
+                $ad_noise_multiplier1 = isset($ad_noise_multiplier[1] ) ? $ad_noise_multiplier[1] : '';
+
+                $ad_prompt = explode(',', $ad_prompt);
+                $ad_prompt0 = isset($ad_prompt[0] ) ? $ad_prompt[0] : '';
+                $ad_prompt1 = isset($ad_prompt[1] ) ? $ad_prompt[1] : '';
+
+                $ad_restore_face = explode(',', $ad_restore_face);
+                $ad_restore_face0 = isset($ad_restore_face[0] ) ? $ad_restore_face[0] : '';
+                $ad_restore_face1 = isset($ad_restore_face[1] ) ? $ad_restore_face[1] : '';
+
+                $ad_sampler = explode(',', $ad_sampler);
+                $ad_sampler0 = isset($ad_sampler[0] ) ? $ad_sampler[0] : '';
+                $ad_sampler1 = isset($ad_sampler[1] ) ? $ad_sampler[1] : '';
+
+                $ad_steps = explode(',', $ad_steps);
+                $ad_steps0 = isset($ad_steps[0] ) ? $ad_steps[0] : '';
+                $ad_steps1 = isset($ad_steps[1] ) ? $ad_steps[1] : '';
+
+                $ad_use_cfg_scale = explode(',', $ad_use_cfg_scale);
+                $ad_use_cfg_scale0 = isset($ad_use_cfg_scale[0] ) ? $ad_use_cfg_scale[0] : '';
+                $ad_use_cfg_scale1 = isset($ad_use_cfg_scale[1] ) ? $ad_use_cfg_scale[1] : '';
+
+                $ad_use_checkpoint = explode(',', $ad_use_checkpoint);
+                $ad_use_checkpoint0 = isset($ad_use_checkpoint[0] ) ? $ad_use_checkpoint[0] : '';
+                $ad_use_checkpoint1 = isset($ad_use_checkpoint[1] ) ? $ad_use_checkpoint[1] : '';
+
+                $ad_use_clip_skip = explode(',', $ad_use_clip_skip);
+                $ad_use_clip_skip0 = isset($ad_use_clip_skip[0] ) ? $ad_use_clip_skip[0] : '';
+                $ad_use_clip_skip1 = isset($ad_use_clip_skip[1] ) ? $ad_use_clip_skip[1] : '';
+
+                $ad_use_inpaint_width_height = explode(',', $ad_use_inpaint_width_height);
+                $ad_use_inpaint_width_height0 = isset($ad_use_inpaint_width_height[0] ) ? $ad_use_inpaint_width_height[0] : '';
+                $ad_use_inpaint_width_height1 = isset($ad_use_inpaint_width_height[1] ) ? $ad_use_inpaint_width_height[1] : '';
+
+                $ad_use_noise_multiplier = explode(',', $ad_use_noise_multiplier);
+                $ad_use_noise_multiplier0 = isset($ad_use_noise_multiplier[0] ) ? $ad_use_noise_multiplier[0] : '';
+                $ad_use_noise_multiplier1 = isset($ad_use_noise_multiplier[1] ) ? $ad_use_noise_multiplier[1] : '';
+
+                $ad_use_sampler = explode(',', $ad_use_sampler);
+                $ad_use_sampler0 = isset($ad_use_sampler[0] ) ? $ad_use_sampler[0] : '';
+                $ad_use_sampler1 = isset($ad_use_sampler[1] ) ? $ad_use_sampler[1] : '';
+
+                $ad_use_steps = explode(',', $ad_use_steps);
+                $ad_use_steps0 = isset($ad_use_steps[0] ) ? $ad_use_steps[0] : '';
+                $ad_use_steps1 = isset($ad_use_steps[1] ) ? $ad_use_steps[1] : '';
+
+                $ad_use_vae = explode(',', $ad_use_vae);
+                $ad_use_vae0 = isset($ad_use_vae[0] ) ? $ad_use_vae[0] : '';
+                $ad_use_vae1 = isset($ad_use_vae[1] ) ? $ad_use_vae[1] : '';
+
+                $ad_vae = explode(',', $ad_vae);
+                $ad_vae0 = isset($ad_vae[0] ) ? $ad_vae[0] : '';
+                $ad_vae1 = isset($ad_vae[1] ) ? $ad_vae[1] : '';
+
+                $ad_x_offset = explode(',', $ad_x_offset);
+                $ad_x_offset0 = isset($ad_x_offset[0] ) ? $ad_x_offset[0] : '';
+                $ad_x_offset1 = isset($ad_x_offset[1] ) ? $ad_x_offset[1] : '';
+
+                $ad_y_offset = explode(',', $ad_y_offset);
+                $ad_y_offset0 = isset($ad_y_offset[0] ) ? $ad_y_offset[0] : '';
+                $ad_y_offset1 = isset($ad_y_offset[1] ) ? $ad_y_offset[1] : '';
+
+                $is_api = explode(',', $is_api);
+                $is_api0 = isset($is_api[0] ) ? $is_api[0] : '';
+                $is_api1 = isset($is_api[1] ) ? $is_api[1] : '';
+
+                $args = explode(',', $args);
+                $args0 =  isset($args[0]) ? $args[0] : '';
+                $args1 =  isset($args[1]) ? $args[1] : '';  
+
+     
+
+            $data2 = '{
                 "input": {
-                    "api_name": "txt2img",
-                    "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $image_prompt).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_prompts).','.str_replace(["\n", "\r", '"'], '', $globle_realistic_terms).'",
-                    "restore_faces": '.$restore_faces.',
-                    "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_prompt).','. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
-                    "seed": '.$seed.',
-                    "override_settings": {
-                        "sd_model_checkpoint": ""
+                    "api": {
+                        "method": "'.$method.'",
+                        "endpoint": "'.$endpoint.'"
                     },
-                    "cfg_scale": '.$cfg_scale.',
-                    "denoising_strength": '.$denoising_strength.',
-                    "enable_hr": '.$enable_hr.',
-                    "hr_scale":'.$hr_scale.',
-                    "hr_upscaler": "'.$hr_upscaler.'",
-                    "sampler_index": "'.$sampler_index.'",
-                    "steps": '.$steps.',
-                    "email": "'.$email.'"
+                    "payload": {
+                        "override_settings": {
+                            "sd_model_checkpoint": "'.$sd_model_checkpoint.'",
+                            "sd_vae": "'.$sd_vae.'"
+                        },
+                        "seed": '.$seed.',
+                        "steps": '.$steps.',
+                        "cfg_scale": '.$cfg_scale.',
+                        "width": '.$width.',
+                        "height": '.$height.',
+                        "denoising_strength": '.$denoising_strength.',
+                        "enable_hr": '.$enable_hr.',
+                        "hr_scale":'.$hr_scale.',
+                        "hr_upscaler": "'.$hr_upscaler.'",
+                        "sampler_name":  "'.$sampler_name.'",
+                        "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
+                        "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
+                        "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $image_prompt).'",
+                        "alwayson_scripts": {
+                            "ADetailer": {
+                                "args": [
+                                    '.$args0.',
+                                    '.$args1.',
+                                    {
+                                        "ad_cfg_scale": "'.$ad_cfg_scale0.'",
+                                        "ad_checkpoint": "'.$ad_checkpoint0.'",
+                                        "ad_clip_skip": "'.$ad_clip_skip0.'",
+                                        "ad_confidence": "'.$ad_confidence0.'",
+                                        "ad_controlnet_guidance_end": "'.$ad_controlnet_guidance_end0.'",
+                                        "ad_controlnet_guidance_start": "'.$ad_controlnet_guidance_start0.'",
+                                        "ad_controlnet_model": "'.$ad_controlnet_model0.'",
+                                        "ad_controlnet_module": "'.$ad_controlnet_module0.'",
+                                        "ad_controlnet_weight": "'.$ad_controlnet_weight0.'",
+                                        "ad_denoising_strength": "'.$ad_denoising_strength0.'",
+                                        "ad_dilate_erode": "'.$ad_dilate_erode0.'",
+                                        "ad_inpaint_height": "'.$ad_inpaint_height0.'",
+                                        "ad_inpaint_only_masked": "'.$ad_inpaint_only_masked0.'",
+                                        "ad_inpaint_only_masked_padding": "'.$ad_inpaint_only_masked_padding0.'",
+                                        "ad_inpaint_width": "'.$ad_inpaint_width0.'",
+                                        "ad_mask_blur": "'.$ad_mask_blur0.'",
+                                        "ad_mask_k_largest": "'.$ad_mask_k_largest0.'",
+                                        "ad_mask_max_ratio": "'.$ad_mask_max_ratio0.'",
+                                        "ad_mask_merge_invert": "'.$ad_mask_merge_invert0.'",
+                                        "ad_mask_min_ratio": "'.$ad_mask_min_ratio0.'",
+                                        "ad_model": "'.$ad_model0.'",
+                                        "ad_negative_prompt": "'.$ad_negative_prompt0.'",
+                                        "ad_noise_multiplier": "'.$ad_noise_multiplier0.'",
+                                        "ad_prompt": "'.$ad_prompt0.'",
+                                        "ad_restore_face": "'.$ad_restore_face0.'",
+                                        "ad_sampler": "'.$ad_sampler0.'",
+                                        "ad_steps": "'.$ad_steps0.'",
+                                        "ad_use_cfg_scale": "'.$ad_use_cfg_scale0.'",
+                                        "ad_use_checkpoint": "'.$ad_use_checkpoint0.'",
+                                        "ad_use_clip_skip": "'.$ad_use_clip_skip0.'",
+                                        "ad_use_inpaint_width_height": "'.$ad_use_inpaint_width_height0.'",
+                                        "ad_use_noise_multiplier": "'.$ad_use_noise_multiplier0.'",
+                                        "ad_use_sampler": "'.$ad_use_sampler0.'",
+                                        "ad_use_steps": "'.$ad_use_steps0.'",
+                                        "ad_use_vae": "'.$ad_use_vae0.'",
+                                        "ad_vae": "'.$ad_vae0.'",
+                                        "ad_x_offset": "'.$ad_x_offset0.'",
+                                        "ad_y_offset": "'.$ad_y_offset0.'",
+                                        "is_api": []
+                                    },
+                                    {
+                                        "ad_cfg_scale": "'.$ad_cfg_scale1.'",
+                                        "ad_checkpoint": "'.$ad_checkpoint1.'",
+                                        "ad_clip_skip": "'.$ad_clip_skip1.'",
+                                        "ad_confidence": "'.$ad_confidence1.'",
+                                        "ad_controlnet_guidance_end": "'.$ad_controlnet_guidance_end1.'",
+                                        "ad_controlnet_guidance_start": "'.$ad_controlnet_guidance_start1.'",
+                                        "ad_controlnet_model": "'.$ad_controlnet_model1.'",
+                                        "ad_controlnet_module": "'.$ad_controlnet_module1.'",
+                                        "ad_controlnet_weight": "'.$ad_controlnet_weight1.'",
+                                        "ad_denoising_strength": "'.$ad_denoising_strength1.'",
+                                        "ad_dilate_erode": "'.$ad_dilate_erode1.'",
+                                        "ad_inpaint_height": "'.$ad_inpaint_height1.'",
+                                        "ad_inpaint_only_masked": "'.$ad_inpaint_only_masked1.'",
+                                        "ad_inpaint_only_masked_padding": "'.$ad_inpaint_only_masked_padding1.'",
+                                        "ad_inpaint_width": "'.$ad_inpaint_width1.'",
+                                        "ad_mask_blur": "'.$ad_mask_blur1.'",
+                                        "ad_mask_k_largest": "'.$ad_mask_k_largest1.'",
+                                        "ad_mask_max_ratio": "'.$ad_mask_max_ratio1.'",
+                                        "ad_mask_merge_invert": "'.$ad_mask_merge_invert1.'",
+                                        "ad_mask_min_ratio": "'.$ad_mask_min_ratio1.'",
+                                        "ad_model": "'.$ad_model1.'",
+                                        "ad_negative_prompt": "'.$ad_negative_prompt1.'",
+                                        "ad_noise_multiplier": "'.$ad_noise_multiplier1.'",
+                                        "ad_prompt": "'.$ad_prompt1.'",
+                                        "ad_restore_face": "'.$ad_restore_face1.'",
+                                        "ad_sampler": "'.$ad_sampler1.'",
+                                        "ad_steps": "'.$ad_steps1.'",
+                                        "ad_use_cfg_scale": "'.$ad_use_cfg_scale1.'",
+                                        "ad_use_checkpoint": "'.$ad_use_checkpoint1.'",
+                                        "ad_use_clip_skip": "'.$ad_use_clip_skip1.'",
+                                        "ad_use_inpaint_width_height": "'.$ad_use_inpaint_width_height1.'",
+                                        "ad_use_noise_multiplier": "'.$ad_use_noise_multiplier1.'",
+                                        "ad_use_sampler": "'.$ad_use_sampler1.'",
+                                        "ad_use_steps": "'.$ad_use_steps1.'",
+                                        "ad_use_vae": "'.$ad_use_vae1.'",
+                                        "ad_vae": "'.$ad_vae1.'",
+                                        "ad_x_offset": "'.$ad_x_offset1.'",
+                                        "ad_y_offset": "'.$ad_y_offset1.'",
+                                        "is_api": []
+                                    }
+                                ]
+                            }
+                        }
+                    }
                 }
             }';
+//             echo "<pre>";
+//             print_r($data2);
+//             die;
             $maxRetries = 3; // Set the maximum number of retries
             $retryDelay = 1; // Set the delay between retries in seconds
 
             for ($retry = 0; $retry < $maxRetries; $retry++) {
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
-                CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
+                CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/runsync',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -646,7 +1029,7 @@ class MessageController extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>$data,
+                CURLOPT_POSTFIELDS =>$data2,
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/json',
                     'Authorization: Bearer '.env('AI_IMAGE_KEY'),
@@ -678,7 +1061,7 @@ class MessageController extends Controller
                     // Create a timestamp
                     $timestamp = date('Y-m-d H:i:s');
                     // Combine the timestamp and the response array
-                    $dataToWrite = "Timestamp: $timestamp\n\n Image request: ". print_r($data, true) ." \nImage ID: ". print_r($response_image_id, true) ."";
+                    $dataToWrite = "Timestamp: $timestamp\n\n Image request: ". print_r($data2, true) ." \nImage ID: ". print_r($response_image_id, true) ."";
                     // Define the file path
                     $filePath = 'Image-API-Response.txt';
                     // Open the file in append mode, or create it if it doesn't exist
@@ -742,8 +1125,8 @@ class MessageController extends Controller
                     //echo "Error: " . $e->getMessage();
                 }
 
-                if(isset($response_image_base64)){
-                    $base64Image = $response_image_base64;
+                if(isset($response_image['output']['images'][0])){
+                    $base64Image = $response_image['output']['images'][0];
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
                     // Generate a unique filename for the image
