@@ -317,6 +317,7 @@ class ProfileController extends Controller
 
                 $profile_update = Profile::where('profile_id', $input['profile_id'])->update([
                     'name' => $input['profile_name'],
+                    'last_name' => $input['profile_lastname'],
                     'ethnicity' => $input['profile_ethnicity'],
                     'personality' => $input['profile_personality'],
                     'age' => $input['profile_age'],
@@ -387,6 +388,7 @@ class ProfileController extends Controller
                 
             $profile = new Profile;
             $profile->name = $input['profile_name'];
+            $profile->last_name = $input['profile_lastname'];
             $profile->ethnicity = $input['profile_ethnicity'];
             $profile->personality = $input['profile_personality'];
             $profile->age = $input['profile_age'];
