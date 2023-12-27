@@ -5,6 +5,8 @@
             <th>Name</th>
             <th>Images</th>
             <th>Ethnicity</th>
+            <th>Image Prompt</th>
+            <th>Negative Prompt</th>
             <th>Personality</th>
             <th>Age</th>
             <th>Gender</th>
@@ -28,6 +30,8 @@
                     <td>{{ $profileList1->name }}</td>
                     <td> @if($imgUrl)<img src="{{ $imgUrl }}" style="width: 50px; height: 50px;" />@else - @endif </td>
                     <td>{{ $profileList1->ethnicity }}</td>
+                    <td>@if($profileList1->image_prompt)<textarea  style="width: 300px; background-color: #191c24; height: 100px; " class="form-control" cols="30" rows="30" readonly>{{ $profileList1->image_prompt }}</textarea>@endif</td>
+                    <td>@if($profileList1->negative_prompt)<textarea  style="width: 300px; background-color: #191c24; height: 100px; " class="form-control" cols="30" rows="30" readonly>{{ $profileList1->negative_prompt }}</textarea>@endif</td>
                     <td>{{ $profileList1->personality }}</td>
                     <td>{{ $profileList1->age }}</td>
                     <td>{{ $profileList1->gender }}</td>

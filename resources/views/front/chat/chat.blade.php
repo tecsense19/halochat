@@ -122,7 +122,12 @@ alert("{{ $errors->first('chat_persona') }}");
                                 </div>
                                 <div class="admin_deatail">
                                     <h6>{{ $chat->name }}</h6>
-                                    <p id="lastmsg">{{ $lastmessage->message_text }}</p>
+                                    <p id="lastmsg">
+                                    @if($lastmessage->message_text == '')
+                                        <img src="{{ URL::asset('public/front/img/image-gallery.png') }}" style="width: 15px;" alt=""> image
+                                    @else
+                                        {{ $lastmessage->message_text }}
+                                    @endif</p>
                                 </div>
                         </a>
                         <div class="chat_delete">
