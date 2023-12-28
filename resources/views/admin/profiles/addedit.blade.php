@@ -84,6 +84,7 @@ $get_voice = json_decode($get_voice, true);
                             <div class="form-group">
                                 <label for="exampleSelectGender">Select Voice</label>
                                 <select class="form-control" id="profile_get_voice" name="profile_get_voice" >
+                                    <option value="">Select Voice </option>
                                     @if ($get_voice !== null)
                                     @foreach ($get_voice['data'] as $item)
                                     <option data-audio-src="{{ $item['preview_url'] }}"
@@ -547,48 +548,63 @@ $get_voice = json_decode($get_voice, true);
 </script>
 
 <script>
-    var selectElement = document.getElementById('profile_get_voice');
-    var audioPreview = document.getElementById('audio-preview');
-    var profile_ethnicity = document.getElementById('profile_ethnicity');
-    var body_description = document.getElementById('profile_body_description');
-    var profile_gender = document.getElementById('profile_gender');
-    var audioUrlInput = document.getElementById('audio_url');
-
-    var voice_idIinput = document.getElementById('voice_id');
-    var profile_voice_id = document.getElementById('profile_voice_id');
     
+    // Function to handle changes in the select element
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectElement = document.getElementById('profile_get_voice');
+        var audioPreview = document.getElementById('audio-preview');
+        var profile_ethnicity = document.getElementById('profile_ethnicity');
+        var body_description = document.getElementById('profile_body_description');
+        var profile_gender = document.getElementById('profile_gender');
+        var audioUrlInput = document.getElementById('audio_url');
 
+        var voice_idIinput = document.getElementById('voice_id');
+        var profile_voice_id = document.getElementById('profile_voice_id');
+
+        // Function to handle changes in the select element
+        function handleSelectChange() {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var audioSrc = selectedOption.getAttribute('data-audio-src');
+            var dataprofile_ethnicity = selectedOption.getAttribute('data-age');
+            var dataBodyDescription = selectedOption.getAttribute('data-body-discription');
+            var dataGender = selectedOption.getAttribute('data-profile-gender');
+            var voice_id = selectedOption.getAttribute('data-voice_id');
+            if (dataprofile_ethnicity !== null) {
+                profile_ethnicity.value = dataprofile_ethnicity;
+            } else {
+                profile_age.value = '30';
+            }
+            if (dataBodyDescription !== null) {
+                body_description.value = dataBodyDescription;
+            } else {
+                body_description.value = 'Test';
+            }
+            if (dataGender !== null) {
+                profile_gender.value = dataGender;
+            } else {
+                profile_gender.value = '';
+            }
+            audioPreview.src = audioSrc;
+            audioUrlInput.value = audioSrc;
+            voice_idIinput.value = voice_id;
+            profile_voice_id.value = voice_id;
+            audioPreview.load();
+            audioPreview.play();
+        }
+
+        // Add an event listener for the change event
+        selectElement.addEventListener('change', handleSelectChange);
+
+        // Call the function when the page loads
+    var voice_name = '{{$voice_name}}'; 
     
+    if(voice_name){
+        handleSelectChange();
+    }
 
-    selectElement.addEventListener('change', function() {
-        var selectedOption = selectElement.options[selectElement.selectedIndex];
-        var audioSrc = selectedOption.getAttribute('data-audio-src');
-        var dataprofile_ethnicity = selectedOption.getAttribute('data-age');
-        var dataBodyDescription = selectedOption.getAttribute('data-body-discription');
-        var dataGender = selectedOption.getAttribute('data-profile-gender');
-        var voice_id = selectedOption.getAttribute('data-voice_id');
-        if (dataprofile_ethnicity !== null) {
-            profile_ethnicity.value = dataprofile_ethnicity;
-        } else {
-            profile_age.value = '30';
-        }
-        if (dataBodyDescription !== null) {
-            body_description.value = dataBodyDescription;
-        } else {
-            body_description.value = 'Test';
-        }
-        if (dataGender !== null) {
-            profile_gender.value = dataGender;
-        } else {
-            profile_gender.value = '';
-        }
-        audioPreview.src = audioSrc;
-        audioUrlInput.value = audioSrc;
-        voice_idIinput.value = voice_id;
-        profile_voice_id.value = voice_id;
-        audioPreview.load();
-        audioPreview.play();
     });
+
+
 </script>
 
 <script>
