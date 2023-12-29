@@ -144,7 +144,7 @@ class ProfileController extends Controller
         try {
             $input = $request->all();
             $validator = Validator::make($input, [
-                'restore_faces' => 'required|string',
+                // 'restore_faces' => 'required|string',
                 'seed' => 'required|string',
                 'denoising_strength' => 'required|string',
                 'enable_hr' => 'required|string',
@@ -180,7 +180,14 @@ class ProfileController extends Controller
                     'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
                     'wordsphrases' => isset($input['wordsphrases']) ? $input['wordsphrases'] : '',
                     'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
-                    'type' => $input['type'],
+                    'type' => $input['type'] ? $input['type'] : '',
+                    'width' => $input['width'] ? $input['width'] : '',
+                    'height' => $input['height'] ? $input['height'] : '',
+                    'sampler_name' => $input['sampler_name'] ? $input['sampler_name'] : '',
+                    'override_settings_restore_afterwards' => $input['override_settings_restore_afterwards'] ? $input['override_settings_restore_afterwards'] : '',
+                    'method' => $input['method'] ? $input['method'] : '',
+                    'endpoint' => $input['endpoint'] ? $input['endpoint'] : ''
+
                 ]
             );
             
@@ -211,7 +218,13 @@ class ProfileController extends Controller
                     'globle_realistic_nagative_prompt' => isset($input['globle_realistic_nagative_prompt']) ? $input['globle_realistic_nagative_prompt'] : '',
                     'wordsphrases' => isset($input['wordsphrases']) ? $input['wordsphrases'] : '',
                     'cfg_scale' => isset($input['cfg_scale']) ? $input['cfg_scale'] : '',
-                    'type' => $input['type'],
+                    'type' => $input['type'] ? $input['type'] : '',
+                    'width' => $input['width'] ? $input['width'] : '',
+                    'height' => $input['height'] ? $input['height'] : '',
+                    'sampler_name' => $input['sampler_name'] ? $input['sampler_name'] : '',
+                    'override_settings_restore_afterwards' => $input['override_settings_restore_afterwards'] ? $input['override_settings_restore_afterwards'] : '',
+                    'method' => $input['method'] ? $input['method'] : '',
+                    'endpoint' => $input['endpoint'] ? $input['endpoint'] : ''
                 ]
             );
             
