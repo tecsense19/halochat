@@ -8,11 +8,26 @@
             @foreach ($getAllReciverUser as $keys => $chat_user)
                 @if($chat_user->sender_id == $chat_user->user_id)
                     @if(!empty($chat_user->message_text))
+                    <?php
+                    //$chat_user = // ... your $chat_user object;
+
+                    // Check if {{first_name}} is present in the message text
+                    if (strpos($chat_user->message_text, '{{first_name}}') !== false) {
+                        // Replace {{first_name}} with the actual first name
+                        $messageText = str_replace('{{first_name}}', Auth::user()->name, $chat_user->message_text);
+                    } else {
+                        // If {{first_name}} is not present, add a space
+                        $messageText = str_replace('{{first_name}}', ' ', $chat_user->message_text);
+                    }
+
+                    // Output the result with line breaks converted to HTML breaks
+                    //  echo nl2br($messageText);
+                    ?>
                         <div class="col-12 scrolltop mb-2">
                             <div class="have_we_met">
                                 <div class="chat_content_box">
                                     <div class="">
-                                        <p id="message" class="sender_message_{{ $keys }}"><?= nl2br($chat_user->message_text) ?></p>
+                                        <p id="message" class="sender_message_{{ $keys }}"><?= nl2br($messageText) ?></p>
                                     </div>
                                     <div class="volume">
                                         <span>

@@ -52,10 +52,10 @@ $(document).ready(function() {
         e.preventDefault();
 
         var url = $(this).attr('href');
-        if (url.startsWith('http://')) {
-            // Replace "http://" with "https://"
-            url = url.replace('http://', 'https://');
-        }
+        // if (url.startsWith('http://')) {
+        //     // Replace "http://" with "https://"
+        //     url = url.replace('http://', 'https://');
+        // }
         getPerPageProfilesList(url);
     });
 });
