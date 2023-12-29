@@ -4,22 +4,24 @@
             @php 
                 $totalMessage = (count($getAllReciverUser) - 1); 
                 $receiverCount = 0;
+                
             @endphp
             @foreach ($getAllReciverUser as $keys => $chat_user)
                 @if($chat_user->sender_id == $chat_user->user_id)
                     @if(!empty($chat_user->message_text))
+                    
                     <?php
                     //$chat_user = // ... your $chat_user object;
-
+                    $profilename = \App\Models\Profile::where('profile_id', $chat_user->profile_id)->first();
                     // Check if {{first_name}} is present in the message text
-                    if (strpos($chat_user->message_text, '{{first_name}}')) {
-                        // Replace {{first_name}} with the actual first name
-                        $messageText = str_replace('{{first_name}}', $chat_user->name, $chat_user->message_text);
-                    } else {
-                        // If {{first_name}} is not present, add a space
-                        $messageText = $chat_user->message_text;
-                    }
-
+                        if (str_contains($chat_user->message_text, '{{first_name}}')) {
+                            // Replace {{first_name}} with the actual first name
+                            $messageText = str_replace('{{first_name}}', $profilename->name, $chat_user->message_text);
+                        } else{
+                            $messageText = $chat_user->message_text;
+                        }
+                    
+                 
                     // Output the result with line breaks converted to HTML breaks
                     //  echo nl2br($messageText);
                     ?>
