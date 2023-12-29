@@ -12,12 +12,12 @@
                     //$chat_user = // ... your $chat_user object;
 
                     // Check if {{first_name}} is present in the message text
-                    if (strpos($chat_user->message_text, '{{first_name}}') !== false) {
+                    if (strpos($chat_user->message_text, '{{first_name}}')) {
                         // Replace {{first_name}} with the actual first name
-                        $messageText = str_replace('{{first_name}}', $profile_id->name, $chat_user->message_text);
+                        $messageText = str_replace('{{first_name}}', $chat_user->profile_id, $chat_user->message_text);
                     } else {
                         // If {{first_name}} is not present, add a space
-                        $messageText = str_replace('{{first_name}}', ' ', $chat_user->message_text);
+                        $messageText = $chat_user->message_text;
                     }
 
                     // Output the result with line breaks converted to HTML breaks
