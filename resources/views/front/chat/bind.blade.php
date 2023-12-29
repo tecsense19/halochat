@@ -14,7 +14,7 @@
                     // Check if {{first_name}} is present in the message text
                     if (strpos($chat_user->message_text, '{{first_name}}') !== false) {
                         // Replace {{first_name}} with the actual first name
-                        $messageText = str_replace('{{first_name}}', Auth::user()->name, $chat_user->message_text);
+                        $messageText = str_replace('{{first_name}}', $profile_id->name, $chat_user->message_text);
                     } else {
                         // If {{first_name}} is not present, add a space
                         $messageText = str_replace('{{first_name}}', ' ', $chat_user->message_text);

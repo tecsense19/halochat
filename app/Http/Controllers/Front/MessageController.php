@@ -24,7 +24,8 @@ class MessageController extends Controller
     public function loadchats(Request $request)
     {
         $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $_GET['id'])->where('isDeleted', 0)->orderBy('guid', 'asc')->get();
-        return view("front.chat.bind", compact('getAllReciverUser'));
+        $profile_id = Profile::where('profile_id', $_GET['id'])->first();
+        return view("front.chat.bind", compact('getAllReciverUser', 'profile_id'));
 
     } 
 
