@@ -947,7 +947,7 @@ class MessageController extends Controller
                         "sampler_name":  "'.$sampler_name.'",
                         "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
                         "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
-                        "prompt": "'. $show .','.str_replace(["\n", "\r", '"'], '', $image_prompt).'",
+                        "prompt": "'. $show .','.preg_replace('/\{\{lora\}\}/', '<lora:00_Ruby:0.7>', $image_prompt).'",
                         "alwayson_scripts": {
                             "ADetailer": {
                                 "args": [
@@ -1040,6 +1040,7 @@ class MessageController extends Controller
             
                         }
                     }
+                }
                 }';
 
 
@@ -1137,9 +1138,7 @@ class MessageController extends Controller
             //         }
             //     }
             // }';
-            // echo "<pre>";
-            // print_r($data2);
-            // die;
+
             $maxRetries = 3; // Set the maximum number of retries
             $retryDelay = 1; // Set the delay between retries in seconds
 
