@@ -415,6 +415,7 @@ class ProfileController extends Controller
             $profile->short_description = $input['short_description'];
             $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->image_prompt = $input['image_prompt'];
+           
             $profile->negative_prompt = $input['negative_prompt'];
             // $profile->prompt = $input['prompt'];
             $profile->save(); // Save the profile data
