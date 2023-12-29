@@ -469,7 +469,7 @@ $is_api1 = isset($is_api[1] ) ? $is_api[1] : '';
 
                       
 
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                         <div class="form-group row">
                         <label for="Name">args</label>
                             <div class="col-sm-4">
@@ -1210,7 +1210,7 @@ $is_api1 = isset($is_api[1] ) ? $is_api[1] : '';
 
                             
                             </div>
-                            </div>
+                            </div> -->
                             
                             
 
