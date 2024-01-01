@@ -631,7 +631,7 @@ function sendMessage() {
         );
         <?php } ?>
 
-        var inputValue = $('#type_message').val();
+        var inputValue = $('#type_message').val().toLowerCase();
 
         // Check if the input contains the word "show"
         if (inputValue.includes('show')) {

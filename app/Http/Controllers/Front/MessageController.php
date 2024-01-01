@@ -100,7 +100,7 @@ class MessageController extends Controller
                 return "credit over";
             }else{  
                 // Now $message_show contains the original string with all matched words removed
-                if (str_contains($message_show, 'show')) {
+                if (str_contains(strtolower($message_show), 'show')) {
                     if($creditAddManage->currentcredit >= 2)
                     {
                         // $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
@@ -168,7 +168,8 @@ class MessageController extends Controller
                             $user->profile_id,
                             $user->first_message,
                             $user->image_prompt,
-                            $user->negative_prompt);    
+                            $user->negative_prompt,
+                            $user->lora_input);    
                         // }
                     }
                 }
@@ -238,8 +239,8 @@ class MessageController extends Controller
                             "request_id": "'.$sequnce_number.'",
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
-                            "system_prompt": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt).'",
-                            "system_instruction": "'.str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction).'",
+                            "system_prompt": '.json_encode($getFirstMessage->system_prompt).',
+                            "system_instruction": '.json_encode($getFirstMessage->system_instruction).',
                             "voice_name": "'.$getFirstMessage->voice_id.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
                             "voice_settings": {
@@ -650,8 +651,6 @@ class MessageController extends Controller
             }else{
                 Messages::where('sender_id',$_GET['Id'])->where('receiver_id', session('user_id'))->where('isDeleted', 0)->orderBy('guid', 'DESC')->update(['isDeleted' => 1]);
             }
-            
-            
         }
     }
 
@@ -704,18 +703,19 @@ class MessageController extends Controller
     $ad_y_offset,
     $is_api,
     $seed,
-     $denoising_strength,
-      $enable_hr,
-       $hr_scale,
-        $hr_upscaler,
-         $sampler_index, 
-         $email, 
-         $steps,
-          $cfg_scale,
-           $profile_id,
-            $first_message,
-             $image_prompt,
-             $negative_profile_prompt) {
+    $denoising_strength,
+    $enable_hr,
+    $hr_scale,
+    $hr_upscaler,
+    $sampler_index, 
+    $email, 
+    $steps,
+    $cfg_scale,
+    $profile_id,
+    $first_message,
+    $image_prompt,
+    $negative_profile_prompt,
+    $lora_input) {
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -923,9 +923,10 @@ class MessageController extends Controller
                 $args0 =  isset($args[0]) ? $args[0] : '';
                 $args1 =  isset($args[1]) ? $args[1] : '';  
 
-            $replacement = '<lora:00_Ruby:0.7>';
+            $replacement = $lora_input;
             $search = '{{lora}}';
             $new_string = str_replace($search, $replacement, $image_prompt);
+            $new_message = $show .','.$new_string;
             
             $data2 = '{
                 "input": {
@@ -948,9 +949,9 @@ class MessageController extends Controller
                         "hr_scale":'.$hr_scale.',
                         "hr_upscaler": "'.$hr_upscaler.'",
                         "sampler_name":  "'.$sampler_name.'",
-                        "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
+                        "negative_prompt": '.json_encode($negative_profile_prompt).',
                         "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
-                        "prompt": "'. $show .','.$new_string.'",
+                        "prompt": '.json_encode($new_message).',
                         "alwayson_scripts": {
                             "ADetailer": {
                                 "args": [
@@ -1141,6 +1142,9 @@ class MessageController extends Controller
             //         }
             //     }
             // }';
+
+            // print_r($data2);
+            // die;
 
             $maxRetries = 3; // Set the maximum number of retries
             $retryDelay = 1; // Set the delay between retries in seconds

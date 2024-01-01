@@ -48,6 +48,7 @@ class Profile extends Authenticatable
         'prompt',
         'negative_prompt',
         'image_prompt',
+        'lora_input',
         'created_at',
         'updated_at',
     ];

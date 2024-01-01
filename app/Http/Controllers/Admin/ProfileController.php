@@ -357,6 +357,7 @@ class ProfileController extends Controller
                     'style' => $input['style'],
                     'use_speaker_boost' => $speakerBoostCheckbox,
                     // 'prompt' => $input['prompt'],
+                    'lora_input' => $input['lora_input'],
                     'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
                 ]);
@@ -428,6 +429,7 @@ class ProfileController extends Controller
             $profile->short_description = $input['short_description'];
             $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->image_prompt = $input['image_prompt'];
+            $profile->lora_input = $input['lora_input'];
            
             $profile->negative_prompt = $input['negative_prompt'];
             // $profile->prompt = $input['prompt'];
