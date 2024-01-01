@@ -923,7 +923,10 @@ class MessageController extends Controller
                 $args0 =  isset($args[0]) ? $args[0] : '';
                 $args1 =  isset($args[1]) ? $args[1] : '';  
 
-
+            $replacement = '<lora:00_Ruby:0.7>';
+            $search = '{{lora}}';
+            $new_string = str_replace($search, $replacement, $image_prompt);
+            
             $data2 = '{
                 "input": {
                     "api": {
@@ -947,7 +950,7 @@ class MessageController extends Controller
                         "sampler_name":  "'.$sampler_name.'",
                         "negative_prompt": "'. str_replace(["\n", "\r"], ' ', $negative_profile_prompt).'",
                         "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
-                        "prompt": "'. $show .','.preg_replace('/\{\{lora\}\}/', '<lora:00_Ruby:0.7>', $image_prompt).'",
+                        "prompt": "'. $show .','.$new_string.'",
                         "alwayson_scripts": {
                             "ADetailer": {
                                 "args": [
