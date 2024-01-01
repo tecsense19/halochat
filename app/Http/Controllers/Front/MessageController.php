@@ -237,6 +237,7 @@ class MessageController extends Controller
                             "max_completion_tokens": '.$getFirstMessage->max_prompt_length.',
                             "max_prompt_words": '.$getFirstMessage->max_ai_reply_length.',
                             "request_id": "'.$sequnce_number.'",
+                            "reply_with_voice": '.$getFirstMessage->reply_with_voice.',
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
                             "system_prompt": '.json_encode($getFirstMessage->system_prompt).',
@@ -254,6 +255,7 @@ class MessageController extends Controller
                             }
                         }';
     
+                    
                 $maxRetries = 3; // Set the maximum number of retries
                 $retryDelay = 1; // Set the delay between retries in seconds
 
@@ -307,8 +309,47 @@ class MessageController extends Controller
                         //     'message'=> isset($responseObject->data->ai_message) ? $responseObject->data->ai_message : '',
                         // );
                         // Chatapi_responses::create($chatjson);
+
+
+                    $curlvoice = curl_init();
+                    curl_setopt_array($curlvoice, array(
+                    CURLOPT_URL => 'https://api.elevenlabs.io/v1/text-to-speech/'.$getFirstMessage->voice_id,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>'{
+                    "model_id": "'.$getFirstMessage->voice_model.'",
+                    "text": '.json_encode($responseObject->data->ai_message).',
+                    "voice_settings": {
+                                "stability": '.$getFirstMessage->stability.',
+                                "similarity_boost": '.$getFirstMessage->similarity_boost.',
+                                "style": '.$getFirstMessage->style.',
+                                "use_speaker_boost": '.$getFirstMessage->use_speaker_boost.'
+                    }
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'xi-api-key: 5772d6928b8e380bc1ccd79ee04aec7c',
+                        'Content-Type: application/json'
+                    ),
+                    ));
+
+                    $responsevoice = curl_exec($curlvoice);
+                    curl_close($curlvoice);
+                    if ($responsevoice === false) {
+                        echo 'Error in API request';
+                        exit;
+                    }
+                    // Replace 'path/to/save/file.mp3' with the desired file path and name
+                    $filePath1 = 'storage/'.uniqid().'.mp3';
+                    // Save the MP3 data to a file
+                    file_put_contents($filePath1, $responsevoice);
+
                         if (isset($responseObject->data->ai_message)) {
-                            $this->creditcut($profile_id,$responseObject->data->ai_message,$responseObject->data->request_id,$userId,$creditAddManage);
+                            $this->creditcut($profile_id,$responseObject->data->ai_message,$responseObject->data->request_id,$userId,$creditAddManage,$filePath1);
                             curl_close($curl);    
                         } else {
                             return back()->withErrors(['ai_message' => 'Message not found in the response'])->withInput();
@@ -323,7 +364,7 @@ class MessageController extends Controller
             }
         }
 
-    public function creditcut($profile_id,$responseObjectAi_message,$responseObjectRequest_id,$userId,$creditAddManage)
+    public function creditcut($profile_id,$responseObjectAi_message,$responseObjectRequest_id,$userId,$creditAddManage,$voiceMessagePath)
     {
         $creditAddManage = Managecredit::where('user_id', $userId->id)->first();
         $getFirstMessage = Profile::where('profile_id', $profile_id)->first();
@@ -342,6 +383,7 @@ class MessageController extends Controller
             'status'=> 'Active',
             'message_text'=> nl2br($responseObjectAi_message),
             'guid' => $responseObjectRequest_id,
+            'voicemessagepath' => $voiceMessagePath,
             'updated_at' => now(),
             'sequence_message' => $responseObjectRequest_id,
         );

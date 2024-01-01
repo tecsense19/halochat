@@ -358,6 +358,7 @@ class ProfileController extends Controller
                     'use_speaker_boost' => $speakerBoostCheckbox,
                     // 'prompt' => $input['prompt'],
                     'lora_input' => $input['lora_input'],
+                    'reply_with_voice' => $input['reply_with_voice'],
                     'negative_prompt' => $input['negative_prompt'],
                     'personatype' => $input['profile_personatype'],
                 ]);
@@ -430,7 +431,7 @@ class ProfileController extends Controller
             $profile->use_speaker_boost = $speakerBoostCheckbox;
             $profile->image_prompt = $input['image_prompt'];
             $profile->lora_input = $input['lora_input'];
-           
+            $profile->reply_with_voice = $input['reply_with_voice'];
             $profile->negative_prompt = $input['negative_prompt'];
             // $profile->prompt = $input['prompt'];
             $profile->save(); // Save the profile data

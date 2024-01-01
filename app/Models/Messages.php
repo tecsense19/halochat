@@ -31,6 +31,7 @@ class Messages extends Authenticatable
         'guid',
         'image_id',
         'isDeleted',
+        'voicemessagepath',
         'sequence_message'
     ];
 

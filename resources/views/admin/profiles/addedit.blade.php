@@ -32,6 +32,7 @@ $max_prompt_length = isset($profileList->max_prompt_length) ? $profileList->max_
 $short_description = isset($profileList->short_description) ? $profileList->short_description : '';
 $image_prompt = isset($profileList->image_prompt) ? $profileList->image_prompt : '';
 $lora_input = isset($profileList->lora_input) ? $profileList->lora_input : '';
+$reply_with_voice = isset($profileList->reply_with_voice) ? $profileList->reply_with_voice : '';
 
 $imgUrl = isset($profileList->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$profileList->profileImages[0]['image_path'] : []; 
 $get_voice = json_decode($get_voice, true);
@@ -229,6 +230,24 @@ $get_voice = json_decode($get_voice, true);
                             <div class="form-check form-check-flat form-check-primary" bis_skin_checked="1">
                                 <label class="form-check-label">
                                 <input type="checkbox" class="form-check-input" id="speakerBoostCheckbox" name="speakerBoostCheckbox" <?php if($use_speaker_boost == 1){ ?>checked <?php } else { ?> <?php }?>> Use Speaker Boost <i class="input-helper"></i></label>
+                            </div>
+
+                            <div class="col-md-6">
+                            <div class="form-group row">
+                            <label for="Name">reply_with_voice</label>
+                                <div class="col-sm-4">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="true" <?php if($reply_with_voice == "true") { ?> checked <?php } else{ ?> <?php } ?>  > true </label>
+                                </div>
+                                </div>
+                                <div class="col-sm-5">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="false" <?php if($reply_with_voice == "false") { ?> checked <?php } else{ ?> <?php } ?>  > false </label>
+                                </div>
+                                </div>
+                             </div>
                             </div>
 
                             <!-- <div class="form-group">
