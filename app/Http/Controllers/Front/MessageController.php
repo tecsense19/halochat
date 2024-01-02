@@ -358,8 +358,6 @@ class MessageController extends Controller
                         //echo "Request successful!\n";
                         break; // Exit the loop on successful request
                     }
-                    
-                    
                 }
             }
         }
@@ -425,6 +423,47 @@ class MessageController extends Controller
                 if(session('user_id'))
                 {
                     User::where('id', session('user_id'))->update(['deletechat_flag' => 0]);
+
+                    // first voice message
+                    $curlvoice = curl_init();
+                    curl_setopt_array($curlvoice, array(
+                    CURLOPT_URL => 'https://api.elevenlabs.io/v1/text-to-speech/'.$user->voice_id,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>'{
+                    "model_id": "'.$user->voice_model.'",
+                    "text": '.json_encode($user->first_message).',
+                    "voice_settings": {
+                                "stability": '.$user->stability.',
+                                "similarity_boost": '.$user->similarity_boost.',
+                                "style": '.$user->style.',
+                                "use_speaker_boost": '.$user->use_speaker_boost.'
+                    }
+                    }',
+                    CURLOPT_HTTPHEADER => array(
+                        'xi-api-key: 5772d6928b8e380bc1ccd79ee04aec7c',
+                        'Content-Type: application/json'
+                    ),
+                    ));
+
+                    $responsevoice = curl_exec($curlvoice);
+                    curl_close($curlvoice);
+                    if ($responsevoice === false) {
+                        echo 'Error in API request';
+                        exit;
+                    }
+                    // Replace 'path/to/save/file.mp3' with the desired file path and name
+                    $filePath1 = 'storage/'.uniqid().'.mp3';
+                    // Save the MP3 data to a file
+                    file_put_contents($filePath1, $responsevoice);
+
+                    // first voice message
+
                     $message = array(
                         'profile_id'=> $user->profile_id,
                         'user_id'=> session('user_id'),
@@ -434,6 +473,7 @@ class MessageController extends Controller
                         'message_text'=> $user->first_message,
                         'sequence_message'=> 0,
                         'guid'=> 0,
+                        'voicemessagepath' => $filePath1, 
                         'updated_at' => now(),
                     );
                 }else{
