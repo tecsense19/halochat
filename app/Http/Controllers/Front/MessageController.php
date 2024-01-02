@@ -313,7 +313,7 @@ class MessageController extends Controller
 
                     $curlvoice = curl_init();
                     curl_setopt_array($curlvoice, array(
-                    CURLOPT_URL => 'https://api.elevenlabs.io/v1/text-to-speech/'.$getFirstMessage->voice_id,
+                    CURLOPT_URL => env('TEXT_TO_VOICE_URL').'/'.'text-to-speech/'.$getFirstMessage->voice_id,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => '',
                     CURLOPT_MAXREDIRS => 10,
@@ -332,7 +332,7 @@ class MessageController extends Controller
                     }
                     }',
                     CURLOPT_HTTPHEADER => array(
-                        'xi-api-key: 5772d6928b8e380bc1ccd79ee04aec7c',
+                        'xi-api-key: '.env('TEXT_TO_VOICE_KEY'),
                         'Content-Type: application/json'
                     ),
                     ));
@@ -423,11 +423,14 @@ class MessageController extends Controller
                 if(session('user_id'))
                 {
                     User::where('id', session('user_id'))->update(['deletechat_flag' => 0]);
-
+                    if (str_contains($user->first_message, '{{first_name}}')) {
+                        // Replace {{first_name}} with the actual first name
+                        $messageText = str_replace('{{first_name}}', $user->name, $user->first_message);
+                    } 
                     // first voice message
                     $curlvoice = curl_init();
                     curl_setopt_array($curlvoice, array(
-                    CURLOPT_URL => 'https://api.elevenlabs.io/v1/text-to-speech/'.$user->voice_id,
+                    CURLOPT_URL => env('TEXT_TO_VOICE_URL').'/'.'text-to-speech/'.$user->voice_id,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => '',
                     CURLOPT_MAXREDIRS => 10,
@@ -437,7 +440,7 @@ class MessageController extends Controller
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS =>'{
                     "model_id": "'.$user->voice_model.'",
-                    "text": '.json_encode($user->first_message).',
+                    "text": '.json_encode($messageText).',
                     "voice_settings": {
                                 "stability": '.$user->stability.',
                                 "similarity_boost": '.$user->similarity_boost.',
@@ -446,7 +449,7 @@ class MessageController extends Controller
                     }
                     }',
                     CURLOPT_HTTPHEADER => array(
-                        'xi-api-key: 5772d6928b8e380bc1ccd79ee04aec7c',
+                        'xi-api-key: '.env('TEXT_TO_VOICE_KEY'),
                         'Content-Type: application/json'
                     ),
                     ));
@@ -612,10 +615,7 @@ class MessageController extends Controller
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
-                                            ->get();
-
-                                        
-                                         
+                                            ->get();    
             }
             return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
         }
@@ -1063,7 +1063,7 @@ class MessageController extends Controller
                                         "ad_model": "face_yolov8s.pt",
                                         "ad_negative_prompt": "chin bump, chin cleft",
                                         "ad_noise_multiplier": 1,
-                                        "ad_prompt": "Ruby <lora:00_Ruby:0.7> Innocent face, light makeup, slight smile, happy eyes",
+                                        "ad_prompt": "Ruby '.$lora_input.' Innocent face, light makeup, slight smile, happy eyes",
                                         "ad_restore_face": false,
                                         "ad_sampler": "DPM++ 2M Karras",
                                         "ad_steps": 28,
