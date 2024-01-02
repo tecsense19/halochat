@@ -120,13 +120,30 @@ alert("{{ $errors->first('chat_persona') }}");
                                     <img src="{{ $imgUrl2 }}">
 
                                 </div>
+
+                                <?php
+                                //$chat_user = // ... your $chat_user object;
+                                $profilename = \App\Models\Profile::where('profile_id', $chat->profile_id)->first();
+                                // Check if {{first_name}} is present in the message text
+                                    if (str_contains($lastmessage->message_text, '{{first_name}}')) {
+                                        // Replace {{first_name}} with the actual first name
+                                        $messageText = str_replace('{{first_name}}', $chat->name, $lastmessage->message_text);
+                                    } else{
+                                        $messageText = $lastmessage->message_text;
+                                    }
+                                
+                            
+                                // Output the result with line breaks converted to HTML breaks 
+                                //  echo nl2br($messageText); 
+                                ?>
+
                                 <div class="admin_deatail">
                                     <h6>{{ $chat->name }}</h6>
                                     <p id="lastmsg">
                                     @if($lastmessage->message_text == '')
                                         <img src="{{ URL::asset('public/front/img/image-gallery.png') }}" style="width: 15px;" alt=""> image
                                     @else
-                                        {{ $lastmessage->message_text }}
+                                        {{ $messageText }}
                                     @endif</p>
                                 </div>
                         </a>
@@ -904,8 +921,8 @@ function unlikedMessage(message, messageId) {
 <script>  
 $('.remove-chat').click(function(e) {
     var chatid = $(this).data('bs-chatid');
-    var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
-    // var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
+    // var url = "{{ route('chat.delete', ['id' => ':chatid'], [], true) }}";
+    var url = "{{ route('chat.delete', ['id' => ':chatid']) }}";
     url = url.replace(':chatid', chatid);
 
     e.preventDefault();
