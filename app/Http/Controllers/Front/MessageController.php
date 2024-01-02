@@ -100,7 +100,7 @@ class MessageController extends Controller
                 return "credit over";
             }else{  
                 // Now $message_show contains the original string with all matched words removed
-                if (str_contains(strtolower($message_show), 'show')) {
+                if (str_contains(strtolower($message_show), 'show') || str_contains(strtolower($message_show), 'can i see...') || str_contains(strtolower($message_show), 'send') || str_contains(strtolower($message_show), 'send me...')) {
                     if($creditAddManage->currentcredit >= 2)
                     {
                         // $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();

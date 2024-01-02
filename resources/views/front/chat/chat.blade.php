@@ -634,8 +634,9 @@ function sendMessage() {
         var inputValue = $('#type_message').val().toLowerCase();
 
         // Check if the input contains the word "show"
-        if (inputValue.includes('show')) {
+        if (inputValue.includes('show') || inputValue.includes('can i see...') || inputValue.includes('send') || inputValue.includes('send me...')) {
             // The word "show" is present in the input
+       
             $('.hidedots').css('display', 'none');
 
             var charname= "{{ $user->name }}";

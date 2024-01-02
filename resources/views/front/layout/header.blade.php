@@ -15,7 +15,9 @@
           <li><a href="#" class="nav-link scrollto"><img src="{{ URL::asset('public/front/img/love-lady.svg') }}"> <span>My Ai</span></a></li> -->
         </ul>
       </nav><!-- .nav-menu -->
-      
+      <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     </div>
   </header><!-- End Header -->
 
