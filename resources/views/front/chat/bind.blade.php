@@ -13,20 +13,31 @@
                     @if(!empty($chat_user->message_text))
                     
                     <?php
-                    //$chat_user = // ... your $chat_user object;
-                    $profilename = \App\Models\Profile::where('profile_id', $chat_user->profile_id)->first();
-                    // Check if {{first_name}} is present in the message text
+                        // Assuming $chat_user is already defined
+
+                        // Fetch the profile name based on $chat_user->profile_id
+                        $profilename = \App\Models\Profile::where('profile_id', $chat_user->profile_id)->first();
+
+                        // Fetch the username based on the session user_id
+                        $username = \App\Models\User::where('id', session('user_id'))->first();
+
+                        // Check if {{first_name}} is present in the message text
                         if (str_contains($chat_user->message_text, '{{first_name}}')) {
                             // Replace {{first_name}} with the actual first name
                             $messageText = str_replace('{{first_name}}', $profilename->name, $chat_user->message_text);
-                        } else{
+                        } else {
                             $messageText = $chat_user->message_text;
                         }
-                    
-                 
-                    // Output the result with line breaks converted to HTML breaks 
-                    //  echo nl2br($messageText); 
-                    ?>
+
+                        // Check if {{username}} is present in the message text
+                        if (str_contains($messageText, '{{username}}')) {
+                            // Replace {{username}} with the actual username
+                            $messageText = str_replace('{{username}}', $username->name, $messageText);
+                        }
+
+                        // Now $messageText contains the final message with replaced placeholders
+                        ?>
+
                         <div class="col-12 scrolltop mb-2">
                             <div class="have_we_met">
                                 <div class="chat_content_box">

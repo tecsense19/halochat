@@ -206,6 +206,7 @@ class MessageController extends Controller
                         'status'=> 'Active',
                         'media_url' => $message_url['image_url'],
                         'image_id' => $message_url['image_id'],
+                        'guid' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
                         'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
                     ]
                 );
@@ -240,8 +241,8 @@ class MessageController extends Controller
                             "reply_with_voice": '.$getFirstMessage->reply_with_voice.',
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
-                            "system_prompt": '.json_encode($getFirstMessage->system_prompt).',
-                            "system_instruction": '.json_encode($getFirstMessage->system_instruction).',
+                            "system_prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt)).',
+                            "system_instruction": '.json_encode(str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction)).',
                             "voice_name": "'.$getFirstMessage->voice_id.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
                             "voice_settings": {
@@ -414,6 +415,7 @@ class MessageController extends Controller
         ->delete();
 
         $user = Profile::with('profileImages')->where('profile_id',$id)->first();
+        $userName = User::where('id', session('user_id'))->first();
         if($user)
         {
             $MessageData = Messages::where('sender_id', session('user_id'))->where('receiver_id', $user->profile_id)->where('isDeleted' , 0)->first();
@@ -427,6 +429,12 @@ class MessageController extends Controller
                         // Replace {{first_name}} with the actual first name
                         $messageText = str_replace('{{first_name}}', $user->name, $user->first_message);
                     } 
+                    if (str_contains($messageText, '{{username}}')) {
+                        // Replace {{username}} with the actual username
+                        $messageText = str_replace('{{username}}', $userName->name, $messageText);
+                    }
+
+
                     // first voice message
                     $curlvoice = curl_init();
                     curl_setopt_array($curlvoice, array(
@@ -1033,9 +1041,9 @@ class MessageController extends Controller
                         "hr_scale":'.$hr_scale.',
                         "hr_upscaler": "'.$hr_upscaler.'",
                         "sampler_name":  "'.$sampler_name.'",
-                        "negative_prompt": '.json_encode($negative_profile_prompt).',
+                        "negative_prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $negative_profile_prompt)).',
                         "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
-                        "prompt": '.json_encode($new_message).',
+                        "prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $new_message)).',
                         "alwayson_scripts": {
                             "ADetailer": {
                                 "args": [
@@ -1305,40 +1313,40 @@ class MessageController extends Controller
                     die;
                 }
 
-                try {
-                    $responseJson = $this->performInitialCheck($response_image_id);
-                    $responseArray = json_decode($responseJson, true);
+                // try {
+                //     $responseJson = $this->performInitialCheck($response_image_id);
+                //     $responseArray = json_decode($responseJson, true);
 
-                    if (isset($responseArray)) {
-                        while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
-                            // Introduce a delay between checks to avoid excessive requests
-                            sleep(1);
+                //     if (isset($responseArray)) {
+                //         while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
+                //             // Introduce a delay between checks to avoid excessive requests
+                //             sleep(1);
 
-                            $responseJson = $this->performInitialCheck($response_image_id);
-                            $responseArray = json_decode($responseJson, true);
+                //             $responseJson = $this->performInitialCheck($response_image_id);
+                //             $responseArray = json_decode($responseJson, true);
 
-                            // Check if the status is now "COMPLETED"
-                            if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
-                                if (isset($responseArray['output']['images'][0])) {
-                                    $response_image_base64 = $responseArray['output']['images'][0];
-                                    // $chatjson2 = array(
-                                    //     'user_id'=> session('user_id'),
-                                    //     'json'=> 'Image'.$responseJson,
-                                    //     'image_base64'=> $responseArray['output']['images'][0],
-                                    // );
-                                    // Chatapi_responses::create($chatjson2);
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        // Handle the case where decoding fails
-                        throw new \Exception("Failed to decode JSON response");
-                    }
-                } catch (\Exception $e) {
-                    // Handle exceptions (e.g., log the error, notify the user, etc.)
-                    //echo "Error: " . $e->getMessage();
-                }
+                //             // Check if the status is now "COMPLETED"
+                //             if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
+                //                 if (isset($responseArray['output']['images'][0])) {
+                //                     $response_image_base64 = $responseArray['output']['images'][0];
+                //                     // $chatjson2 = array(
+                //                     //     'user_id'=> session('user_id'),
+                //                     //     'json'=> 'Image'.$responseJson,
+                //                     //     'image_base64'=> $responseArray['output']['images'][0],
+                //                     // );
+                //                     // Chatapi_responses::create($chatjson2);
+                //                     break;
+                //                 }
+                //             }
+                //         }
+                //     } else {
+                //         // Handle the case where decoding fails
+                //         throw new \Exception("Failed to decode JSON response");
+                //     }
+                // } catch (\Exception $e) {
+                //     // Handle exceptions (e.g., log the error, notify the user, etc.)
+                //     //echo "Error: " . $e->getMessage();
+                // }
 
                 if(isset($response_image['output']['images'][0])){
                     $base64Image = $response_image['output']['images'][0];
@@ -1369,6 +1377,9 @@ class MessageController extends Controller
                         'image_id' => $response_image_id,
                         'image_url' => $imgUrl
                     );
+                    // echo "<pre>";
+                    // print_r($result);
+                    // die;
                     return $result;
                 }
 

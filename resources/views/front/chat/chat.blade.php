@@ -124,13 +124,20 @@ alert("{{ $errors->first('chat_persona') }}");
                                 <?php
                                 //$chat_user = // ... your $chat_user object;
                                 $profilename = \App\Models\Profile::where('profile_id', $chat->profile_id)->first();
+                                $username = \App\Models\User::where('id', session('user_id'))->first();
                                 // Check if {{first_name}} is present in the message text
                                     if (str_contains($lastmessage->message_text, '{{first_name}}')) {
                                         // Replace {{first_name}} with the actual first name
                                         $messageText = str_replace('{{first_name}}', $chat->name, $lastmessage->message_text);
+
                                     } else{
                                         $messageText = $lastmessage->message_text;
                                     }
+                                    if (str_contains($messageText, '{{username}}')) {
+                                        // Replace {{username}} with the actual username
+                                        $messageText = str_replace('{{username}}', $username->name, $messageText);
+                                    }
+            
                                 
                             
                                 // Output the result with line breaks converted to HTML breaks 
