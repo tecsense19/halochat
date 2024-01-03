@@ -232,6 +232,9 @@ class MessageController extends Controller
                 );
             }else{
 
+                $system_prompt = preg_replace('/\s+/', ' ', json_encode(str_replace(["\n", "\r", '"'], ' ', $getFirstMessage->system_prompt)));
+                $system_instruction = preg_replace('/\s+/', ' ', json_encode(str_replace(["\n", "\r", '"'], ' ', $getFirstMessage->system_instruction)));
+
                 $postfeild = '{
                             "user_message": "'.str_replace(["\n", "\r", '"'], '', $message).'",
                             "persona_id": "'.$getFirstMessage->persona_id.'",
@@ -241,8 +244,8 @@ class MessageController extends Controller
                             "reply_with_voice": '.$getFirstMessage->reply_with_voice.',
                             "persona": {
                             "name": "'.$getFirstMessage->name.'",
-                            "system_prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_prompt)).',
-                            "system_instruction": '.json_encode(str_replace(["\n", "\r", '"'], '', $getFirstMessage->system_instruction)).',
+                            "system_prompt": '.$system_prompt.',
+                            "system_instruction": '.$system_instruction.',
                             "voice_name": "'.$getFirstMessage->voice_id.'",
                             "voice_model": "'.$getFirstMessage->voice_model.'",
                             "voice_settings": {
@@ -1019,6 +1022,7 @@ class MessageController extends Controller
             $search = '{{lora}}';
             $new_string = str_replace($search, $replacement, $image_prompt);
             $new_message = $show .','.$new_string;
+            $prompt = preg_replace('/\s+/', ' ', json_encode(str_replace(["\n", "\r", '"'], ' ', $new_message)));
             
             $data2 = '{
                 "input": {
@@ -1041,9 +1045,9 @@ class MessageController extends Controller
                         "hr_scale":'.$hr_scale.',
                         "hr_upscaler": "'.$hr_upscaler.'",
                         "sampler_name":  "'.$sampler_name.'",
-                        "negative_prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $negative_profile_prompt)).',
+                        "negative_prompt": '.json_encode(str_replace(["\n", "\r", '"'], ' ', $negative_profile_prompt)).',
                         "override_settings_restore_afterwards": '.$override_settings_restore_afterwards.',
-                        "prompt": '.json_encode(str_replace(["\n", "\r", '"'], '', $new_message)).',
+                        "prompt": '.$prompt.',
                         "alwayson_scripts": {
                             "ADetailer": {
                                 "args": [
