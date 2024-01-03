@@ -1021,7 +1021,7 @@ class MessageController extends Controller
             $replacement = $lora_input;
             $search = '{{lora}}';
             $new_string = str_replace($search, $replacement, $image_prompt);
-            $new_message = $show .','.$new_string;
+            $new_message = $show .', '.$new_string;
             $prompt = preg_replace('/\s+/', ' ', json_encode(str_replace(["\n", "\r", '"'], ' ', $new_message)));
             
             $data2 = '{

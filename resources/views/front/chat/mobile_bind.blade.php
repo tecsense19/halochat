@@ -102,11 +102,14 @@
                         </script> -->
                     @endif
                     @if($chat_user->media_url)
-                        <div class="col-12 mt-2">
-                            <div class="chat_content_img mb-2">
+                    <div class="col-12 mt-2">
+                            <div class="chat_content_img mb-4">
+                            <a data-fancybox="gallery" data-src="{{ $chat_user->media_url }}">
                                 <img src="{{ $chat_user->media_url }}">
+                                </a>
                             </div>
                         </div>
+                        <div>
 
                         <!-- <script>
                             $( document ).ready(function() {
@@ -198,3 +201,12 @@
         });
     });
 </script>
+
+
+<script>
+      Fancybox.bind('[data-fancybox="gallery"]', {
+        Thumbs : {
+          showOnStart: false
+        }
+      });    
+    </script>

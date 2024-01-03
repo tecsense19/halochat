@@ -1,5 +1,4 @@
 
-
 <div class="chat_content" id="chatContent">
     <div class="row new_message" >
         @if(!empty($getAllReciverUser))
@@ -111,12 +110,16 @@
                         </script> -->
                     @endif
                     @if($chat_user->media_url)
+                    
                         <div class="col-12 mt-2">
                             <div class="chat_content_img mb-4">
+                            <a data-fancybox="gallery" data-src="{{ $chat_user->media_url }}">
                                 <img src="{{ $chat_user->media_url }}">
+                                </a>
                             </div>
                         </div>
-
+                        <div>
+                    
                         <!-- <script>
                             $( document ).ready(function() {
                                 // setTimeout(function(){
@@ -205,3 +208,11 @@
         });
     });
 </script>
+
+<script>
+      Fancybox.bind('[data-fancybox="gallery"]', {
+        Thumbs : {
+          showOnStart: false
+        }
+      });    
+    </script>
