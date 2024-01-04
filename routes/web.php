@@ -115,7 +115,7 @@ use App\Http\Controllers\Admin\SubscriptionsController;
     Route::post('/orderplaced', [PaymentController::class, 'orderConfirm'])->name('payment.orderConfirm');
     Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
-   
+    Route::get('/cronorderdata', [PaymentController::class, 'cronOrderData']);
 
     //Plans Subscription
     Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');

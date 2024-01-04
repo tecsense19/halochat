@@ -206,8 +206,8 @@ class MessageController extends Controller
                         'status'=> 'Active',
                         'media_url' => $message_url['image_url'],
                         'image_id' => $message_url['image_id'],
-                        'guid' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
-                        'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid + 1) : 0,
+                        'guid' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
+                        'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
                     ]
                 );
 
@@ -1248,7 +1248,7 @@ class MessageController extends Controller
             for ($retry = 0; $retry < $maxRetries; $retry++) {
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
-                CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/runsync',
+                CURLOPT_URL => env('AI_IMAGE_URL').'/'.env('AI_IMAGE_USER').'/run',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -1317,43 +1317,42 @@ class MessageController extends Controller
                     die;
                 }
 
-                // try {
-                //     $responseJson = $this->performInitialCheck($response_image_id);
-                //     $responseArray = json_decode($responseJson, true);
+                try {
+                    $responseJson = $this->performInitialCheck($response_image_id);
+                    $responseArray = json_decode($responseJson, true);
 
-                //     if (isset($responseArray)) {
-                //         while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
-                //             // Introduce a delay between checks to avoid excessive requests
-                //             sleep(1);
-
-                //             $responseJson = $this->performInitialCheck($response_image_id);
-                //             $responseArray = json_decode($responseJson, true);
-
-                //             // Check if the status is now "COMPLETED"
-                //             if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
-                //                 if (isset($responseArray['output']['images'][0])) {
-                //                     $response_image_base64 = $responseArray['output']['images'][0];
-                //                     // $chatjson2 = array(
-                //                     //     'user_id'=> session('user_id'),
-                //                     //     'json'=> 'Image'.$responseJson,
-                //                     //     'image_base64'=> $responseArray['output']['images'][0],
-                //                     // );
-                //                     // Chatapi_responses::create($chatjson2);
-                //                     break;
-                //                 }
-                //             }
-                //         }
-                //     } else {
-                //         // Handle the case where decoding fails
-                //         throw new \Exception("Failed to decode JSON response");
-                //     }
-                // } catch (\Exception $e) {
-                //     // Handle exceptions (e.g., log the error, notify the user, etc.)
-                //     //echo "Error: " . $e->getMessage();
-                // }
-
-                if(isset($response_image['output']['images'][0])){
-                    $base64Image = $response_image['output']['images'][0];
+                    if (isset($responseArray)) {
+                        while ($responseArray['status'] == "IN_PROGRESS" || $responseArray['status'] == "IN_QUEUE") {
+                            // Introduce a delay between checks to avoid excessive requests
+                            sleep(1);
+                            $responseJson = $this->performInitialCheck($response_image_id);
+                            $responseArray = json_decode($responseJson, true);
+                            // Check if the status is now "COMPLETED"
+                            if (isset($responseArray['status']) && $responseArray['status'] == "COMPLETED") {
+                                if (isset($responseArray['output']['images'][0])) {
+                                    $response_image_base64 = $responseArray['output']['images'][0];
+                                    // $chatjson2 = array(
+                                    //     'user_id'=> session('user_id'),
+                                    //     'json'=> 'Image'.$responseJson,
+                                    //     'image_base64'=> $responseArray['output']['images'][0],
+                                    // );
+                                    // Chatapi_responses::create($chatjson2);
+                                    break;
+                                }
+                            }
+                        }
+                   
+                    } else {
+                        // Handle the case where decoding fails
+                        throw new \Exception("Failed to decode JSON response");
+                    }
+                } catch (\Exception $e) {
+                    // Handle exceptions (e.g., log the error, notify the user, etc.)
+                    //echo "Error: " . $e->getMessage();
+                }
+             
+                if(isset($responseArray['output']['images'][0])){
+                    $base64Image = $responseArray['output']['images'][0];
                     // Decode the Base64 image data
                     $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
                     // Generate a unique filename for the image
@@ -1415,7 +1414,7 @@ class MessageController extends Controller
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
+        CURLOPT_TIMEOUT => 60,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',

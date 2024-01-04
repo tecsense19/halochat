@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Subscriptions;
+use App\Models\Subscriptions_history;
 use App\Models\Managecredit;
 use Stripe\Stripe;
 use Stripe\Charge;
@@ -58,12 +59,12 @@ class PaymentController extends Controller
                 "shippingId": "2",
                 "tranType": "Sale",
                 "ipAddress": "2401:4900:1f3e:296:bcbc:2b68:ef62:b3fb",
-                "campaignId": "1",
+                "campaignId": "2",
                 "offers": [
                     {
                         "offer_id": "2",
                         "product_id": '.$request->product_id.',
-                        "billing_model_id": "5",
+                        "billing_model_id": "6",
                         "quantity": 1
                     }
                 ],
@@ -85,7 +86,7 @@ class PaymentController extends Controller
             $response = curl_exec($curl);
             curl_close($curl);
             $response = json_decode($response, true);
-            // echo $response;
+      
             if($response['response_code'] == 100)
             {
 
@@ -222,6 +223,89 @@ class PaymentController extends Controller
          
 
             
+    }
+
+    public function cronOrderData()
+    {
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://viceapp.sticky.io/api/v1/customer_view',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "customer_id":11
+        }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Basic dmljZWFwcF8xMDExNDo1NDE4NTI5NWY0ZTkyYw=='
+        ),
+        ));
+
+        $response1 = curl_exec($curl);
+
+        curl_close($curl);
+       
+        $response1 = json_decode($response1, true);
+        // print_r($response['order_list']);
+        // Get the last value from the 'order_list' array
+        $lastValue = end($response1['order_list']);
+        // Print the result
+        print_r($lastValue);
+        
+        $curl1 = curl_init();
+        curl_setopt_array($curl1, array(
+        CURLOPT_URL => 'https://viceapp.sticky.io/api/v1/order_view',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "order_id":[
+                "'.$lastValue.'"
+            ]
+        }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Basic dmljZWFwcF8xMDExNDo1NDE4NTI5NWY0ZTkyYw=='
+        ),
+        ));
+
+        $response = curl_exec($curl1);
+
+        curl_close($curl);
+        echo "<pre>";
+        print_r( $response);
+        $response = json_decode($response, true);
+        $subscriptions_history = new Subscriptions_history;
+        $subscriptions_history->user_id = session('user_id');
+        $subscriptions_history->plan_id = $response['products'][0]['product_id'];
+        $subscriptions_history->order_id = $response['order_id'];   
+        $subscriptions_history->transactionID = $response['transaction_id'];
+        $subscriptions_history->subscription_type = $response['products'][0]['name'];
+        $subscriptions_history->customerId = $response['customer_id'];
+        $subscriptions_history->authId = $response['auth_id'];
+        $subscriptions_history->orderTotal = $response['order_total'];
+        $subscriptions_history->product_id = $response['products'][0]['product_id'];
+        $subscriptions_history->quantity = $response['main_product_quantity'];
+        $subscriptions_history->subscription_id = $response['products'][0]['subscription_id'];
+        $subscriptions_history->recurring_date = $response['products'][0]['recurring_date'];
+        $subscriptions_history->subscription_start_date = date('Y-m-d');
+        $subscriptions_history->subscription_end_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +30 days'));
+        $subscriptions_history->subscription_next_date = date('Y-m-d', strtotime(date('Y-m-d') . ' +30 days'));
+        // $subscriptions_history->resp_msg = $response['resp_msg'];
+        $subscriptions_history->save(); // Save the profile data
+
+        die;
     }
 
     // public function makePayment(Request $request)

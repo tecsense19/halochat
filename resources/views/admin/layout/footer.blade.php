@@ -47,6 +47,5 @@
     <script src="{{ URL::asset('public/js/typeahead.js') }}"></script>
     <script src="{{ URL::asset('public/js/select2.js') }}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   </body>
 </html>

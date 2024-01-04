@@ -142,6 +142,7 @@ $('body').on('click', '#clear-button', function(e) {
     $('#search').val('');
     usersList();
 });
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 function suspendUser(id) {
     var appUrl = @json(config('app.url'));
