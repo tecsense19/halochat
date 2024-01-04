@@ -206,8 +206,8 @@ class MessageController extends Controller
                         'status'=> 'Active',
                         'media_url' => $message_url['image_url'],
                         'image_id' => $message_url['image_id'],
-                        'guid' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
-                        'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
+                        // 'guid' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
+                        // 'sequence_message' => $getMessageSequnce ? ($getMessageSequnce->guid) : 0,
                     ]
                 );
 
