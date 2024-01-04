@@ -5,14 +5,14 @@
   <main id="main">
     <section class="gallery_section">
       <div class="container-fluid">
-        <div class="pictures_limit">
+        <!-- <div class="pictures_limit">
           <div class="row align-items-center">
             <div class="col-lg-6">
-              <div class="limit_txt">
+             <div class="limit_txt">
                 <h3>You have reached the free pictures limit:</h3>
               
                 <span>{{ count($responseArr) }} / {{ $totalCount }} pictures</span>
-              </div>
+              </div> 
             </div>
             <div class="col-lg-6">
               <div class="limit_txt justify-content-lg-end">
@@ -20,7 +20,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         @foreach($responseArr as $img)
         <div class="pictures_box">
           <div class="pictures_head">
