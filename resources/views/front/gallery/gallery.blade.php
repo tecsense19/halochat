@@ -21,6 +21,7 @@
             </div>
           </div>
         </div> -->
+        @if(count($responseArr) > 0)
         @foreach($responseArr as $img)
         <div class="pictures_box">
           <div class="pictures_head">
@@ -43,6 +44,7 @@
          
           @endforeach
           </div>
+      
           <div class="pictures_head d-block d-lg-none">
             <!-- <a href="#" class="see_btn">See all</a> -->
           </div>
@@ -66,6 +68,9 @@
         </div> -->
       </div>
       @endforeach
+      @else
+      <div style="display: flex;color: white;font-size: 34px;justify-content: center;margin: 40px;font-weight: 700;"> No pictures found</div>
+      @endif
     </section>
   </main>
   <!-- End #main -->
