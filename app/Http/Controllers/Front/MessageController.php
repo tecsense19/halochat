@@ -1077,7 +1077,7 @@ class MessageController extends Controller
                                         "ad_model": "face_yolov8s.pt",
                                         "ad_negative_prompt": "chin bump, chin cleft",
                                         "ad_noise_multiplier": 1,
-                                        "ad_prompt": "Ruby '.$lora_input.' Innocent face, light makeup, slight smile, happy eyes",
+                                        "ad_prompt": "Ruby '.$lora_input.' Innocent face, makeup, slight smile, happy eyes",
                                         "ad_restore_face": false,
                                         "ad_sampler": "DPM++ 2M Karras",
                                         "ad_steps": 28,

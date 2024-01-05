@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Action</th>
             <th>#</th>
             <th>Name</th>
             <th>Images</th>
@@ -15,7 +16,6 @@
             <th>Relationship status</th>
             <th>Body description</th>
             <th>Voice</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +26,16 @@
                     $profileId = Crypt::encryptString($profileList1->profile_id);
                 @endphp
                 <tr>
+                <td>
+                        <a href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileId]) }}" role="button" title="Edit">
+                            <i class="mdi mdi-pencil-box-outline" style="color: green; font-size: 24px;"></i>
+                        </a>
+                        <!-- <button class="btn btn-danger btn-rounded btn-icon"
+                                                                    onclick="deleteProfile('{{$profileList1->profile_id}}')"
+                                                                    id="get_id" value="" type="submit"> <i
+                                                                        class="mdi mdi-delete-forever"></i> </button> -->
+
+                    </td>
                     <td>{{ ($key + 1) }}</td>
                     <td>{{ $profileList1->name }}</td>
                     <td> @if($imgUrl)<img src="{{ $imgUrl }}" style="width: 50px; height: 50px;" />@else - @endif </td>
@@ -45,16 +55,7 @@
                             Your browser does not support the audio element.
                         </audio>
                     </td>
-                    <td>
-                        <a href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileId]) }}" role="button" title="Edit">
-                            <i class="mdi mdi-pencil-box-outline" style="color: green; font-size: 24px;"></i>
-                        </a>
-                        <!-- <button class="btn btn-danger btn-rounded btn-icon"
-                                                                    onclick="deleteProfile('{{$profileList1->profile_id}}')"
-                                                                    id="get_id" value="" type="submit"> <i
-                                                                        class="mdi mdi-delete-forever"></i> </button> -->
-
-                    </td>
+                    
                 </tr>
             @endforeach
         @else
