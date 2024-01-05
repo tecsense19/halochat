@@ -451,7 +451,7 @@ class MessageController extends Controller
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS =>'{
                     "model_id": "'.$user->voice_model.'",
-                    "text": '.json_encode($messageText).',
+                    "text": '.json_encode($messageText) ? json_encode($user->first_message) : ''.',
                     "voice_settings": {
                                 "stability": '.$user->stability.',
                                 "similarity_boost": '.$user->similarity_boost.',
