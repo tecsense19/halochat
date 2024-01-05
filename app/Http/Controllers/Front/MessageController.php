@@ -431,12 +431,16 @@ class MessageController extends Controller
                     if (str_contains($user->first_message, '{{first_name}}')) {
                         // Replace {{first_name}} with the actual first name
                         $messageText = str_replace('{{first_name}}', $user->name, $user->first_message);
+                    }else{
+                        $messageText = $user->first_message;
                     } 
+
                     if (str_contains($user->first_message, '{{username}}')) {
                         // Replace {{username}} with the actual username
                         $messageText = str_replace('{{username}}', $userName->name, $messageText);
-                    }
-
+                    }else{
+                        $messageText = $user->first_message;
+                    } 
 
                     // first voice message
                     $curlvoice = curl_init();
@@ -451,7 +455,7 @@ class MessageController extends Controller
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS =>'{
                     "model_id": "'.$user->voice_model.'",
-                    "text": '.json_encode($messageText) ? json_encode($user->first_message) : ''.',
+                    "text": '.json_encode($messageText).',
                     "voice_settings": {
                                 "stability": '.$user->stability.',
                                 "similarity_boost": '.$user->similarity_boost.',
