@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\UserController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Front\MessageController;
+use App\Http\Controllers\Front\WebhookController;
 use App\Http\Controllers\Front\ProfilesController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\GoogleLoginController;
@@ -119,8 +120,9 @@ use App\Http\Controllers\Admin\SubscriptionsController;
 
     //Plans Subscription
     Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');
-
     Route::get('/chat/isdelete/{id}', [MessageController::class, 'Ischeckdeleted'])->name('chat.Ischeckdeleted');
+    Route::get('/webhook', [WebhookController::class, 'webhook']);
+    
 
     Route::get('/clear-cache', function () {
         Artisan::call('cache:clear');
