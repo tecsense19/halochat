@@ -122,6 +122,8 @@ use App\Http\Controllers\Admin\SubscriptionsController;
     Route::get('/subscriprion/plans', [SubscriptionController::class, 'index'])->name('subscription.index');
     Route::get('/chat/isdelete/{id}', [MessageController::class, 'Ischeckdeleted'])->name('chat.Ischeckdeleted');
     Route::get('/webhook', [WebhookController::class, 'webhook']);
+    Route::get('/webhookSubscription', [WebhookController::class, 'webhookSubscription']);
+    
     
 
     Route::get('/clear-cache', function () {
