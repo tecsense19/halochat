@@ -303,7 +303,10 @@ alert("{{ $errors->first('chat_persona') }}");
                     <div id="aside" class="sidebar">
                         <div class="sidebar_main_carousel">
                             <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                                <div class="carousel-indicators">
+                            <?php if(count($profileImages) == 1) { ?>
+                            
+                                <?php } else { ?>
+                                    <div class="carousel-indicators">
                                     <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
                                         class="active" aria-current="true" aria-label="Slide 1"></button>
                                     <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="1"
@@ -311,16 +314,30 @@ alert("{{ $errors->first('chat_persona') }}");
                                     <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
                                         aria-label="Slide 3"></button>
                                 </div>
+                                    <?php } ?>
                                 <div class="back_btn" style="display: none;">
                                     <img
                                         src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg">
                                     <div class="text-white text-sm font-semibold leading-normal">Back</div>
                                 </div>
-                                <div class="carousel-inner">
+                                <?php if(count($profileImages) == 1) { ?>
+                                    <div class="">
                                     @foreach($profileImages as $key => $profileImages)
                                     @php
-                                    $imgUrl = isset($profileImages->image_path) ?
-                                    asset('storage/app/public').'/'.$profileImages->image_path : '';
+                                    $imgUrl = isset($profileImages->image_path) ? asset('storage/app/public').'/'.$profileImages->image_path : '';
+                                    @endphp
+
+                                    <div class="">
+                                        <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
+                                        <img src="{{ $imgUrl }}" class="d-block w-100">
+                                    </div>
+                                    @endforeach
+                                </div>
+                                    <?php } else { ?>
+                                        <div class="carousel-inner">
+                                    @foreach($profileImages as $key => $profileImages)
+                                    @php
+                                    $imgUrl = isset($profileImages->image_path) ? asset('storage/app/public').'/'.$profileImages->image_path : '';
                                     @endphp
 
                                     <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
@@ -339,6 +356,10 @@ alert("{{ $errors->first('chat_persona') }}");
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
+                                    <?php } ?>
+
+                               
+                               
                             </div>
                         </div>
                         <div class="waitress">

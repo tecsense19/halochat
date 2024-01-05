@@ -371,7 +371,16 @@ class ProfileController extends Controller
                             'is_primary' => 0, // You can set is_primary as needed
                         ]);
                     }
+                } else {
+                    // If no images are uploaded, insert the default image path into the database
+                    $defaultImagePath = 'images/exampleforall.jpg';
+                    ProfileImage::create([
+                        'profile_id' => $profileId, // Set the appropriate profile_id
+                        'image_path' => $defaultImagePath,
+                        'is_primary' => 0, // You can set is_primary as needed
+                    ]);
                 }
+                
             }else{
                // add profile
                 $curl = curl_init();
@@ -448,6 +457,14 @@ class ProfileController extends Controller
                             'is_primary' => 0, // You can set is_primary as needed
                         ]);
                     }
+                } else {
+                    // If no images are uploaded, insert the default image path into the database
+                    $defaultImagePath = 'images/exampleforall.jpg';
+                    ProfileImage::create([
+                        'profile_id' => $profileId, // Set the appropriate profile_id
+                        'image_path' => $defaultImagePath,
+                        'is_primary' => 0, // You can set is_primary as needed
+                    ]);
                 }
             }
         }     

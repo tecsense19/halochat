@@ -96,8 +96,9 @@
             </div> -->
     @foreach ($profileList as $item)
     @php 
-      $imgUrl = isset($item->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$item->profileImages[0]['image_path'] : ''; 
-      $imgUrl2 = isset($item->profileImages[1]) ? asset('storage/app/public').'/'.$item->profileImages[1]['image_path'] : ''; 
+    $testimage = asset('public/front/img/exampleforall.jpg');
+      $imgUrl = isset($item->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$item->profileImages[0]['image_path'] : $testimage; 
+      $imgUrl2 = isset($item->profileImages[1]) ? asset('storage/app/public').'/'.$item->profileImages[1]['image_path'] : $testimage; 
   @endphp
             <div class="col-xl-3 col-md-6 col-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
               <div class="portfolio-wrap">

@@ -247,7 +247,10 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                             <div class="sidebar_main_carousel">
                                 <div id="carouselExampleFade" class="carousel slide carousel-fade"
                                     data-bs-ride="carousel">
-                                    <div class="carousel-indicators">
+                                    <?php if(count($profileImages) == 1) { ?>
+                            
+                                    <?php } else { ?>
+                                        <div class="carousel-indicators">
                                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
                                             class="active" aria-current="true" aria-label="Slide 1"></button>
                                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="1"
@@ -255,45 +258,49 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                         <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="2"
                                             aria-label="Slide 3"></button>
                                     </div>
+                                        <?php } ?>
                                     <div class="back_btn">
                                         <img
                                             src="https://candy.ai/assets/left-arrow-198ce01386bf370e33697c53d1cf90f5e8107c896bd0a849f0d1f67acf905c85.svg">
                                         <div class="text-white text-sm font-semibold leading-normal">Back</div>
                                     </div>
-                                    <div class="carousel-inner">
-                                        @foreach($profileImages as $key => $profileImages)
-                                        @php
-                                        $imgUrl = isset($profileImages->image_path) ?
-                                        asset('storage/app/public').'/'.$profileImages->image_path : '';
-                                        @endphp
+                                    <?php if(count($profileImages) == 1) { ?>
+                                    <div class="">
+                                    @foreach($profileImages as $key => $profileImages)
+                                    @php
+                                    $imgUrl = isset($profileImages->image_path) ? asset('storage/app/public').'/'.$profileImages->image_path : '';
+                                    @endphp
 
-                                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                            <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
-                                            <img src="{{ $imgUrl }}" class="d-block w-100">
-                                            1
-                                        </div>
-                                        @endforeach
-                                        <!-- <div class="carousel-item">
-                                          <img src="{{ URL::asset('public/front/img/slider-img2.webp') }}" class="d-block w-100">
-                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                                          2
-                                        </div>
-                                        <div class="carousel-item">
-                                          <img src="{{ URL::asset('public/front/img/slider-img3.webp') }}" class="d-block w-100">
-                                          <img src="{{ URL::asset('public/front/img/testimonial-img.png') }}" class="d-block w-100">
-                                          3
-                                        </div> -->
+                                    <div class="">
+                                        <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
+                                        <img src="{{ $imgUrl }}" class="d-block w-100">
                                     </div>
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
+                                    @endforeach
+                                </div>
+                                    <?php } else { ?>
+                                        <div class="carousel-inner">
+                                    @foreach($profileImages as $key => $profileImages)
+                                    @php
+                                    $imgUrl = isset($profileImages->image_path) ? asset('storage/app/public').'/'.$profileImages->image_path : '';
+                                    @endphp
+
+                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                        <!-- <img src="{{ URL::asset('public/front/img/slider-img1.webp') }}" class="d-block w-100"> -->
+                                        <img src="{{ $imgUrl }}" class="d-block w-100">
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="waitress">
