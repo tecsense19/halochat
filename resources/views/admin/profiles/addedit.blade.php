@@ -91,6 +91,7 @@ $get_voice = json_decode($get_voice, true);
                                     @foreach ($get_voice['data'] as $item)
                                     <option data-audio-src="{{ $item['preview_url'] }}"
                                         data-profile-gender="{{ isset($item['labels']['gender']) ? $item['labels']['gender'] : 'female' }}"
+                                        data-voice-name="{{ isset($item['name']) ? $item['name'] : '' }}"
                                         data-body-discription="{{ isset($item['labels']['description']) ? $item['labels']['description'] : 'test' }}"
                                         data-age="{{ isset($item['labels']['age']) ? $item['labels']['age'] : 0 }}"
                                         data-voice_id="{{ isset($item['voice_id']) ? $item['voice_id'] : '' }}" value="{{ $item['name'] }}" <?php echo ($item['name'] === $voice_name) ? 'selected' : ''; ?>>
@@ -99,6 +100,7 @@ $get_voice = json_decode($get_voice, true);
                                     @endif
                                 </select>
                                 <input type="hidden" name="voice_id" id="voice_id">
+                                <input type="hidden" name="voice_name" id="voice_name" value="">
                             </div>
                             @error('profile_get_voice')
                             <span class="text-danger">{{ $message }}</span>
@@ -589,6 +591,7 @@ $get_voice = json_decode($get_voice, true);
 
         var voice_idIinput = document.getElementById('voice_id');
         var profile_voice_id = document.getElementById('profile_voice_id');
+        var voice_nameid = document.getElementById('voice_name');
 
         // Function to handle changes in the select element
         function handleSelectChange() {
@@ -598,6 +601,8 @@ $get_voice = json_decode($get_voice, true);
             var dataBodyDescription = selectedOption.getAttribute('data-body-discription');
             var dataGender = selectedOption.getAttribute('data-profile-gender');
             var voice_id = selectedOption.getAttribute('data-voice_id');
+            var voice_nameattr = selectedOption.getAttribute('data-voice-name');
+         
             if (dataprofile_ethnicity !== null) {
                 profile_ethnicity.value = dataprofile_ethnicity;
             } else {
@@ -617,6 +622,8 @@ $get_voice = json_decode($get_voice, true);
             audioUrlInput.value = audioSrc;
             voice_idIinput.value = voice_id;
             profile_voice_id.value = voice_id;
+            voice_nameid.value = voice_nameattr;
+
             audioPreview.load();
             audioPreview.play();
         }

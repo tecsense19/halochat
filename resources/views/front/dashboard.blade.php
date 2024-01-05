@@ -99,10 +99,10 @@
       $imgUrl = isset($item->profileImages[0]['image_path']) ? asset('storage/app/public').'/'.$item->profileImages[0]['image_path'] : ''; 
       $imgUrl2 = isset($item->profileImages[1]) ? asset('storage/app/public').'/'.$item->profileImages[1]['image_path'] : ''; 
   @endphp
-            <div class="col-xl-3 col-md-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
+            <div class="col-xl-3 col-md-6 col-6 portfolio-item filter-app filter-card model-{{ $item->personatype }}">
               <div class="portfolio-wrap">
                 <a href="{{ route('chat.message', ['id' => $item->profile_id]) }}" data-profile-id="{{ $item->profile_id }}" id="chatLink_{{ $item->profile_id }}">
-                  <div>
+                  <div class="mobileboxview">
                     <img src="{{ $imgUrl }}" class="img-fluid">
                     <img src="{{ $imgUrl2 }}" class="img-fluid hover_img">
                   </div>

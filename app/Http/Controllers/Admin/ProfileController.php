@@ -246,8 +246,8 @@ class ProfileController extends Controller
     {
         if(!session()->has('authenticated_admin')){
             return redirect()->route('admin.login')->withErrors(['email' => 'Please login to access the dashboard.'])->onlyInput('email');
-        }   
-        
+        }  
+     
         try {
         $input = $request->all();
         if(!empty($input['speakerBoostCheckbox']))
@@ -259,12 +259,11 @@ class ProfileController extends Controller
             $speakerBoostCheckboxreq = false;
         }
 
-
         $postfiled = '{
             "name": "'.$input['profile_name'].'",
             "system_prompt": "'.$input['system_prompt'].'",
             "system_instruction": "'.$input['system_instruction'].'",
-            "voice_name": "'.$input['profile_get_voice'].'",
+            "voice_name": "'.$input['voice_name'].'",
             "voice_model": "'.$input['eleven_radio'].'",
             "voice_settings": {
                 "stability": '.$input['stability'].',
@@ -341,7 +340,7 @@ class ProfileController extends Controller
                     'relationship_status' => $input['profile_relationship_status'],
                     'body_description' => $input['profile_body_description'],
                     'description' => $input['description'],
-                    'voice_name' => $input['profile_get_voice'],
+                    'voice_name' => $input['voice_name'],
                     'voice_id' => $input['voice_id'],
                     'voice_model' => $input['eleven_radio'],
                     'voice_preview_url' => $input['audio_url'],
@@ -414,7 +413,7 @@ class ProfileController extends Controller
             $profile->relationship_status = $input['profile_relationship_status'];
             $profile->body_description = $input['profile_body_description'];
             $profile->description = $input['description'];
-            $profile->voice_name = $input['profile_name'];
+            $profile->voice_name = $input['voice_name'];
             $profile->voice_model = $input['eleven_radio'];
             $profile->voice_id = $input['voice_id'];
             $profile->voice_preview_url = $input['audio_url'];
