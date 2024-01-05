@@ -432,7 +432,7 @@ class MessageController extends Controller
                         // Replace {{first_name}} with the actual first name
                         $messageText = str_replace('{{first_name}}', $user->name, $user->first_message);
                     } 
-                    if (str_contains($messageText, '{{username}}')) {
+                    if (str_contains($user->first_message, '{{username}}')) {
                         // Replace {{username}} with the actual username
                         $messageText = str_replace('{{username}}', $userName->name, $messageText);
                     }

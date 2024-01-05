@@ -135,12 +135,12 @@ alert("{{ $errors->first('chat_persona') }}");
                                     }
                                     if(session('user_id'))
                                     {
-                                        if (str_contains($messageText, '{{username}}')) {
+                                        if (str_contains($lastmessage->message_text, '{{username}}')) {
                                             // Replace {{username}} with the actual username
                                             $messageText = str_replace('{{username}}', $username->name, $messageText);
                                         }
                                     }else{
-                                        if (str_contains($messageText, '{{username}}')) {
+                                        if (str_contains($lastmessage->message_text, '{{username}}')) {
                                             // Replace {{username}} with the actual username
                                             $messageText = str_replace('{{username}}', 'Guest', $messageText);
                                         }
