@@ -28,12 +28,18 @@
                             $messageText = $chat_user->message_text;
                         }
 
-                        // Check if {{username}} is present in the message text
-                        if (str_contains($messageText, '{{username}}')) {
-                            // Replace {{username}} with the actual username
-                            $messageText = str_replace('{{username}}', $username->name, $messageText);
-                        }
-
+                        if(session('user_id'))
+                                    {
+                                        if (str_contains($messageText, '{{username}}')) {
+                                            // Replace {{username}} with the actual username
+                                            $messageText = str_replace('{{username}}', $username->name, $messageText);
+                                        }
+                                    }else{
+                                        if (str_contains($messageText, '{{username}}')) {
+                                            // Replace {{username}} with the actual username
+                                            $messageText = str_replace('{{username}}', 'Guest', $messageText);
+                                        }
+                                    }
                         // Now $messageText contains the final message with replaced placeholders
                         ?>
 

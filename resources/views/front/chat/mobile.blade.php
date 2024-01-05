@@ -90,9 +90,17 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                     } else{
                                         $messageText = $lastmessage->message_text;
                                     }
-                                    if (str_contains($messageText, '{{username}}')) {
-                                        // Replace {{username}} with the actual username
-                                        $messageText = str_replace('{{username}}', $username->name, $messageText);
+                                    if(session('user_id'))
+                                    {
+                                        if (str_contains($messageText, '{{username}}')) {
+                                            // Replace {{username}} with the actual username
+                                            $messageText = str_replace('{{username}}', $username->name, $messageText);
+                                        }
+                                    }else{
+                                        if (str_contains($messageText, '{{username}}')) {
+                                            // Replace {{username}} with the actual username
+                                            $messageText = str_replace('{{username}}', 'Guest', $messageText);
+                                        }
                                     }
             
                                 
