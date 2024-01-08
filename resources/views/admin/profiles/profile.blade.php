@@ -44,6 +44,16 @@
 </div>
 </div>
 @include('admin.layout.footer')
+
+ <!-- SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+
+
+
+
 <script type="text/javascript">
 $(document).ready(function() {
     profilesList();
@@ -67,8 +77,8 @@ function profilesList() {
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        url: "{{ URL::to('admin/profile/list', [], true) }}",
-        // url: "{{ URL::to('admin/profile/list') }}",
+        // url: "{{ URL::to('admin/profile/list', [], true) }}",
+        url: "{{ URL::to('admin/profile/list') }}",
         data: { search: search },
         success: function(data) {
             $('.profileList').html(data);
@@ -101,11 +111,13 @@ $('body').on('click', '#clear-button', function(e) {
 });
 
 function deleteProfile(id) {
-    var str = "{{URL::to('admin/profiles/destroy', [], true)}}/" + id;
+    // var str = "{{URL::to('admin/profiles/destroy', [], true)}}/" + id;
+    var str = "{{URL::to('admin/profiles/destroy')}}/" + id;
+
         
     Swal.fire({
         title: 'Are you sure?',
-        text: "Once deleted, you will not be able to recover this imaginary file!",
+        text: "Once deleted, you will not be able to recover this profile!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -121,7 +133,7 @@ function deleteProfile(id) {
                 success: function(result) {
                     Swal.fire({
                         title: 'Success',
-                        text: 'Your imaginary file has been deleted!',
+                        text: 'Your profile has been deleted!',
                         icon: 'success',
                         confirmButtonColor: '#fe7d22',
                         confirmButtonText: 'OK',
@@ -135,7 +147,7 @@ function deleteProfile(id) {
                 }
             });
         } else {
-            swal("Your imaginary file is safe!");
+            swal("Your profile is safe!");
         }
     });
 }

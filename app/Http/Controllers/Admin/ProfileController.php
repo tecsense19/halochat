@@ -73,7 +73,7 @@ class ProfileController extends Controller
         // Perform the deletion
         $profile = Profile::where('profile_id', $id)->delete();
 
-        return view('admin.profiles.addedit')->with('success', 'Profile deleted successfully');;
+        return true;
     }
 
     public function edit($id)

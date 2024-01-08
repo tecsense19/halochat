@@ -6,6 +6,7 @@
         <tr>
             <th >Action</th>
             <th >#</th>
+            <th >Drag</th>
             <th >Name</th>
             <th >Images</th>
             <th >Ethnicity</th>
@@ -30,16 +31,18 @@
                 @endphp
                 <tr data-id="{{ $profileList1->profile_id }}">
                 <td>
-                        <a href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileId]) }}" role="button" title="Edit">
-                            <i class="mdi mdi-pencil-box-outline" style="color: green; font-size: 24px;"></i>
-                        </a>
-                        <!-- <button class="btn btn-danger btn-rounded btn-icon"
-                                                                    onclick="deleteProfile('{{$profileList1->profile_id}}')"
-                                                                    id="get_id" value="" type="submit"> <i
-                                                                        class="mdi mdi-delete-forever"></i> </button> -->
 
+                <div class="d-flex justify-content-around align-items-center">
+                        <a href="{{  URL::to('admin/profiles/edit', ['profile_id' => $profileId]) }}" role="button" title="Edit">
+                            <i class="mdi mdi-pencil-box-outline" style="color: green; font-size: 24px;margin-right:10px"></i>
+                        </a>
+                        <a href="javascript:void(0);" onclick="deleteProfile('{{$profileList1->profile_id}}')" id="get_id" role="button" title="delete">
+                            <i class="mdi mdi-block-helper" style="font-size: 19px;color: red;"></i>
+                        </a>
+                    </div>
                     </td>
                     <td>{{ $key + 1 }}</td>
+                    <td> <a href="javascript:void(0);"><i class="mdi mdi-drag-horizontal" style="font-size: 24px;color: white;"></i> </a></td>
                     <td>{{ $profileList1->name }}</td>
                     <td> @if($imgUrl)<img src="{{ $imgUrl }}" style="width: 50px; height: 50px;" />@else - @endif </td>
                     <td>{{ $profileList1->ethnicity }}</td>
@@ -58,6 +61,7 @@
                             Your browser does not support the audio element.
                         </audio>
                     </td>
+                  
                 </tr>
             @endforeach
         @else
@@ -68,8 +72,6 @@
     </tbody>
 </table>
 {!! $profileList->links('pagination') !!}
-
-
 
 
 <script>

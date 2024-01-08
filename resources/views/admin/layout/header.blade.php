@@ -20,6 +20,9 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+       <!-- Other head elements -->
+       
+
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
