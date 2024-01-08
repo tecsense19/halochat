@@ -77,8 +77,8 @@ function profilesList() {
         headers: {
             'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
         },
-        // url: "{{ URL::to('admin/profile/list', [], true) }}",
-        url: "{{ URL::to('admin/profile/list') }}",
+        url: "{{ URL::to('admin/profile/list', [], true) }}",
+        // url: "{{ URL::to('admin/profile/list') }}",
         data: { search: search },
         success: function(data) {
             $('.profileList').html(data);
@@ -111,8 +111,8 @@ $('body').on('click', '#clear-button', function(e) {
 });
 
 function deleteProfile(id) {
-    // var str = "{{URL::to('admin/profiles/destroy', [], true)}}/" + id;
-    var str = "{{URL::to('admin/profiles/destroy')}}/" + id;
+    var str = "{{URL::to('admin/profiles/destroy', [], true)}}/" + id;
+    // var str = "{{URL::to('admin/profiles/destroy')}}/" + id;
 
         
     Swal.fire({
