@@ -83,21 +83,21 @@ $profileImages = isset($user->profileImages) ? $user->profileImages : [];
                                 $profilename = \App\Models\Profile::where('profile_id', $chat->profile_id)->first();
                                 $username = \App\Models\User::where('id', session('user_id'))->first();
                                 // Check if {{first_name}} is present in the message text
-                                    if (str_contains($lastmessage->message_text, '{{first_name}}')) {
+                                    if (str_contains($profilename->message_text, '{{first_name}}')) {
                                         // Replace {{first_name}} with the actual first name
-                                        $messageText = str_replace('{{first_name}}', $chat->name, $lastmessage->message_text);
+                                        $messageText = str_replace('{{first_name}}', $chat->name, $profilename->message_text);
 
                                     } else{
-                                        $messageText = $lastmessage->message_text;
+                                        $messageText = $profilename->message_text;
                                     }
                                     if(session('user_id'))
                                     {
-                                        if (str_contains($lastmessage->message_text, '{{username}}')) {
+                                        if (str_contains($profilename->message_text, '{{username}}')) {
                                             // Replace {{username}} with the actual username
                                             $messageText = str_replace('{{username}}', $username->name, $messageText);
                                         }
                                     }else{
-                                        if (str_contains($lastmessage->message_text, '{{username}}')) {
+                                        if (str_contains($profilename->message_text, '{{username}}')) {
                                             // Replace {{username}} with the actual username
                                             $messageText = str_replace('{{username}}', 'Guest', $messageText);
                                         }
