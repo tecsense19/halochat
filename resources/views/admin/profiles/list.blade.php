@@ -88,7 +88,7 @@
                 headers: {
                     'X-CSRF-TOKEN': jQuery('input[name=_token]').val()
                 },
-                url: "{{ URL::to('admin/profiles/sequence', [], true)) }}",
+                url: "{{ URL::to('admin/profiles/sequence', [], true) }}",
                 data: { ids: ids },
                 success: function (response) {
                     // Handle success response
