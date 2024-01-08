@@ -39,7 +39,7 @@
                                                                         class="mdi mdi-delete-forever"></i> </button> -->
 
                     </td>
-                    <td>{{ $profileList1->sequence_profile }}</td>
+                    <td>{{ $key + 1 }}</td>
                     <td>{{ $profileList1->name }}</td>
                     <td> @if($imgUrl)<img src="{{ $imgUrl }}" style="width: 50px; height: 50px;" />@else - @endif </td>
                     <td>{{ $profileList1->ethnicity }}</td>
@@ -81,7 +81,7 @@
             // var newOrder = $(this).sortable('toArray', { attribute: 'data-col' });
             var ids = $(this).sortable('toArray', { attribute: 'data-id' });
 
-            console.log(ids);
+            // console.log(ids);
             // Make an AJAX call to update the sequence in the database
             $.ajax({
                 type: 'POST',
@@ -92,7 +92,7 @@
                 data: { ids: ids },
                 success: function (response) {
                     // Handle success response
-                    console.log(response);
+                    // console.log(response);
                 },
                 error: function (xhr, status, error) {
                     // Handle error
