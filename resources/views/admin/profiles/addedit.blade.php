@@ -240,13 +240,13 @@ $get_voice = json_decode($get_voice, true);
                                 <div class="col-sm-4">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="true" <?php if($reply_with_voice == "true") { ?> checked <?php } else{ ?> <?php } ?>  > true </label>
+                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="true" <?php if($reply_with_voice == "true") { ?> checked <?php } else{ ?>  <?php } ?>  > true </label>
                                 </div>
                                 </div>
                                 <div class="col-sm-5">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="false" <?php if($reply_with_voice == "false") { ?> checked <?php } else{ ?> <?php } ?>  > false </label>
+                                    <input type="radio" class="form-check-input" id="reply_with_voice" name="reply_with_voice" value="false" <?php if($reply_with_voice == "false") { ?> checked <?php } else{ ?> checked <?php } ?>  > false </label>
                                 </div>
                                 </div>
                              </div>
@@ -267,7 +267,7 @@ $get_voice = json_decode($get_voice, true);
                             <div class="col-sm-4">
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" id="eleven_multilingual_v2" name="eleven_radio" value="eleven_multilingual_v2" <?php if($voice_model == "eleven_multilingual_v2") { ?> checked <?php } else{ ?> <?php } ?>  > Eleven Multilingual V2 </label>
+                                  <input type="radio" class="form-check-input" id="eleven_multilingual_v2" name="eleven_radio"  value="eleven_multilingual_v2" <?php if($voice_model == "eleven_multilingual_v2") { ?> checked <?php } else{ ?> checked <?php } ?>  > Eleven Multilingual V2 </label>
                               </div>
                             </div>
                             <div class="col-sm-5">

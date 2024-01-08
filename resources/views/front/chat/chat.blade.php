@@ -125,6 +125,7 @@ alert("{{ $errors->first('chat_persona') }}");
                                 //$chat_user = // ... your $chat_user object;
                                 $profilename = \App\Models\Profile::where('profile_id', $chat->profile_id)->first();
                                 $username = \App\Models\User::where('id', session('user_id'))->first();
+                                $lastmessage = \App\Models\Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$chat->profile_id)->orderBy('message_id', 'DESC')->first();
                                 // Check if {{first_name}} is present in the message text
                                     if (str_contains($lastmessage->message_text, '{{first_name}}')) {
                                         // Replace {{first_name}} with the actual first name
@@ -143,6 +144,8 @@ alert("{{ $errors->first('chat_persona') }}");
                                         if (str_contains($lastmessage->message_text, '{{username}}')) {
                                             // Replace {{username}} with the actual username
                                             $messageText = str_replace('{{username}}', 'Guest', $messageText);
+                                        }else{
+                                            $messageText = $lastmessage->message_text;
                                         }
                                     }
                                     

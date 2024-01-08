@@ -507,18 +507,16 @@ class MessageController extends Controller
                         'updated_at' => now(),
                     );
                 }
-
                 Messages::create($message); 
                 $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
-                $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
+               
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                             ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                             ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                             ->groupBy('messages.profile_id')
                                             ->get();
-                                            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user", "lastmessage"));
-                
+                                            return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
             }else{
                 $getAllReciverUser = [];
                 $user = '';
@@ -526,7 +524,7 @@ class MessageController extends Controller
                 if(session('user_id')){
 
                     $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $id)->where('isDeleted', 0)->get();
-                    $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
+                   
                     $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                     $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                                 ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
@@ -534,23 +532,18 @@ class MessageController extends Controller
                                                 ->whereNotNull('profiles.profile_id')
                                                 ->groupBy('messages.profile_id')
                                                 ->get();
-                
-                                            
                 }else{
                     
                     $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
-                    $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
+                   
                     $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                     $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                                 ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                                 ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                                 ->groupBy('messages.profile_id')
                                                 ->get();
-
-                                            
-                                            
                 }
-                return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user", "lastmessage"));
+                return view("front.chat.chat", compact("getAllProfile", "getAllReciverUser", "user"));
             }
         }
         else
@@ -595,14 +588,14 @@ class MessageController extends Controller
 
             Messages::create($message); 
             $getAllReciverUser = Messages::where('profile_id',$id)->where('isDeleted', 0)->limit(1)->get();
-            $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
+           
             $user = Profile::with('profileImages')->where('profile_id',$id)->first();
             $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                         ->join('profiles', 'profiles.profile_id','=','messages.profile_id')
                                         ->join('profile_images', 'profile_images.profile_id','=','messages.profile_id')
                                         ->groupBy('messages.profile_id')
                                         ->get();
-                                        return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user" ,"lastmessage"));
+                                        return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
             
         }else{
             $getAllReciverUser = [];
@@ -611,7 +604,7 @@ class MessageController extends Controller
             if(session('user_id')){
 
                 $getAllReciverUser = Messages::where('user_id',session('user_id'))->where('profile_id', $id)->where('isDeleted', 0)->get();
-                $lastmessage = Messages::where('sender_id',session('user_id'))->where('isDeleted', 0)->where('receiver_id',$id)->orderBy('guid', 'DESC')->first();
+               
                 $user = Profile::with('profileImages')->where('profile_id',$id)->first();
                 $getAllProfile = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)
                                             ->join('profiles', 'profiles.profile_id', '=', 'messages.profile_id')
@@ -634,7 +627,7 @@ class MessageController extends Controller
                                             ->groupBy('messages.profile_id')
                                             ->get();    
             }
-            return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user","lastmessage"));
+            return view("front.chat.mobile", compact("getAllProfile", "getAllReciverUser", "user"));
         }
     }
 
@@ -1384,9 +1377,6 @@ class MessageController extends Controller
                         'image_id' => $response_image_id,
                         'image_url' => $imgUrl
                     );
-                    // echo "<pre>";
-                    // print_r($result);
-                    // die;
                     return $result;
                 }
 
