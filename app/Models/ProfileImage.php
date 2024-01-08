@@ -24,5 +24,4 @@ class ProfileImage extends Authenticatable
         'image_path',
         'is_primary',
     ];
-
 }

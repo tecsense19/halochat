@@ -584,7 +584,7 @@ $get_voice = json_decode($get_voice, true);
     document.addEventListener('DOMContentLoaded', function () {
         var selectElement = document.getElementById('profile_get_voice');
         var audioPreview = document.getElementById('audio-preview');
-        var profile_ethnicity = document.getElementById('profile_ethnicity');
+        var profile_ethnicity = document.getElementById('profile_age');
         var body_description = document.getElementById('profile_body_description');
         var profile_gender = document.getElementById('profile_gender');
         var audioUrlInput = document.getElementById('audio_url');

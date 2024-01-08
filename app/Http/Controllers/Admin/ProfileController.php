@@ -377,13 +377,17 @@ class ProfileController extends Controller
                         ]);
                     }
                 } else {
-                    // If no images are uploaded, insert the default image path into the database
-                    $defaultImagePath = 'images/exampleforall.jpg';
-                    ProfileImage::create([
-                        'profile_id' => $profileId, // Set the appropriate profile_id
-                        'image_path' => $defaultImagePath,
-                        'is_primary' => 0, // You can set is_primary as needed
-                    ]);
+                    $profileImage = ProfileImage::where('profile_id', $profileId)->first();
+                    if (!$profileImage) {
+                        // If no ProfileImage exists, create a new one
+                        ProfileImage::create([
+                            'profile_id' => $profileId,
+                            'image_path' => 'images/exampleforall.jpg',
+                            'is_primary' => 0,
+                        ]);
+                    } else {
+                        
+                    }
                 }
                 
             }else{
@@ -463,13 +467,18 @@ class ProfileController extends Controller
                         ]);
                     }
                 } else {
-                    // If no images are uploaded, insert the default image path into the database
-                    $defaultImagePath = 'images/exampleforall.jpg';
-                    ProfileImage::create([
-                        'profile_id' => $profileId, // Set the appropriate profile_id
-                        'image_path' => $defaultImagePath,
-                        'is_primary' => 0, // You can set is_primary as needed
-                    ]);
+
+                    $profileImage = ProfileImage::where('profile_id', $profileId)->first();
+                    if (!$profileImage) {
+                        // If no ProfileImage exists, create a new one
+                        ProfileImage::create([
+                            'profile_id' => $profileId,
+                            'image_path' => 'images/exampleforall.jpg',
+                            'is_primary' => 0,
+                        ]);
+                    } else {
+                       
+                    }
                 }
             }
         }     

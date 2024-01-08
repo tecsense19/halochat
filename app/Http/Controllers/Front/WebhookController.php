@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Webhook_data;
+use App\Models\Subscriptions;
 
 class WebhookController extends Controller
 {
@@ -113,12 +114,25 @@ class WebhookController extends Controller
         // Loop through the expected parameters and extract values from the URL
         foreach ($expectedParameters as $param) {
             if (isset($_GET[$param])) {
+                // echo $parameterValues['post_back_action'];
+                // print_r($_GET[$param]);
                 $parameterValues[$param] = $_GET[$param];
+                
             } else {
                 $parameterValues[$param] = ''; // Set a default value if the parameter is not present
             }
         }
 
+        if($parameterValues['post_back_action'] == 'rebill')
+        {
+            Subscriptions::where('subscription_id', $parameterValues['subscription_id_csv'])->update([
+                'recurring_date' => $parameterValues['new_recurring_date'],
+                'subscription_type' => $parameterValues['product_names_csv'],
+            ]);
+            echo "Entry done";
+        }
+        // print_r( $parameterValues);
+        die;
          Webhook_data::create($parameterValues);
 
         // Create a string with the parameter values
