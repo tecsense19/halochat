@@ -34,7 +34,7 @@ class UserController extends Controller
         $request->session()->forget('sessionprofile_id');
         // $request->session()->invalidate();
         // $request->session()->regenerateToken();
-        $profileList = Profile::with('profileImages')->get();
+        $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
         return view("front.dashboard", compact('profileList'));
     }
 
@@ -48,15 +48,15 @@ class UserController extends Controller
 
             $subscriptionsUser = Subscriptions::where('user_id', session('user_id'))->first();
             if(isset($subscriptionsUser->subscription_type) && $subscriptionsUser->subscription_type == 'Basic subscription'){
-                $profileList = Profile::with('profileImages')->where('subscription_type', 'Basic subscription')->take(10)->get();
+                $profileList = Profile::with('profileImages')->where('subscription_type', 'Basic subscription')->orderBy('sequence_profile', 'asc')->take(10)->get();
                 $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
             }
             elseif(isset($subscriptionsUser->subscription_type) && $subscriptionsUser->subscription_type == 'VIP subscription')
             {
-                $profileList = Profile::with('profileImages')->get();
+                $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
                 $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
             }else{
-                $profileList = Profile::with('profileImages')->get();
+                $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
                 $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
             }
 
@@ -73,7 +73,7 @@ class UserController extends Controller
 
             return view("front.dashboard", compact('profileList'));
         } else {
-            $profileList = Profile::with('profileImages')->get();
+            $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
             return view("front.dashboard", compact('profileList'));
         }
     }
@@ -88,7 +88,7 @@ class UserController extends Controller
             $getAllReciverUser = Messages::where('user_id', session('user_id'))->limit(1)->get();
             if(empty($getAllReciverUser[0]['receiver_id']))
             {
-                $profileList = Profile::with('profileImages')->get();
+                $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
                 return view("front.dashboard", compact('profileList'));
             }else{
                 $user = Profile::with('profileImages')->where('profile_id',$getAllReciverUser[0]['receiver_id'])->first();
@@ -101,7 +101,7 @@ class UserController extends Controller
             }
         }else{
          
-            $profileList = Profile::with('profileImages')->get();
+            $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
             return view("front.dashboard", compact('profileList'));
         }
         
@@ -123,7 +123,7 @@ class UserController extends Controller
             ->whereNull('sender_id')
             ->whereNull('receiver_id')
             ->delete();
-        $profileList = Profile::with('profileImages')->get();
+        $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
         return view("front.dashboard", compact('profileList'));
         }
     }
@@ -337,7 +337,7 @@ class UserController extends Controller
                 // $request->session()->regenerate();
 
                 //check last profile id
-                $profileList = Profile::with('profileImages')->get();
+                $profileList = Profile::with('profileImages')->orderBy('sequence_profile', 'asc')->get();
                 $request->session()->put('sessionprofile_id', $profileList[0]->profile_id);
 
                 $lastchatid = Messages::where('sender_id', session('user_id'))->where('isDeleted', 0)->orderBy('sequence_message', 'DESC')->first();

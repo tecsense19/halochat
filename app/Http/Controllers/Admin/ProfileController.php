@@ -40,15 +40,20 @@ class ProfileController extends Controller
         $input = $request->all();
 
         $search = $input['search'];
-
         $profileList = Profile::with('profileImages')
-                        ->when($search, function ($query) use ($search) {
-                            return $query->where(function ($query) use ($search) {
-                                $query->where('name', 'like', '%' . $search . '%');
-                            });
-                        })
-                        ->paginate(10);
-
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            });
+        })
+        ->orderBy('sequence_profile', 'asc')
+        ->paginate(10);
+            // $profileListSql = $profileListQuery->toSql();
+            // $bindings = $profileListQuery->getBindings();
+            
+            // print_r($profileListSql);
+            // print_r($bindings);
+            // die;
         return view('admin.profiles.list', compact('profileList'));
     }
 
@@ -493,6 +498,16 @@ class ProfileController extends Controller
 
 
             // return redirect()->back();
+        }
+
+
+        public function profileSequence(Request $request)
+        {
+            for ($i=0; $i < count($_POST['ids']); $i++) { 
+                Profile::where('profile_id', $_POST['ids'][$i])->update(['sequence_profile' => $i + 1]);
+            }
+
+            return response()->json(['success' => true]);
         }
 
 

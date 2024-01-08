@@ -62,6 +62,9 @@ use App\Http\Controllers\Admin\SubscriptionsController;
         Route::get('/globlepromptreal', [ProfileController::class, 'addGloblepromptrealist'])->name('profile.globlepromptrealist');
         Route::post('profiles/storegloble', [ProfileController::class, 'store_globleprompts'])->name('profile.store_globleprompts');
         Route::post('profiles/delete', [ProfileController::class, 'deleteImage'])->name('profile.deleteImage');
+        Route::post('profiles/sequence', [ProfileController::class, 'profileSequence'])->name('profile.sequence');
+
+        
 
         Route::get('/subscription/{id}', [SubscriptionsController::class, 'subscription'])->name('subscription');
         Route::post('/subscription/list', [SubscriptionsController::class, 'subscriptionList'])->name('subscription.list');

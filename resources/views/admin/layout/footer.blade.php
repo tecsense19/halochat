@@ -12,6 +12,7 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
+
     <script src="{{ URL::asset('public/vendors/js/vendor.bundle.base.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
@@ -47,5 +48,8 @@
     <script src="{{ URL::asset('public/js/typeahead.js') }}"></script>
     <script src="{{ URL::asset('public/js/select2.js') }}"></script>
 
+ 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   </body>
 </html>

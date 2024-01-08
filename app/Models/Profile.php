@@ -21,6 +21,7 @@ class Profile extends Authenticatable
 
     protected $fillable = [
         'profile_id',
+        'sequence_profile',
         'name',
         'last_name',
         'description',
